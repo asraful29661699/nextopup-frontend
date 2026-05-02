@@ -3,46 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Service Center</title>
+    <title>NexTopUp - Premium Store</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .hidden-page { display: none !important; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8f9fa; color: #333; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #000000; color: white; -webkit-tap-highlight-color: transparent; }
         
-        /* Box Style as per Screenshot */
+        /* 3 Box Style as per Screenshot */
         .service-card {
-            background: white;
+            background: #111111;
             border-radius: 1.5rem;
-            padding: 1.5rem;
+            padding: 1rem;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #1f2937;
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 1px solid #eee;
         }
-        .service-card:active { transform: scale(0.95); background: #f0f0f0; }
+        .service-card:active { transform: scale(0.95); background: #1a1a1a; }
         
-        .icon-container {
-            background: #f1f5f9;
+        .icon-box {
+            background: #000000;
             border-radius: 1rem;
             aspect-ratio: 1/1;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #333;
         }
 
-        .header-bg { background: #0c1a33; }
-        .greeting-card { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: 2rem; }
+        .header-bg { background: #000000; border-bottom: 1px solid #1f2937; }
+        .greeting-card { 
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6); 
+            border-radius: 1.5rem; 
+            margin-bottom: 1.5rem;
+        }
+        
+        .nav-bar { background: #000000; border-top: 1px solid #1f2937; }
     </style>
 </head>
 <body class="pb-24">
 
-    <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-white">
+    <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-black">
         <div class="w-full max-w-sm text-center">
-            <img src="logo-main.png" alt="NexTopUp" class="h-20 mx-auto mb-10 object-contain">
+            <img src="logo-main.png" alt="NexTopUp" class="h-24 mx-auto mb-10 object-contain">
             <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
         </div>
@@ -53,114 +59,113 @@
             <div class="flex items-center gap-2">
                 <img src="file_00000000c9787208b660aa071e1c6022.png" alt="Logo" class="h-8 w-8 rounded">
                 <div>
-                    <h1 class="text-white font-bold leading-none text-sm uppercase">NEXT<span class="text-yellow-500">TOPUP</span></h1>
-                    <p class="text-[8px] text-gray-400 uppercase tracking-tighter">Top Up Today, Stay Ahead Tomorrow</p>
+                    <h1 class="text-white font-bold text-sm">NEXT<span class="text-yellow-500">TOPUP</span></h1>
                 </div>
             </div>
-            <div class="bg-[#1e293b] text-yellow-500 px-3 py-1 rounded-full font-bold text-xs flex items-center gap-2">
-                <i class="fa-solid fa-wallet text-white text-[10px]"></i> ৳ ০.০০
+            <div class="bg-[#111111] text-yellow-500 px-3 py-1 rounded-full font-bold text-xs border border-gray-800">
+                ৳ ০.০০
             </div>
         </header>
 
-        <div id="homePage" class="p-4">
-            <div class="greeting-card p-8 mb-8 shadow-lg">
-                <h2 class="text-white text-2xl font-bold">হ্যালো, <span id="userName">Asraful</span>!</h2>
-                <p class="text-blue-100 text-sm mt-1">আপনার প্রিয় গেম টপ-আপ করুন</p>
-                <button class="mt-4 bg-blue-500 text-white text-xs px-4 py-2 rounded-full flex items-center gap-2">
+        <div id="homePage" class="page-content p-4">
+            <div class="greeting-card p-6 shadow-2xl">
+                <h2 class="text-white text-xl font-bold">হ্যালো, <span id="userName">Asraful</span>!</h2>
+                <p class="text-blue-100 text-xs mt-1">আপনার প্রিয় গেম টপ-আপ করুন</p>
+                <button class="mt-4 bg-blue-500/30 border border-blue-400/50 text-white text-[10px] px-4 py-1.5 rounded-full flex items-center gap-2">
                     <i class="fa-brands fa-telegram"></i> জয়েন টেলিগ্রাম
                 </button>
             </div>
 
-            <h3 class="text-gray-800 font-black text-sm italic mb-4 flex items-center gap-2 uppercase">
-                <span class="w-1.5 h-4 bg-yellow-500 rounded-full"></span> Free Fire Services
-            </h3>
+            <p class="text-yellow-500 text-[10px] font-bold italic mb-4 uppercase tracking-widest">Free Fire Services</p>
 
             <div class="grid grid-cols-3 gap-3">
                 <div onclick="openOrder('UID TOPUP')" class="service-card">
-                    <div class="icon-container">
-                        <i class="fa-solid fa-id-card text-2xl text-blue-900"></i>
-                    </div>
-                    <p class="text-[9px] font-bold text-gray-600 uppercase">UID TOPUP</p>
+                    <div class="icon-box"><i class="fa-solid fa-id-card text-xl text-blue-500"></i></div>
+                    <p class="text-[8px] font-bold text-gray-400 uppercase">UID TOPUP</p>
                 </div>
-                
                 <div onclick="openOrder('WEEKLY')" class="service-card">
-                    <div class="icon-container">
-                        <i class="fa-solid fa-crown text-2xl text-blue-900"></i>
-                    </div>
-                    <p class="text-[9px] font-bold text-gray-600 uppercase">WEEKLY</p>
+                    <div class="icon-box"><i class="fa-solid fa-crown text-xl text-yellow-500"></i></div>
+                    <p class="text-[8px] font-bold text-gray-400 uppercase">WEEKLY</p>
                 </div>
-
                 <div onclick="openOrder('MONTHLY')" class="service-card">
-                    <div class="icon-container">
-                        <div class="w-6 h-6 bg-blue-900 rounded-sm"></div>
-                    </div>
-                    <p class="text-[9px] font-bold text-gray-600 uppercase">MONTHLY</p>
+                    <div class="icon-box"><i class="fa-solid fa-gem text-xl text-purple-500"></i></div>
+                    <p class="text-[8px] font-bold text-gray-400 uppercase">MONTHLY</p>
                 </div>
             </div>
+        </div>
+
+        <div id="profilePage" class="page-content hidden-page p-6 text-center">
+            <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-yellow-500">
+                <i class="fa-solid fa-user text-3xl text-yellow-500"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-1" id="profileName">User Name</h3>
+            <p class="text-gray-500 text-sm mb-10">premium member</p>
+            
+            <button onclick="logout()" class="w-full bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+            </button>
         </div>
 
         <div id="orderPage" class="page-content hidden-page p-4">
-            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-                <h3 id="orderTitle" class="font-bold text-lg mb-6 border-b pb-2">Package Select</h3>
-                <div id="packageList" class="grid grid-cols-2 gap-3 mb-8"></div>
-                
-                <p class="text-xs font-bold text-gray-500 mb-2 uppercase">Player ID</p>
-                <input type="text" placeholder="12345678" class="w-full p-4 rounded-xl mb-6 bg-gray-50 border-none shadow-inner">
-                
-                <button onclick="showPage('homePage')" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold uppercase tracking-widest shadow-md">Confirm Order</button>
+            <button onclick="showPage('homePage')" class="text-gray-400 mb-4 flex items-center gap-2 text-sm"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <div class="bg-[#111111] rounded-3xl p-6 border border-gray-800">
+                <h3 id="orderTitle" class="font-bold text-white mb-6 uppercase text-sm">Package</h3>
+                <div id="packageList" class="grid grid-cols-2 gap-3 mb-6"></div>
+                <input type="text" placeholder="Enter Player ID" class="w-full bg-black border border-gray-800 p-4 rounded-xl text-white mb-6 outline-none">
+                <button class="w-full bg-yellow-500 text-black py-4 rounded-xl font-bold">CONFIRM</button>
             </div>
         </div>
 
-        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3 px-10 flex justify-between items-center z-50">
-            <div onclick="showPage('homePage')" class="flex flex-col items-center gap-1 text-blue-600">
+        <nav class="fixed bottom-0 left-0 right-0 nav-bar py-4 px-10 flex justify-between items-center z-50">
+            <div onclick="showPage('homePage')" class="flex flex-col items-center gap-1 text-yellow-500 cursor-pointer">
                 <i class="fa-solid fa-house text-xl"></i>
-                <span class="text-[10px] font-bold">HOME</span>
+                <span class="text-[9px] font-bold">HOME</span>
             </div>
-            <div class="flex flex-col items-center gap-1 text-gray-400">
-                <i class="fa-solid fa-square-plus text-xl"></i>
-                <span class="text-[10px] font-bold">ADD</span>
-            </div>
-            <div class="flex flex-col items-center gap-1 text-gray-400">
+            <div onclick="showPage('profilePage')" class="flex flex-col items-center gap-1 text-gray-500 cursor-pointer">
                 <i class="fa-solid fa-circle-user text-xl"></i>
-                <span class="text-[10px] font-bold">PROFILE</span>
+                <span class="text-[9px] font-bold">PROFILE</span>
             </div>
         </nav>
     </div>
 
     <script>
-        const packData = {
-            'WEEKLY': [{ name: 'Weekly Lite', price: '১৫৪', img: 'oss-a4dc82551f55d986ea4bab3e8521c172.png' }],
-            'MONTHLY': [{ name: 'Monthly Pro', price: '৭৬৫', img: 'oss-3c8ac1d57fcaeb222b2fe02d9f8cc5d8.png' }],
-            'UID TOPUP': [{ name: '115 Diamonds', price: '৮০', img: 'diamond_icon.png' }]
-        };
+        function handleCredentialResponse(response) {
+            const data = parseJwt(response.credential);
+            localStorage.setItem('nexUser', JSON.stringify(data));
+            loginSuccess(data);
+        }
 
-        window.onload = function() {
-            // Demo Login
+        function loginSuccess(data) {
+            document.getElementById('userName').innerText = data.given_name;
+            document.getElementById('profileName').innerText = data.name;
             document.getElementById('loginPage').classList.add('hidden-page');
             document.getElementById('mainUI').classList.remove('hidden-page');
-        };
+        }
+
+        function logout() {
+            localStorage.removeItem('nexUser');
+            location.reload(); // Refresh the page to show login
+        }
 
         function showPage(pageId) {
-            document.getElementById('homePage').classList.add('hidden-page');
-            document.getElementById('orderPage').classList.add('hidden-page');
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
             document.getElementById(pageId).classList.remove('hidden-page');
-            window.scrollTo(0,0);
         }
 
         function openOrder(title) {
             document.getElementById('orderTitle').innerText = title;
-            const pList = document.getElementById('packageList');
-            pList.innerHTML = '';
-            (packData[title] || []).forEach(p => {
-                pList.innerHTML += `
-                    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 text-center">
-                        <img src="${p.img}" class="h-12 mx-auto mb-2 object-contain">
-                        <p class="text-[10px] font-bold text-gray-800">${p.name}</p>
-                        <p class="text-xs font-black text-blue-600">৳ ${p.price}</p>
-                    </div>
-                `;
-            });
             showPage('orderPage');
+        }
+
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            return JSON.parse(window.atob(base64));
+        }
+
+        window.onload = function() {
+            const user = localStorage.getItem('nexUser');
+            if(user) loginSuccess(JSON.parse(user));
         }
     </script>
 </body>
