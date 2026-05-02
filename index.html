@@ -10,8 +10,9 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, update, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, update, set, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // আপনার Firebase কনফিগারেশন
         const firebaseConfig = {
             apiKey: "AIzaSyB4Lff3dPJvWnIMEdbJS0wIEWaBXNlBmro",
             authDomain: "nextopup-e6b28.firebaseapp.com",
@@ -22,138 +23,166 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ভিডিওর মতো প্যাকেজ ডেটা
-        const products = {
-            weekly: [
-                { name: "WEEKLY", price: 154 }, { name: "2X WEEKLY", price: 308 }, { name: "3X WEEKLY", price: 460 }
-            ],
-            monthly: [
-                { name: "MONTHLY", price: 765 }, { name: "2X MONTHLY", price: 1530 }, { name: "1W+1M", price: 915 }
-            ],
-            diamond: [
-                { name: "25 DIAMOND", price: 24 }, { name: "50 DIAMOND", price: 38 }, { name: "115 DIAMOND", price: 79 }
-            ]
+        // ১. লোড ডেটা (প্রাইস এবং ব্যালেন্স)
+        window.loadAppData = (email) => {
+            onValue(ref(db, `users/${email.replace('.', '_')}`), (s) => {
+                const userData = s.val() || { balance: 0 };
+                document.getElementById('userBal').innerText = '৳' + userData.balance;
+                document.getElementById('walletBal').innerText = '৳' + userData.balance;
+            });
+            onValue(ref(db, 'prices'), (s) => { window.prices = s.val() || { weekly: 154, monthly: 765 }; });
         };
 
-        window.openProduct = (type) => {
-            const list = products[type];
-            let html = `<div class="grid grid-cols-2 gap-3 mb-6">`;
-            list.forEach(item => {
-                html += `<button onclick="selectItem('${item.name}', ${item.price})" class="item-btn border border-gray-800 p-4 rounded-xl text-center bg-[#0c0c0c] hover:border-blue-500 transition-all">
-                            <p class="text-[10px] font-black text-blue-500 uppercase">${item.name}</p>
-                            <p class="text-[10px] text-gray-500 mt-1 italic">BDT ${item.price}</p>
+        // ২. অর্ডার লজিক (ভিডিওর মতো ধাপে ধাপে)
+        window.openSheet = (type) => {
+            const p = window.prices;
+            const pkgs = type === 'weekly' ? 
+                [{n:"1X Weekly", p:p.weekly}, {n:"2X Weekly", p:p.weekly*2}] : 
+                [{n:"1X Monthly", p:p.monthly}, {n:"Weekly + Monthly", p:parseInt(p.weekly)+parseInt(p.monthly)}];
+            
+            let html = `<div class="grid grid-cols-2 gap-3">`;
+            pkgs.forEach(i => {
+                html += `<button onclick="selectPkg('${i.n}', ${i.p})" class="pkg-card border border-gray-800 p-4 rounded-xl bg-[#0c0c0c]">
+                            <p class="text-[10px] font-black text-blue-500 uppercase">${i.n}</p>
+                            <p class="text-[10px] text-gray-500 mt-1">BDT ${i.p}</p>
                          </button>`;
             });
-            document.getElementById('productOptions').innerHTML = html + `</div>`;
-            document.getElementById('orderModal').classList.remove('hidden-page');
+            document.getElementById('pkgList').innerHTML = html + `</div>`;
+            document.getElementById('orderSheet').classList.remove('hidden-page');
         };
 
-        window.selectItem = (name, price) => {
-            window.currentOrder = { name, price };
-            document.getElementById('orderForm').classList.remove('hidden-page');
-            document.querySelectorAll('.item-btn').forEach(b => b.classList.remove('border-blue-500', 'bg-blue-900/10'));
-            event.currentTarget.classList.add('border-blue-500', 'bg-blue-900/10');
+        window.selectPkg = (n, p) => {
+            window.activeOrder = { n, p };
+            document.getElementById('inputArea').classList.remove('hidden-page');
+            document.querySelectorAll('.pkg-card').forEach(b => b.classList.remove('border-blue-600'));
+            event.currentTarget.classList.add('border-blue-600');
         };
 
-        window.submitOrder = () => {
+        // ৩. পেমেন্ট ও অর্ডার সাবমিট
+        window.placeOrder = () => {
             const pid = document.getElementById('playerID').value;
-            const pay = document.querySelector('input[name="payment"]:checked')?.value;
-            if(!pid || !pay) return alert("Player ID এবং Payment Method সিলেক্ট করুন!");
+            if(!pid) return alert("Player ID দিন!");
+            const u = JSON.parse(localStorage.getItem('nexUser'));
             
-            push(ref(db, 'orders'), { ...window.currentOrder, playerID: pid, payment: pay, status: 'pending' })
-                .then(() => { alert("অর্ডার সফল হয়েছে!"); location.reload(); });
+            push(ref(db, 'orders'), { 
+                ...window.activeOrder, 
+                playerID: pid, 
+                user: u.email, 
+                status: 'pending', 
+                time: new Date().toLocaleString() 
+            }).then(() => {
+                alert("অর্ডার সফল! এডমিন চেক করছে।");
+                location.reload();
+            });
         };
+
+        // ৪. অ্যাড মানি (সিম্পল ভেরিফিকেশন)
+        window.addMoney = () => {
+            const trnx = document.getElementById('trnxID').value;
+            const amount = document.getElementById('addAmount').value;
+            if(!trnx || !amount) return alert("সব তথ্য দিন!");
+            
+            push(ref(db, 'deposits'), { trnx, amount, user: JSON.parse(localStorage.getItem('nexUser')).email, status: 'pending' })
+                .then(() => alert("অনুরোধ পাঠানো হয়েছে! এডমিন ট্রানজ্যাকশন চেক করে ব্যালেন্স যোগ করে দিবে।"));
+        };
+
     </script>
 
     <style>
         .hidden-page { display: none !important; }
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        .top-nav { background: #000; border-bottom: 1px solid #111; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .hero-banner { background: linear-gradient(45deg, #1d4ed8, #1e40af); border-radius: 35px; padding: 30px; margin: 20px; text-align: center; }
-        .service-card { background: #0c0c0c; border: 1px solid #111; border-radius: 20px; padding: 12px; transition: 0.3s; cursor: pointer; }
-        .service-card:active { transform: scale(0.95); }
-        .service-card img { width: 100%; border-radius: 15px; margin-bottom: 10px; }
-        
-        /* ভিডিওর স্টাইল অনুযায়ী বটম শীট */
-        #orderModal { position: fixed; bottom: 0; left: 0; right: 0; background: #080808; border-radius: 30px 30px 0 0; padding: 30px 20px; z-index: 1000; border-top: 2px solid #1e40af; max-height: 90vh; overflow-y: auto; }
-        .pay-box { border: 1px solid #222; padding: 15px; border-radius: 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; }
-        .pay-box input:checked + div { border-color: #3b82f6; }
-        
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 15px 0; z-index: 100; }
-        .nav-item { text-align: center; color: #444; flex: 1; }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #080808; border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 15px 0; z-index: 100; }
+        .nav-item { text-align: center; color: #444; flex: 1; transition: 0.3s; }
         .nav-item.active { color: #3b82f6; }
+        .card { background: #0c0c0c; border: 1px solid #111; border-radius: 20px; overflow: hidden; }
+        #orderSheet { position: fixed; bottom: 0; left: 0; right: 0; background: #050505; border-radius: 30px 30px 0 0; padding: 30px 20px; border-top: 2px solid #1e40af; z-index: 1000; max-height: 85vh; overflow-y: auto; }
     </style>
 </head>
 <body class="pb-32">
 
-    <div class="top-nav">
-        <div class="text-2xl font-black italic tracking-tighter">
-            <span class="text-blue-600">OFFER</span><span class="text-yellow-500">TOPUP</span>
-        </div>
-        <div class="bg-[#111] px-4 py-2 rounded-full border border-gray-800 flex items-center gap-2">
-            <i class="fa-solid fa-wallet text-yellow-500 text-xs"></i>
-            <span class="text-xs font-bold">৳ ০.০০</span>
+    <div id="loginPage" class="min-h-screen flex items-center justify-center p-6">
+        <div class="bg-white p-10 rounded-[40px] text-center w-full max-w-sm">
+            <h1 class="text-3xl font-black italic mb-2 text-black">OFFER<span class="text-blue-600">TOPUP</span></h1>
+            <p class="text-xs text-gray-400 font-bold uppercase mb-8">Fastest Gaming Store</p>
+            <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
+            <div class="g_id_signin" data-type="standard"></div>
         </div>
     </div>
 
-    <div id="homePage">
-        <div class="hero-banner shadow-2xl shadow-blue-900/20">
-            <h1 class="text-2xl font-black italic">Special Offer!</h1>
-            <p class="text-[10px] uppercase font-bold opacity-70 tracking-widest mt-1">Top up today, stay ahead tomorrow</p>
+    <div id="mainUI" class="hidden-page">
+        <div class="p-5 flex justify-between items-center border-b border-gray-900 sticky top-0 bg-black z-50">
+            <div class="text-xl font-black italic">OFFER<span class="text-blue-600">TOPUP</span></div>
+            <div class="bg-[#111] px-4 py-2 rounded-full border border-gray-800 text-xs font-black text-yellow-500" id="userBal">৳ ০.০০</div>
         </div>
 
-        <div class="p-6">
-            <h2 class="text-[10px] font-black uppercase text-gray-500 tracking-[0.3em] mb-6 border-l-4 border-blue-600 pl-3">Free Fire Services</h2>
+        <div id="homePage" class="p-5 page-content">
+            <div class="bg-blue-600 p-8 rounded-[35px] mb-8 shadow-2xl shadow-blue-900/20">
+                <h2 class="text-2xl font-black italic">Hi, <span id="uName">User</span>!</h2>
+                <p class="text-[9px] uppercase font-bold opacity-70 tracking-widest mt-1">Select your service & top up instantly</p>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
-                <div onclick="openProduct('weekly')" class="service-card shadow-lg">
-                    <img src="weekly_thumb.png">
-                    <p class="text-[9px] font-black uppercase">Weekly Membership</p>
-                </div>
-                <div onclick="openProduct('monthly')" class="service-card shadow-lg">
-                    <img src="monthly_thumb.png">
-                    <p class="text-[9px] font-black uppercase">Monthly Membership</p>
-                </div>
-                <div onclick="openProduct('diamond')" class="service-card shadow-lg col-span-2 flex items-center gap-4 p-4">
-                    <div class="w-16"><img src="diamond_thumb.png" class="m-0"></div>
-                    <p class="text-[12px] font-black uppercase">Instant Diamond Topup</p>
-                </div>
+                <div onclick="openSheet('weekly')" class="card p-3"><img src="weekly.png" class="rounded-xl mb-3"><p class="text-[9px] font-black uppercase text-center">Weekly Membership</p></div>
+                <div onclick="openSheet('monthly')" class="card p-3"><img src="monthly.png" class="rounded-xl mb-3"><p class="text-[9px] font-black uppercase text-center">Monthly Membership</p></div>
             </div>
         </div>
-    </div>
 
-    <div id="orderModal" class="hidden-page">
-        <div class="flex justify-between items-center mb-8">
-            <h3 class="text-lg font-black italic text-blue-500 uppercase">1 Select Package</h3>
-            <button onclick="document.getElementById('orderModal').classList.add('hidden-page')" class="text-gray-500 text-2xl"><i class="fa-solid fa-circle-xmark"></i></button>
-        </div>
-
-        <div id="productOptions"></div>
-
-        <div id="orderForm" class="hidden-page mt-10 pt-8 border-t border-gray-900">
-            <h3 class="text-sm font-black uppercase text-gray-400 mb-4">2 Account Info</h3>
-            <input id="playerID" type="number" class="w-full bg-[#111] p-5 rounded-2xl border border-gray-800 font-bold mb-8 focus:border-blue-600 transition-all outline-none" placeholder="Enter Player ID">
-
-            <h3 class="text-sm font-black uppercase text-gray-400 mb-4">3 Select Payment</h3>
-            <div class="space-y-3">
-                <label class="pay-box">
-                    <input type="radio" name="payment" value="bkash" class="accent-pink-600">
-                    <span class="text-xs font-bold uppercase ml-2">bKash (Auto Payment)</span>
-                </label>
-                <label class="pay-box">
-                    <input type="radio" name="payment" value="nagad" class="accent-orange-500">
-                    <span class="text-xs font-bold uppercase ml-2">Nagad (Manual)</span>
-                </label>
+        <div id="walletPage" class="hidden-page p-5 page-content">
+            <div class="card p-8 text-center mb-6">
+                <p class="text-xs text-gray-500 font-bold uppercase mb-2">Current Balance</p>
+                <h1 class="text-4xl font-black text-yellow-500" id="walletBal">৳ ০.০০</h1>
             </div>
-
-            <button onclick="submitOrder()" class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black mt-8 shadow-xl shadow-blue-900/30 uppercase tracking-widest text-xs">Confirm Order</button>
+            <div class="card p-6">
+                <p class="text-[10px] font-black uppercase text-gray-400 mb-4 tracking-widest">Add Money (Manual)</p>
+                <input id="addAmount" type="number" class="w-full bg-[#000] p-4 rounded-xl border border-gray-800 mb-3 outline-none" placeholder="Amount">
+                <input id="trnxID" type="text" class="w-full bg-[#000] p-4 rounded-xl border border-gray-800 mb-4 outline-none" placeholder="bKash/Nagad TrnxID">
+                <button onclick="addMoney()" class="w-full bg-blue-600 p-4 rounded-xl font-black text-xs uppercase tracking-widest">Submit Request</button>
+            </div>
         </div>
+
+        <div id="orderSheet" class="hidden-page shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <p class="text-xs font-black uppercase text-gray-500 tracking-widest">1 Select Package</p>
+                <button onclick="document.getElementById('orderSheet').classList.add('hidden-page')" class="text-gray-500 text-xl"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            <div id="pkgList"></div>
+            <div id="inputArea" class="hidden-page mt-8 pt-6 border-t border-gray-900">
+                <p class="text-xs font-black uppercase text-gray-500 mb-4 tracking-widest">2 Account Info</p>
+                <input id="playerID" type="number" class="w-full bg-[#111] p-5 rounded-2xl border border-gray-800 font-bold mb-4 outline-none" placeholder="Player ID">
+                <button onclick="placeOrder()" class="w-full bg-blue-600 p-5 rounded-2xl font-black uppercase tracking-widest text-xs">Confirm Order</button>
+            </div>
+        </div>
+
+        <nav class="nav-bar">
+            <div onclick="showPage('homePage')" id="nHome" class="nav-item active"><i class="fa-solid fa-house"></i><p class="text-[8px] font-black mt-1">HOME</p></div>
+            <div onclick="showPage('walletPage')" id="nWallet" class="nav-item"><i class="fa-solid fa-wallet"></i><p class="text-[8px] font-black mt-1">WALLET</p></div>
+            <div onclick="showPage('profilePage')" id="nUser" class="nav-item"><i class="fa-solid fa-circle-user"></i><p class="text-[8px] font-black mt-1">PROFILE</p></div>
+        </nav>
     </div>
 
-    <nav class="nav-bar">
-        <div class="nav-item active"><i class="fa-solid fa-house"></i><p class="text-[8px] font-black mt-1">HOME</p></div>
-        <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><p class="text-[8px] font-black mt-1">ORDERS</p></div>
-        <div class="nav-item"><i class="fa-solid fa-user-shield"></i><p class="text-[8px] font-black mt-1">PROFILE</p></div>
-    </nav>
-
+    <script>
+        window.handleCredentialResponse = (r) => {
+            const d = JSON.parse(atob(r.credential.split('.')[1]));
+            localStorage.setItem('nexUser', JSON.stringify(d));
+            login(d);
+        };
+        function login(d) {
+            document.getElementById('uName').innerText = d.given_name;
+            document.getElementById('loginPage').classList.add('hidden-page');
+            document.getElementById('mainUI').classList.remove('hidden-page');
+            loadAppData(d.email);
+        }
+        window.showPage = (id) => {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
+            document.getElementById(id).classList.remove('hidden-page');
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            if(id === 'homePage') document.getElementById('nHome').classList.add('active');
+            if(id === 'walletPage') document.getElementById('nWallet').classList.add('active');
+        };
+        window.onload = () => {
+            const u = localStorage.getItem('nexUser');
+            if(u) login(JSON.parse(u));
+        };
+    </script>
 </body>
 </html>
