@@ -31,7 +31,7 @@
             justify-content: center;
             margin-bottom: 0.5rem;
             border: 1px solid #333;
-            overflow: hidden;
+            overflow: hidden; /* ছবি যাতে বক্সের বাইরে না যায় */
         }
 
         .header-bg { background: #000000; border-bottom: 1px solid #1f2937; }
@@ -82,23 +82,42 @@
                     <div class="icon-box"><i class="fa-solid fa-id-card text-xl text-blue-500"></i></div>
                     <p class="text-[8px] font-bold text-gray-400 uppercase">UID TOPUP</p>
                 </div>
+                
                 <div onclick="openOrder('WEEKLY')" class="service-card">
-                    <div class="icon-box"><img src="oss-a4dc82551f55d986ea4bab3e8521c172.png" class="w-full h-full object-cover"></div>
+                    <div class="icon-box">
+                        <img src="weekly_logo.png" class="w-full h-full object-cover" alt="Weekly">
+                    </div>
                     <p class="text-[8px] font-bold text-gray-400 uppercase">WEEKLY</p>
                 </div>
+                
                 <div onclick="openOrder('MONTHLY')" class="service-card">
-                    <div class="icon-box"><img src="image_e070115c-7d67-479a-9312-39fd04c46b12.png" class="w-full h-full object-cover"></div>
+                    <div class="icon-box">
+                        <img src="monthly_logo.png" class="w-full h-full object-cover" alt="Monthly">
+                    </div>
                     <p class="text-[8px] font-bold text-gray-400 uppercase">MONTHLY</p>
                 </div>
             </div>
         </div>
 
         <div id="profilePage" class="page-content hidden-page p-6 text-center">
-            <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-yellow-500">
-                <i class="fa-solid fa-user text-3xl text-yellow-500"></i>
+            <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center border-2 border-yellow-500 overflow-hidden">
+                <img id="profileImg" src="" class="w-full h-full object-cover hidden">
+                <i id="profileIcon" class="fa-solid fa-user text-3xl text-yellow-500"></i>
             </div>
             <h3 class="text-xl font-bold mb-1" id="profileName">User Name</h3>
-            <button onclick="logout()" class="w-full mt-10 bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold">Logout Account</button>
+            <button onclick="logout()" class="w-full mt-10 bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+            </button>
+        </div>
+
+        <div id="orderPage" class="page-content hidden-page p-4">
+            <button onclick="showPage('homePage')" class="text-gray-400 mb-4 flex items-center gap-2 text-sm"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <div class="bg-[#111111] rounded-3xl p-6 border border-gray-800">
+                <h3 id="orderTitle" class="font-bold text-white mb-6 uppercase text-sm border-b border-gray-800 pb-2">Select Package</h3>
+                <div id="packageList" class="grid grid-cols-2 gap-3 mb-6"></div>
+                <input type="text" placeholder="Enter Player ID" class="w-full bg-black border border-gray-800 p-4 rounded-xl text-white mb-6 outline-none">
+                <button class="w-full bg-yellow-500 text-black py-4 rounded-xl font-bold uppercase tracking-wider">CONFIRM</button>
+            </div>
         </div>
 
         <nav class="fixed bottom-0 left-0 right-0 nav-bar py-4 px-10 flex justify-between items-center z-50">
@@ -114,6 +133,20 @@
     </div>
 
     <script>
+        // প্যাকেজ ডাটা লোগো লিঙ্ক সহ (উদাহরণস্বরূপ কিছু ছবি দেওয়া হলো)
+        const packData = {
+            'WEEKLY': [
+                { name: 'Weekly Lite', price: '১৫৪', img: 'oss-a4dc82551f55d986ea4bab3e8521c172.png' },
+                { name: '2X Weekly', price: '৩০৮', img: 'oss-a4dc82551f55d986ea4bab3e8521c172.png' }
+            ],
+            'MONTHLY': [
+                { name: 'Monthly Pro', price: '৭৬৫', img: 'oss-3c8ac1d57fcaeb222b2fe02d9f8cc5d8.png' }
+            ],
+            'UID TOPUP': [
+                { name: '115 Diamonds', price: '৮০', img: 'diamond_icon.png' }
+            ]
+        };
+
         function handleCredentialResponse(response) {
             const data = parseJwt(response.credential);
             localStorage.setItem('nexUser', JSON.stringify(data));
@@ -123,6 +156,12 @@
         function loginSuccess(data) {
             document.getElementById('userName').innerText = data.given_name;
             document.getElementById('profileName').innerText = data.name;
+            // প্রোফাইল ছবি থাকলে সেট হবে
+            if (data.picture) {
+                document.getElementById('profileImg').src = data.picture;
+                document.getElementById('profileImg').classList.remove('hidden');
+                document.getElementById('profileIcon').classList.add('hidden');
+            }
             document.getElementById('loginPage').classList.add('hidden-page');
             document.getElementById('mainUI').classList.remove('hidden-page');
         }
@@ -135,6 +174,24 @@
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
             document.getElementById(pageId).classList.remove('hidden-page');
+            window.scrollTo(0,0);
+        }
+
+        function openOrder(title) {
+            document.getElementById('orderTitle').innerText = title;
+            const pList = document.getElementById('packageList');
+            pList.innerHTML = '';
+            // সঠিক প্যাকেজ ডাটা টেনে আনা
+            (packData[title] || []).forEach(p => {
+                pList.innerHTML += `
+                    <div class="bg-black border border-gray-800 rounded-2xl p-4 text-center">
+                        <img src="${p.img}" class="h-12 mx-auto mb-2 object-contain" alt="Package">
+                        <p class="text-[10px] font-bold text-gray-400">${p.name}</p>
+                        <p class="text-xs font-black text-blue-500">৳ ${p.price}</p>
+                    </div>
+                `;
+            });
+            showPage('orderPage');
         }
 
         function parseJwt(token) {
