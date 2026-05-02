@@ -11,7 +11,6 @@
         .hidden-page { display: none !important; }
         body { font-family: 'Segoe UI', sans-serif; background-color: #000000; color: white; -webkit-tap-highlight-color: transparent; }
         
-        /* 3 Box Style as per Screenshot */
         .service-card {
             background: #111111;
             border-radius: 1.5rem;
@@ -32,6 +31,7 @@
             justify-content: center;
             margin-bottom: 0.5rem;
             border: 1px solid #333;
+            overflow: hidden;
         }
 
         .header-bg { background: #000000; border-bottom: 1px solid #1f2937; }
@@ -49,7 +49,10 @@
     <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-black">
         <div class="w-full max-w-sm text-center">
             <img src="logo-main.png" alt="NexTopUp" class="h-24 mx-auto mb-10 object-contain">
-            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleCredentialResponse"></div>
+            <div id="g_id_onload" 
+                 data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" 
+                 data-callback="handleCredentialResponse">
+            </div>
             <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
         </div>
     </div>
@@ -58,13 +61,9 @@
         <header class="header-bg p-4 flex justify-between items-center sticky top-0 z-50">
             <div class="flex items-center gap-2">
                 <img src="file_00000000c9787208b660aa071e1c6022.png" alt="Logo" class="h-8 w-8 rounded">
-                <div>
-                    <h1 class="text-white font-bold text-sm">NEXT<span class="text-yellow-500">TOPUP</span></h1>
-                </div>
+                <h1 class="text-white font-bold text-sm">NEXT<span class="text-yellow-500">TOPUP</span></h1>
             </div>
-            <div class="bg-[#111111] text-yellow-500 px-3 py-1 rounded-full font-bold text-xs border border-gray-800">
-                ৳ ০.০০
-            </div>
+            <div class="bg-[#111111] text-yellow-500 px-3 py-1 rounded-full font-bold text-xs border border-gray-800">৳ ০.০০</div>
         </header>
 
         <div id="homePage" class="page-content p-4">
@@ -84,11 +83,11 @@
                     <p class="text-[8px] font-bold text-gray-400 uppercase">UID TOPUP</p>
                 </div>
                 <div onclick="openOrder('WEEKLY')" class="service-card">
-                    <div class="icon-box"><i class="fa-solid fa-crown text-xl text-yellow-500"></i></div>
+                    <div class="icon-box"><img src="oss-a4dc82551f55d986ea4bab3e8521c172.png" class="w-full h-full object-cover"></div>
                     <p class="text-[8px] font-bold text-gray-400 uppercase">WEEKLY</p>
                 </div>
                 <div onclick="openOrder('MONTHLY')" class="service-card">
-                    <div class="icon-box"><i class="fa-solid fa-gem text-xl text-purple-500"></i></div>
+                    <div class="icon-box"><img src="image_e070115c-7d67-479a-9312-39fd04c46b12.png" class="w-full h-full object-cover"></div>
                     <p class="text-[8px] font-bold text-gray-400 uppercase">MONTHLY</p>
                 </div>
             </div>
@@ -99,21 +98,7 @@
                 <i class="fa-solid fa-user text-3xl text-yellow-500"></i>
             </div>
             <h3 class="text-xl font-bold mb-1" id="profileName">User Name</h3>
-            <p class="text-gray-500 text-sm mb-10">premium member</p>
-            
-            <button onclick="logout()" class="w-full bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout Account
-            </button>
-        </div>
-
-        <div id="orderPage" class="page-content hidden-page p-4">
-            <button onclick="showPage('homePage')" class="text-gray-400 mb-4 flex items-center gap-2 text-sm"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <div class="bg-[#111111] rounded-3xl p-6 border border-gray-800">
-                <h3 id="orderTitle" class="font-bold text-white mb-6 uppercase text-sm">Package</h3>
-                <div id="packageList" class="grid grid-cols-2 gap-3 mb-6"></div>
-                <input type="text" placeholder="Enter Player ID" class="w-full bg-black border border-gray-800 p-4 rounded-xl text-white mb-6 outline-none">
-                <button class="w-full bg-yellow-500 text-black py-4 rounded-xl font-bold">CONFIRM</button>
-            </div>
+            <button onclick="logout()" class="w-full mt-10 bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold">Logout Account</button>
         </div>
 
         <nav class="fixed bottom-0 left-0 right-0 nav-bar py-4 px-10 flex justify-between items-center z-50">
@@ -144,17 +129,12 @@
 
         function logout() {
             localStorage.removeItem('nexUser');
-            location.reload(); // Refresh the page to show login
+            location.reload();
         }
 
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
             document.getElementById(pageId).classList.remove('hidden-page');
-        }
-
-        function openOrder(title) {
-            document.getElementById('orderTitle').innerText = title;
-            showPage('orderPage');
         }
 
         function parseJwt(token) {
