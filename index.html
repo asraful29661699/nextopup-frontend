@@ -1,78 +1,107 @@
-<section class="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl">
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <h2 class="text-xl font-bold mb-4 text-center">Top-Up Now</h2>
-
-  <!-- STEP 1 -->
-  <div class="mb-4">
-    <label class="text-sm text-gray-500">Player UID</label>
-    <input id="uid" class="w-full border p-3 rounded-lg mt-1" placeholder="Enter UID">
-  </div>
-
-  <!-- STEP 2 -->
-  <div class="mb-4">
-    <label class="text-sm text-gray-500">Select Package</label>
-    <div class="grid grid-cols-2 gap-3 mt-2">
-
-      <button onclick="selectPackage('100')" class="pkg border p-3 rounded-lg hover:border-blue-500">
-        100 💎 <br> ৳80
-      </button>
-
-      <button onclick="selectPackage('210')" class="pkg border p-3 rounded-lg hover:border-blue-500">
-        210 💎 <br> ৳160
-      </button>
-
+<div class="bg-gray-100 min-h-screen py-10 px-4">
+  <section class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+    
+    <div class="bg-[#6328e0] p-6 text-center text-white">
+      <h2 class="text-2xl font-bold">Free Fire Top-Up</h2>
+      <p class="text-xs opacity-80 mt-1">Instant Delivery via Game ID</p>
     </div>
-  </div>
 
-  <!-- STEP 3 -->
-  <div class="mb-4">
-    <label class="text-sm text-gray-500">Payment Method</label>
+    <div class="p-6 space-y-6">
+      
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+          <label class="font-bold text-gray-700">Account Info</label>
+        </div>
+        <input id="uid" class="w-full border-2 border-gray-100 bg-gray-50 p-4 rounded-xl focus:border-[#6328e0] focus:outline-none transition-all" placeholder="প্লেয়ার আইডি (UID) বসান">
+      </div>
 
-    <div class="grid grid-cols-2 gap-3 mt-2">
-      <button onclick="selectPay('bkash')" id="bkashBtn" class="border p-3 rounded-lg hover:border-pink-500">
-        bKash
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+          <label class="font-bold text-gray-700">Select Package</label>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="selectPackage('100', this)" class="pkg-card border-2 border-gray-100 p-4 rounded-2xl hover:bg-purple-50 transition-all text-center group">
+            <span class="block text-xl">💎 100</span>
+            <span class="block text-[#6328e0] font-bold mt-1">৳৮০</span>
+          </button>
+          <button onclick="selectPackage('210', this)" class="pkg-card border-2 border-gray-100 p-4 rounded-2xl hover:bg-purple-50 transition-all text-center group">
+            <span class="block text-xl">💎 210</span>
+            <span class="block text-[#6328e0] font-bold mt-1 text-sm">৳১৬০</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+          <label class="font-bold text-gray-700">Payment Method</label>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="selectPay('bkash', this)" class="pay-btn border-2 border-gray-100 p-3 rounded-xl flex items-center justify-center gap-2 hover:border-pink-500 transition-all">
+            <img src="https://itshamsul.com/wp-content/uploads/2023/06/bkash-logo.png" class="h-6" alt="bKash">
+          </button>
+          <button onclick="selectPay('nagad', this)" class="pay-btn border-2 border-gray-100 p-3 rounded-xl flex items-center justify-center gap-2 hover:border-orange-500 transition-all">
+            <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" class="h-8" alt="Nagad">
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+          <label class="font-bold text-gray-700">Transaction ID</label>
+        </div>
+        <input id="trx" class="w-full border-2 border-gray-100 bg-gray-50 p-4 rounded-xl focus:border-[#6328e0] focus:outline-none" placeholder="পেমেন্ট ট্রানজেকশন আইডি দিন">
+      </div>
+
+      <button onclick="order()" class="w-full bg-[#6328e0] text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-purple-200 hover:scale-[1.02] active:scale-95 transition-all">
+        Buy Now
       </button>
 
-      <button onclick="selectPay('nagad')" id="nagadBtn" class="border p-3 rounded-lg hover:border-orange-500">
-        Nagad
-      </button>
+      <p id="status" class="text-green-600 font-medium text-center"></p>
     </div>
-  </div>
-
-  <!-- STEP 4 -->
-  <div class="mb-4">
-    <label class="text-sm text-gray-500">Transaction ID</label>
-    <input id="trx" class="w-full border p-3 rounded-lg mt-1">
-  </div>
-
-  <button onclick="order()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold">
-    Confirm Order
-  </button>
-
-  <p id="status" class="text-green-600 mt-3 text-center"></p>
-
-</section>
+  </section>
+</div>
 
 <script>
-let product = '';
-let paymentMethod = '';
+let selectedProduct = '';
+let selectedMethod = '';
 
-function selectPackage(p){
-  product = p;
-  document.querySelectorAll('.pkg').forEach(btn => btn.classList.remove('border-blue-500'));
-  event.target.classList.add('border-blue-500');
+function selectPackage(p, element) {
+  selectedProduct = p;
+  // Remove selection from all
+  document.querySelectorAll('.pkg-card').forEach(card => {
+    card.classList.remove('border-[#6328e0]', 'bg-purple-50');
+    card.classList.add('border-gray-100');
+  });
+  // Add to current
+  element.classList.add('border-[#6328e0]', 'bg-purple-50');
+  element.classList.remove('border-gray-100');
 }
 
-function selectPay(method){
-  paymentMethod = method;
+function selectPay(method, element) {
+  selectedMethod = method;
+  document.querySelectorAll('.pay-btn').forEach(btn => {
+    btn.classList.remove('border-pink-500', 'border-orange-500', 'bg-gray-50');
+  });
+  
+  if(method === 'bkash') element.classList.add('border-pink-500', 'bg-gray-50');
+  if(method === 'nagad') element.classList.add('border-orange-500', 'bg-gray-50');
+}
 
-  document.getElementById('bkashBtn').classList.remove('border-pink-500');
-  document.getElementById('nagadBtn').classList.remove('border-orange-500');
+function order() {
+  const uid = document.getElementById('uid').value;
+  const trx = document.getElementById('trx').value;
 
-  if(method === 'bkash'){
-    document.getElementById('bkashBtn').classList.add('border-pink-500');
-  } else {
-    document.getElementById('nagadBtn').classList.add('border-orange-500');
+  if(!uid || !selectedProduct || !selectedMethod || !trx) {
+    alert('দয়া করে সব তথ্য পূরণ করুন!');
+    return;
   }
+
+  document.getElementById('status').innerText = "অর্ডারটি সফল হয়েছে! ১০-৩০ মিনিট অপেক্ষা করুন।";
 }
 </script>
