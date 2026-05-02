@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Complete Site</title>
+    <title>NexTopUp - Fixed Logos</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // আপনার Firebase Config (ছবি অনুযায়ী ঠিক করা হয়েছে)
         const firebaseConfig = {
             apiKey: "AIzaSyB4Lff3dPJvWnIMEdbJS0wIEWaBXNlBmro",
             authDomain: "nextopup-e6b28.firebaseapp.com",
@@ -26,7 +25,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // অ্যাডমিন ড্যাশবোর্ড ডাটা লোড (আপনার স্ক্রিনশটের মতো ৪টি কার্ড)
+        // Admin functionality
         window.loadAdminDashboard = function() {
             onValue(ref(db, 'orders'), (snapshot) => {
                 const data = snapshot.val();
@@ -39,19 +38,7 @@
                         total++; 
                         if(o.status === 'pending') pending++;
                         else if(o.status === 'done') completed++;
-
-                        listUI.innerHTML += `
-                            <div class="bg-[#111] border border-gray-800 p-4 rounded-2xl mb-3 flex justify-between items-center">
-                                <div>
-                                    <p class="text-xs text-yellow-500 font-bold uppercase">ID: ${o.playerID}</p>
-                                    <p class="text-[10px] text-gray-400 mt-1">${o.package} - ৳${o.price}</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    ${o.status === 'pending' ? `
-                                        <button onclick="updateStatus('${key}', 'done')" class="bg-green-600/20 text-green-500 text-[10px] px-3 py-1 rounded-lg font-bold">DONE</button>
-                                    ` : `<span class="text-[9px] text-gray-600 uppercase font-bold">${o.status}</span>`}
-                                </div>
-                            </div>`;
+                        listUI.innerHTML += `<div class="bg-[#111] border border-gray-800 p-4 rounded-2xl mb-3 flex justify-between items-center"><div><p class="text-xs text-yellow-500 font-bold uppercase">ID: ${o.playerID}</p><p class="text-[10px] text-gray-400 mt-1">${o.package} - ৳${o.price}</p></div><button onclick="updateStatus('${key}', 'done')" class="bg-green-600/20 text-green-500 text-[10px] px-3 py-1 rounded-lg font-bold">DONE</button></div>`;
                     });
                 }
                 document.getElementById('statTotalOrders').innerText = total;
@@ -64,30 +51,29 @@
 
     <style>
         .hidden-page { display: none !important; }
-        body { background: #000; color: #fff; font-family: sans-serif; overflow-x: hidden; }
+        body { background: #000; color: #fff; font-family: sans-serif; }
         .card-dark { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 20px; }
-        .nav-icon { font-size: 20px; color: #444; cursor: pointer; transition: 0.3s; }
-        .nav-active { color: #eab308; }
+        .nav-active { color: #eab308 !important; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .animate-marquee { display: inline-block; animation: marquee 15s linear infinite; }
     </style>
 </head>
 <body class="pb-24">
 
     <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-[#001529]">
         <div class="bg-white p-10 rounded-[40px] text-center w-full max-w-sm shadow-2xl">
-            <img src="https://i.ibb.co/L9H8XvP/nextopup-logo.png" class="w-20 mx-auto mb-4">
+            <img src="logo-main.png" class="w-20 mx-auto mb-4" alt="Main Logo">
             <h1 class="text-2xl font-black text-[#001529] mb-1">NexTopUp</h1>
-            <p class="text-[10px] text-gray-400 font-bold mb-8 tracking-widest uppercase">Login to Continue</p>
+            <p class="text-[10px] text-gray-400 font-bold mb-8 uppercase tracking-widest">Login to Continue</p>
             <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
-            <p class="mt-8 text-[8px] text-gray-300 font-bold uppercase tracking-widest">Safe • Fast • Reliable</p>
         </div>
     </div>
 
     <div id="mainUI" class="hidden-page">
-        
         <header class="p-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <img src="https://i.ibb.co/L9H8XvP/nextopup-logo.png" class="w-8">
+                <img src="file_00000000c9787208b660aa071e1c6022.png" class="w-8">
                 <h1 class="font-black italic text-lg uppercase tracking-tighter">Next<span class="text-yellow-500">TopUp</span></h1>
             </div>
             <div class="bg-[#111] px-4 py-2 rounded-full border border-gray-800 flex items-center gap-2">
@@ -96,15 +82,15 @@
             </div>
         </header>
 
-        <div class="bg-yellow-500 text-black text-[10px] font-bold py-2 px-4 mb-4 overflow-hidden whitespace-nowrap">
+        <div class="bg-yellow-500 text-black text-[10px] font-bold py-2 overflow-hidden whitespace-nowrap">
             <p class="animate-marquee italic uppercase">NexTopUp-এ আপনাকে স্বাগতম! দ্রুত এবং নিরাপদ টপ-আপের জন্য আমাদের সাথেই থাকুন।</p>
         </div>
 
         <div id="homePage" class="page-content p-4">
-            <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 rounded-[40px] mb-6 relative overflow-hidden">
+            <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 rounded-[40px] mb-6">
                 <h2 class="text-2xl font-black mb-1">হ্যালো, <span id="userName">User</span>!</h2>
                 <p class="text-xs opacity-80 mb-6">আপনার প্রিয় গেম টপ-আপ করুন দ্রুত</p>
-                <a href="https://t.me/yourlink" class="bg-blue-500 text-[10px] font-black px-6 py-3 rounded-full inline-flex items-center gap-2 uppercase">
+                <a href="https://t.me/nextopup" class="bg-white/20 backdrop-blur-md text-[10px] font-black px-6 py-3 rounded-full inline-flex items-center gap-2 uppercase">
                     <i class="fa-brands fa-telegram text-sm"></i> জয়েন টেলিগ্রাম
                 </a>
             </div>
@@ -114,86 +100,35 @@
             </h3>
             <div class="grid grid-cols-3 gap-3">
                 <div onclick="openOrder('UID TOPUP', '80')" class="card-dark p-6 text-center cursor-pointer">
-                    <i class="fa-solid fa-id-card text-blue-500 mb-3 text-2xl"></i>
-                    <p class="text-[9px] font-bold uppercase">UID Topup</p>
+                    <i class="fa-solid fa-id-card text-blue-500 mb-2 text-xl"></i>
+                    <p class="text-[8px] font-bold uppercase">UID Topup</p>
                 </div>
                 <div onclick="openOrder('WEEKLY', '155')" class="card-dark p-6 text-center cursor-pointer">
-                    <img src="https://img.icons8.com/color/96/diamond.png" class="h-8 mx-auto mb-3">
-                    <p class="text-[9px] font-bold uppercase">Weekly</p>
+                    <img src="weekly_logo.png" class="h-6 mx-auto mb-2">
+                    <p class="text-[8px] font-bold uppercase">Weekly</p>
                 </div>
                 <div onclick="openOrder('MONTHLY', '765')" class="card-dark p-6 text-center cursor-pointer">
-                    <img src="https://img.icons8.com/fluency/96/diamond.png" class="h-8 mx-auto mb-3">
-                    <p class="text-[9px] font-bold uppercase">Monthly</p>
+                    <img src="monthly_logo.png" class="h-6 mx-auto mb-2">
+                    <p class="text-[8px] font-bold uppercase">Monthly</p>
                 </div>
-            </div>
-        </div>
-
-        <div id="addMoneyPage" class="page-content hidden-page p-4">
-            <h2 class="text-xl font-black mb-6 uppercase italic">Add Money</h2>
-            <div class="card-dark p-6 text-center">
-                <p class="text-xs text-gray-500 mb-4">আপনার একাউন্টে টাকা যোগ করতে নিচের নম্বরে সেন্ড মানি করুন</p>
-                <div class="bg-black p-4 rounded-2xl border border-dashed border-gray-700 mb-6 font-bold text-yellow-500">
-                    BKASH/NAGAD: 017XXXXXXXX
-                </div>
-                <input type="number" placeholder="কত টাকা?" class="w-full bg-black border border-gray-800 p-4 rounded-2xl mb-3 text-sm">
-                <button class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black uppercase">Request Add Money</button>
             </div>
         </div>
 
         <div id="adminPage" class="page-content hidden-page p-4">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-yellow-500 font-black italic text-xl">ADMIN PANEL</h1>
-                <button onclick="showPage('homePage')" class="text-[10px] font-bold bg-[#111] px-4 py-2 rounded-full border border-gray-800 uppercase">Back</button>
-            </div>
-            <div class="grid grid-cols-2 gap-3 mb-8">
-                <div class="card-dark p-5 relative overflow-hidden">
-                    <p id="statTotalOrders" class="text-2xl font-black">0</p>
-                    <p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Total Orders</p>
-                </div>
-                <div class="card-dark p-5">
-                    <p class="text-2xl font-black text-blue-500">১২৫</p>
-                    <p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Total Viewers</p>
-                </div>
-                <div class="card-dark p-5 border-green-900/30">
-                    <p id="statCompleted" class="text-2xl font-black text-green-500">0</p>
-                    <p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Done Orders</p>
-                </div>
-                <div class="card-dark p-5 border-yellow-900/30">
-                    <p id="statPending" class="text-2xl font-black text-yellow-500">0</p>
-                    <p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Waiting</p>
-                </div>
+            <h1 class="text-yellow-500 font-black italic text-xl mb-6">ADMIN PANEL</h1>
+            <div class="grid grid-cols-2 gap-3 mb-8 text-center">
+                <div class="card-dark p-5"><p id="statTotalOrders" class="text-2xl font-black">0</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Total Orders</p></div>
+                <div class="card-dark p-5"><p class="text-2xl font-black text-blue-500">১২৫</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Viewers</p></div>
+                <div class="card-dark p-5 border-green-900/30"><p id="statCompleted" class="text-2xl font-black text-green-500">0</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Done</p></div>
+                <div class="card-dark p-5 border-yellow-900/30"><p id="statPending" class="text-2xl font-black text-yellow-500">0</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Waiting</p></div>
             </div>
             <div id="liveOrderList" class="space-y-3"></div>
         </div>
 
-        <div id="profilePage" class="page-content hidden-page p-8 text-center">
-            <div class="relative w-28 h-28 mx-auto mb-6">
-                <img id="profileImg" class="w-full h-full rounded-full border-4 border-yellow-500 p-1 shadow-xl shadow-yellow-500/10">
-            </div>
-            <h3 id="profileName" class="text-xl font-black uppercase italic"></h3>
-            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-10">Premium Member</p>
-            
-            <div class="space-y-3">
-                <button id="adminBtn" onclick="showPage('adminPage')" class="w-full bg-yellow-500 text-black py-4 rounded-3xl font-black hidden uppercase">Admin Control</button>
-                <button onclick="logout()" class="w-full bg-[#111] text-red-500 py-4 rounded-3xl text-[10px] font-bold uppercase border border-red-900/20">Logout</button>
-            </div>
-        </div>
-
-        <nav class="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-md border-t border-gray-900 py-4 px-10 flex justify-between items-center z-50">
-            <div onclick="showPage('homePage')" id="navHome" class="nav-icon nav-active"><i class="fa-solid fa-house"></i></div>
-            <div onclick="showPage('addMoneyPage')" id="navAdd" class="nav-icon"><i class="fa-solid fa-circle-plus"></i></div>
-            <div onclick="showPage('profilePage')" id="navProfile" class="nav-icon"><i class="fa-solid fa-circle-user"></i></div>
+        <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-900 py-4 px-12 flex justify-between">
+            <div onclick="showPage('homePage')" id="navHome" class="nav-active cursor-pointer"><i class="fa-solid fa-house text-xl"></i></div>
+            <div onclick="showPage('adminPage')" id="navAdmin" class="text-gray-600 cursor-pointer"><i class="fa-solid fa-gauge text-xl"></i></div>
         </nav>
-    </div>
-
-    <div id="orderPage" class="page-content hidden-page fixed inset-0 bg-black/90 p-6 z-[100] flex items-center justify-center">
-        <div class="card-dark p-8 w-full max-w-sm">
-            <h3 id="orderTitle" class="font-black mb-6 text-center text-yellow-500 text-xl italic uppercase"></h3>
-            <input id="playerIDInput" type="text" placeholder="গেম ID দিন..." class="w-full bg-black border border-gray-800 p-4 rounded-2xl mb-3 text-sm focus:border-yellow-500 outline-none">
-            <input id="trxIDInput" type="text" placeholder="ট্রানজেকশন ID দিন..." class="w-full bg-black border border-gray-800 p-4 rounded-2xl mb-8 text-sm focus:border-yellow-500 outline-none">
-            <button id="confirmBtn" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black uppercase">Confirm Order</button>
-            <button onclick="showPage('homePage')" class="w-full text-[10px] text-gray-600 mt-6 font-bold uppercase tracking-widest">Cancel</button>
-        </div>
     </div>
 
     <script>
@@ -205,29 +140,22 @@
         };
         function loginSuccess(d) {
             document.getElementById('userName').innerText = d.given_name;
-            document.getElementById('profileName').innerText = d.name;
-            document.getElementById('profileImg').src = d.picture;
             if(d.email === ADMIN_EMAIL) {
-                document.getElementById('adminBtn').classList.remove('hidden');
+                document.getElementById('navAdmin').classList.remove('hidden');
                 loadAdminDashboard();
+            } else {
+                document.getElementById('navAdmin').classList.add('hidden');
             }
             document.getElementById('loginPage').classList.add('hidden-page');
             document.getElementById('mainUI').classList.remove('hidden-page');
         }
         window.showPage = (id) => {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
-            document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('nav-active'));
+            document.querySelectorAll('.nav-active').forEach(n => n.classList.remove('nav-active', 'text-yellow-500'));
             document.getElementById(id).classList.remove('hidden-page');
-            if(id === 'homePage') document.getElementById('navHome').classList.add('nav-active');
-            if(id === 'addMoneyPage') document.getElementById('navAdd').classList.add('nav-active');
-            if(id === 'profilePage') document.getElementById('navProfile').classList.add('nav-active');
+            if(id === 'homePage') document.getElementById('navHome').classList.add('nav-active', 'text-yellow-500');
+            if(id === 'adminPage') document.getElementById('navAdmin').classList.add('nav-active', 'text-yellow-500');
         };
-        window.openOrder = (t, p) => {
-            document.getElementById('orderTitle').innerText = t + " - ৳" + p;
-            document.getElementById('confirmBtn').onclick = () => placeOrder(t, p);
-            showPage('orderPage');
-        };
-        window.logout = () => { localStorage.removeItem('nexUser'); location.reload(); };
         window.onload = () => {
             const u = localStorage.getItem('nexUser');
             if(u) loginSuccess(JSON.parse(u));
