@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Premium Store</title>
+    <title>NexTopUp - Admin Panel Enabled</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,37 +11,14 @@
         .hidden-page { display: none !important; }
         body { font-family: 'Segoe UI', sans-serif; background-color: #000000; color: white; -webkit-tap-highlight-color: transparent; }
         
-        .service-card {
-            background: #111111;
-            border-radius: 1.5rem;
-            padding: 1rem;
-            text-align: center;
-            border: 1px solid #1f2937;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .service-card:active { transform: scale(0.95); background: #1a1a1a; }
-        
-        .icon-box {
-            background: #000000;
-            border-radius: 1rem;
-            aspect-ratio: 1/1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-            border: 1px solid #333;
-            overflow: hidden; /* ছবি যাতে বক্সের বাইরে না যায় */
-        }
-
-        .header-bg { background: #000000; border-bottom: 1px solid #1f2937; }
-        .greeting-card { 
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6); 
-            border-radius: 1.5rem; 
-            margin-bottom: 1.5rem;
-        }
-        
+        .service-card { background: #111111; border-radius: 1.5rem; padding: 1rem; text-align: center; border: 1px solid #1f2937; transition: all 0.3s ease; cursor: pointer; }
+        .icon-box { background: #000000; border-radius: 1rem; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; border: 1px solid #333; overflow: hidden; }
+        .greeting-card { background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: 1.5rem; margin-bottom: 1.5rem; }
         .nav-bar { background: #000000; border-top: 1px solid #1f2937; }
+
+        /* Admin Panel Specific Styles */
+        .admin-stat-card { background: #111111; border: 1px solid #eab308; border-radius: 1rem; padding: 1rem; }
+        .order-row { background: #0a0a0a; border-left: 4px solid #eab308; border-radius: 0.5rem; padding: 0.75rem; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body class="pb-24">
@@ -49,52 +26,56 @@
     <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-black">
         <div class="w-full max-w-sm text-center">
             <img src="logo-main.png" alt="NexTopUp" class="h-24 mx-auto mb-10 object-contain">
-            <div id="g_id_onload" 
-                 data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" 
-                 data-callback="handleCredentialResponse">
-            </div>
+            <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
         </div>
     </div>
 
     <div id="mainUI" class="hidden-page">
-        <header class="header-bg p-4 flex justify-between items-center sticky top-0 z-50">
-            <div class="flex items-center gap-2">
+        <header class="bg-black p-4 flex justify-between items-center sticky top-0 z-50 border-b border-gray-800">
+            <div onclick="showPage('homePage')" class="flex items-center gap-2 cursor-pointer">
                 <img src="file_00000000c9787208b660aa071e1c6022.png" alt="Logo" class="h-8 w-8 rounded">
                 <h1 class="text-white font-bold text-sm">NEXT<span class="text-yellow-500">TOPUP</span></h1>
             </div>
-            <div class="bg-[#111111] text-yellow-500 px-3 py-1 rounded-full font-bold text-xs border border-gray-800">৳ ০.০০</div>
+            <div class="bg-[#111111] text-yellow-500 px-3 py-1 rounded-full font-bold text-xs border border-gray-800 flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-white text-[10px]"></i> ৳ ০.০০
+            </div>
         </header>
 
         <div id="homePage" class="page-content p-4">
             <div class="greeting-card p-6 shadow-2xl">
-                <h2 class="text-white text-xl font-bold">হ্যালো, <span id="userName">Asraful</span>!</h2>
+                <h2 class="text-white text-xl font-bold">হ্যালো, <span id="userName">User</span>!</h2>
                 <p class="text-blue-100 text-xs mt-1">আপনার প্রিয় গেম টপ-আপ করুন</p>
-                <button class="mt-4 bg-blue-500/30 border border-blue-400/50 text-white text-[10px] px-4 py-1.5 rounded-full flex items-center gap-2">
-                    <i class="fa-brands fa-telegram"></i> জয়েন টেলিগ্রাম
-                </button>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <div onclick="openOrder('UID TOPUP')" class="service-card"><div class="icon-box"><i class="fa-solid fa-id-card text-xl text-blue-500"></i></div><p class="text-[8px] font-bold text-gray-400 uppercase">UID TOPUP</p></div>
+                <div onclick="openOrder('WEEKLY')" class="service-card"><div class="icon-box"><img src="oss-a4dc82551f55d986ea4bab3e8521c172.png" class="w-full h-full object-cover"></div><p class="text-[8px] font-bold text-gray-400 uppercase">WEEKLY</p></div>
+                <div onclick="openOrder('MONTHLY')" class="service-card"><div class="icon-box"><img src="image_e070115c-7d67-479a-9312-39fd04c46b12.png" class="w-full h-full object-cover"></div><p class="text-[8px] font-bold text-gray-400 uppercase">MONTHLY</p></div>
+            </div>
+        </div>
+
+        <div id="adminPage" class="page-content hidden-page p-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black text-yellow-500 uppercase italic">Admin Dashboard</h2>
+                <button onclick="showPage('homePage')" class="text-xs bg-gray-800 px-3 py-1 rounded-lg">Close</button>
             </div>
 
-            <p class="text-yellow-500 text-[10px] font-bold italic mb-4 uppercase tracking-widest">Free Fire Services</p>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="admin-stat-card"><p class="text-[10px] text-gray-400 uppercase font-bold">Total Orders</p><p class="text-2xl font-black">১৫</p></div>
+                <div class="admin-stat-card"><p class="text-[10px] text-gray-400 uppercase font-bold">Pending</p><p class="text-2xl font-black text-yellow-500">০৩</p></div>
+            </div>
 
-            <div class="grid grid-cols-3 gap-3">
-                <div onclick="openOrder('UID TOPUP')" class="service-card">
-                    <div class="icon-box"><i class="fa-solid fa-id-card text-xl text-blue-500"></i></div>
-                    <p class="text-[8px] font-bold text-gray-400 uppercase">UID TOPUP</p>
-                </div>
-                
-                <div onclick="openOrder('WEEKLY')" class="service-card">
-                    <div class="icon-box">
-                        <img src="weekly_logo.png" class="w-full h-full object-cover" alt="Weekly">
+            <h3 class="text-sm font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Recent Orders</h3>
+            <div id="adminOrderList">
+                <div class="order-row flex justify-between items-center">
+                    <div>
+                        <p class="text-xs font-bold">ID: 5543229988</p>
+                        <p class="text-[9px] text-gray-500">Package: 115 Diamonds</p>
                     </div>
-                    <p class="text-[8px] font-bold text-gray-400 uppercase">WEEKLY</p>
-                </div>
-                
-                <div onclick="openOrder('MONTHLY')" class="service-card">
-                    <div class="icon-box">
-                        <img src="monthly_logo.png" class="w-full h-full object-cover" alt="Monthly">
+                    <div class="flex gap-2">
+                        <button class="bg-green-600 text-[8px] px-2 py-1 rounded font-bold">DONE</button>
+                        <button class="bg-red-600 text-[8px] px-2 py-1 rounded font-bold">CANCEL</button>
                     </div>
-                    <p class="text-[8px] font-bold text-gray-400 uppercase">MONTHLY</p>
                 </div>
             </div>
         </div>
@@ -105,47 +86,25 @@
                 <i id="profileIcon" class="fa-solid fa-user text-3xl text-yellow-500"></i>
             </div>
             <h3 class="text-xl font-bold mb-1" id="profileName">User Name</h3>
-            <button onclick="logout()" class="w-full mt-10 bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout Account
-            </button>
-        </div>
+            
+            <div class="mt-10 space-y-3">
+                <button id="adminBtn" onclick="showPage('adminPage')" class="w-full bg-yellow-500/10 border border-yellow-500 text-yellow-500 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hidden">
+                    <i class="fa-solid fa-shield-halved"></i> Admin Control
+                </button>
 
-        <div id="orderPage" class="page-content hidden-page p-4">
-            <button onclick="showPage('homePage')" class="text-gray-400 mb-4 flex items-center gap-2 text-sm"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <div class="bg-[#111111] rounded-3xl p-6 border border-gray-800">
-                <h3 id="orderTitle" class="font-bold text-white mb-6 uppercase text-sm border-b border-gray-800 pb-2">Select Package</h3>
-                <div id="packageList" class="grid grid-cols-2 gap-3 mb-6"></div>
-                <input type="text" placeholder="Enter Player ID" class="w-full bg-black border border-gray-800 p-4 rounded-xl text-white mb-6 outline-none">
-                <button class="w-full bg-yellow-500 text-black py-4 rounded-xl font-bold uppercase tracking-wider">CONFIRM</button>
+                <button onclick="logout()" class="w-full bg-red-500/10 border border-red-500 text-red-500 py-3 rounded-2xl font-bold">Logout Account</button>
             </div>
         </div>
 
         <nav class="fixed bottom-0 left-0 right-0 nav-bar py-4 px-10 flex justify-between items-center z-50">
-            <div onclick="showPage('homePage')" class="flex flex-col items-center gap-1 text-yellow-500 cursor-pointer">
-                <i class="fa-solid fa-house text-xl"></i>
-                <span class="text-[9px] font-bold">HOME</span>
-            </div>
-            <div onclick="showPage('profilePage')" class="flex flex-col items-center gap-1 text-gray-500 cursor-pointer">
-                <i class="fa-solid fa-circle-user text-xl"></i>
-                <span class="text-[9px] font-bold">PROFILE</span>
-            </div>
+            <div onclick="showPage('homePage')" class="flex flex-col items-center gap-1 text-yellow-500 cursor-pointer"><i class="fa-solid fa-house text-xl"></i><span class="text-[9px] font-bold">HOME</span></div>
+            <div onclick="showPage('profilePage')" class="flex flex-col items-center gap-1 text-gray-500 cursor-pointer"><i class="fa-solid fa-circle-user text-xl"></i><span class="text-[9px] font-bold">PROFILE</span></div>
         </nav>
     </div>
 
     <script>
-        // প্যাকেজ ডাটা লোগো লিঙ্ক সহ (উদাহরণস্বরূপ কিছু ছবি দেওয়া হলো)
-        const packData = {
-            'WEEKLY': [
-                { name: 'Weekly Lite', price: '১৫৪', img: 'oss-a4dc82551f55d986ea4bab3e8521c172.png' },
-                { name: '2X Weekly', price: '৩০৮', img: 'oss-a4dc82551f55d986ea4bab3e8521c172.png' }
-            ],
-            'MONTHLY': [
-                { name: 'Monthly Pro', price: '৭৬৫', img: 'oss-3c8ac1d57fcaeb222b2fe02d9f8cc5d8.png' }
-            ],
-            'UID TOPUP': [
-                { name: '115 Diamonds', price: '৮০', img: 'diamond_icon.png' }
-            ]
-        };
+        // আপনার ইমেইল আইডি এখানে দিন যাতে শুধু আপনিই এডমিন বাটনটি দেখতে পান
+        const ADMIN_EMAIL = "asraful29661693@gmail.com"; 
 
         function handleCredentialResponse(response) {
             const data = parseJwt(response.credential);
@@ -156,7 +115,12 @@
         function loginSuccess(data) {
             document.getElementById('userName').innerText = data.given_name;
             document.getElementById('profileName').innerText = data.name;
-            // প্রোফাইল ছবি থাকলে সেট হবে
+            
+            // এডমিন চেক
+            if(data.email === ADMIN_EMAIL) {
+                document.getElementById('adminBtn').classList.remove('hidden');
+            }
+
             if (data.picture) {
                 document.getElementById('profileImg').src = data.picture;
                 document.getElementById('profileImg').classList.remove('hidden');
@@ -166,32 +130,12 @@
             document.getElementById('mainUI').classList.remove('hidden-page');
         }
 
-        function logout() {
-            localStorage.removeItem('nexUser');
-            location.reload();
-        }
+        function logout() { localStorage.removeItem('nexUser'); location.reload(); }
 
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
             document.getElementById(pageId).classList.remove('hidden-page');
             window.scrollTo(0,0);
-        }
-
-        function openOrder(title) {
-            document.getElementById('orderTitle').innerText = title;
-            const pList = document.getElementById('packageList');
-            pList.innerHTML = '';
-            // সঠিক প্যাকেজ ডাটা টেনে আনা
-            (packData[title] || []).forEach(p => {
-                pList.innerHTML += `
-                    <div class="bg-black border border-gray-800 rounded-2xl p-4 text-center">
-                        <img src="${p.img}" class="h-12 mx-auto mb-2 object-contain" alt="Package">
-                        <p class="text-[10px] font-bold text-gray-400">${p.name}</p>
-                        <p class="text-xs font-black text-blue-500">৳ ${p.price}</p>
-                    </div>
-                `;
-            });
-            showPage('orderPage');
         }
 
         function parseJwt(token) {
