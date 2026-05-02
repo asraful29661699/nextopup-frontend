@@ -1,103 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexTopUp - Fast & Reliable</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         .animate-marquee { animation: marquee 15s linear infinite; }
         .hidden-page { display: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 pb-20">
+<body class="bg-gray-50 pb-24">
 
-    <header class="bg-white p-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
+    <header class="bg-[#1A2B56] p-4 flex justify-between items-center shadow-lg sticky top-0 z-50">
         <div onclick="showPage('home')" class="flex items-center gap-2 cursor-pointer">
-            <div class="bg-[#6328e0] text-white p-2 rounded-lg font-bold">O</div>
-            <span class="font-bold text-xl tracking-tighter uppercase">Offer <span class="text-[#6328e0]">Topup</span></span>
+            <img src="1777535107688.jpg" alt="Logo" class="h-10 w-10 rounded-lg object-cover border border-yellow-500">
+            <div class="flex flex-col">
+                <span class="text-white font-bold text-lg leading-none tracking-tight italic">NEXT<span class="text-yellow-500 font-extrabold">TOPUP</span></span>
+                <span class="text-[7px] text-gray-300 uppercase tracking-widest mt-1">Stay Ahead Tomorrow</span>
+            </div>
         </div>
-        <div class="bg-purple-100 text-[#6328e0] px-3 py-1 rounded-full font-bold flex items-center gap-1 text-sm">
-            <i class="fa-solid fa-wallet"></i> ৳০
+        <div class="flex items-center gap-3">
+            <div class="bg-[#2a3e72] text-yellow-500 px-3 py-1.5 rounded-full font-bold flex items-center gap-2 text-xs border border-yellow-500/20">
+                <i class="fa-solid fa-wallet text-white"></i> ৳ ০.০০
+            </div>
         </div>
     </header>
 
-    <div id="homePage">
-        <div class="bg-[#6328e0] text-white text-[11px] py-2 overflow-hidden whitespace-nowrap">
-            <div class="animate-marquee inline-block">১৮ বছরের নিচে কেউ অর্ডার করবেন না! ফ্যামিলির টাকা চুরি করে অর্ডার করলে ব্যবস্থা নেওয়া হবে!</div>
+    <div class="bg-yellow-500 text-[#1A2B56] text-[10px] font-bold py-1.5 overflow-hidden whitespace-nowrap">
+        <div class="animate-marquee inline-block italic">
+            NexTopUp-এ আপনাকে স্বাগতম! বিশ্বস্ততার সাথে টপ-আপ করুন। যেকোনো সমস্যায় টেলিগ্রাম সাপোর্টে যোগাযোগ করুন।
         </div>
+    </div>
 
+    <div id="homePage">
         <div class="p-4">
-            <div class="bg-gradient-to-r from-purple-800 to-indigo-900 rounded-2xl p-6 text-white shadow-lg">
-                <h2 class="font-bold text-lg">গিভওয়ে ও সকল অফার</h2>
-                <p class="text-xs text-yellow-400">টেলিগ্রাম চ্যানেলে জয়েন করুন</p>
+            <div class="bg-gradient-to-r from-[#1A2B56] to-blue-900 rounded-3xl p-6 relative overflow-hidden shadow-xl border-b-4 border-yellow-500">
+                <h2 class="text-white font-bold text-xl leading-tight relative z-10">NexTopUp এর সকল <br> <span class="text-yellow-400">অফার দেখুন</span></h2>
+                <button class="mt-4 bg-blue-500 text-white text-[10px] px-4 py-2 rounded-xl font-bold flex items-center gap-2 relative z-10">
+                    <i class="fa-brands fa-telegram text-sm"></i> জয়েন টেলিগ্রাম
+                </button>
+                <i class="fa-solid fa-bolt absolute right-[-10px] bottom-[-10px] text-white/10 text-9xl"></i>
             </div>
         </div>
 
-        <div class="px-4 mt-4">
-            <h3 class="text-center font-bold text-gray-800 mb-4 tracking-widest uppercase">Free Fire</h3>
+        <div class="px-4 mt-6">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="h-5 w-1.5 bg-yellow-500 rounded-full"></div>
+                <h3 class="font-bold text-gray-800 text-sm uppercase tracking-wider">Free Fire Services</h3>
+            </div>
+            
             <div class="grid grid-cols-3 gap-3">
-                <div onclick="showPage('orderPage')" class="bg-white rounded-2xl shadow-sm border p-2 text-center cursor-pointer active:scale-95 transition-all">
-                    <div class="bg-gradient-to-b from-indigo-500 to-purple-800 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2">
-                        <i class="fa-solid fa-id-card text-2xl"></i>
+                <div onclick="showPage('orderPage')" class="bg-white rounded-3xl shadow-sm border border-gray-100 p-2 text-center cursor-pointer active:scale-95 transition-all">
+                    <div class="bg-gradient-to-b from-[#1A2B56] to-indigo-900 rounded-2xl aspect-square flex flex-col items-center justify-center text-white mb-2">
+                        <i class="fa-solid fa-id-card text-2xl text-yellow-500"></i>
                     </div>
-                    <p class="text-[10px] font-bold text-gray-700 uppercase leading-tight">UID TOPUP (BD)</p>
+                    <p class="text-[9px] font-extrabold text-gray-700 uppercase">UID TOPUP</p>
                 </div>
+
+                <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-2 text-center opacity-70">
+                    <div class="bg-gradient-to-b from-yellow-500 to-yellow-600 rounded-2xl aspect-square flex flex-col items-center justify-center text-white mb-2">
+                        <i class="fa-solid fa-calendar-check text-2xl text-[#1A2B56]"></i>
+                    </div>
+                    <p class="text-[9px] font-extrabold text-gray-700 uppercase tracking-tighter">Monthly</p>
                 </div>
+            </div>
         </div>
     </div>
 
     <div id="orderPage" class="hidden-page p-4">
-        <button onclick="showPage('home')" class="mb-4 text-[#6328e0] font-bold flex items-center gap-2">
-            <i class="fa-solid fa-arrow-left"></i> Back to Home
+        <button onclick="showPage('home')" class="mb-4 text-[#1A2B56] font-bold flex items-center gap-2 text-sm">
+            <i class="fa-solid fa-circle-arrow-left text-lg"></i> Back Home
         </button>
 
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border">
-            <div class="bg-[#6328e0] p-4 text-white text-center">
-                <h2 class="font-bold">UID TOPUP (BD)</h2>
+        <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+            <div class="bg-[#1A2B56] p-5 text-center">
+                <h2 class="text-white font-bold">UID TOPUP (BD SERVER)</h2>
+                <p class="text-yellow-500 text-[10px] mt-1">ডেলিভারি সময়: ৫-২০ মিনিট</p>
             </div>
             
-            <div class="p-5 space-y-6">
+            <div class="p-6 space-y-6">
                 <div>
-                    <label class="font-bold text-gray-700 block mb-3">1. Select Recharge</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="selectPkg('115 Diamonds', 79, this)" class="pkg border-2 p-3 rounded-xl text-sm hover:border-[#6328e0]">
-                            115 Diamonds <br> <span class="text-[#6328e0] font-bold">BDT 79</span>
+                    <label class="font-bold text-gray-700 block mb-4 flex items-center gap-2">
+                        <span class="bg-[#1A2B56] text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span> 
+                        প্যাকেজ সিলেক্ট করুন
+                    </label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="selectPkg('115 Diamonds', 80, this)" class="pkg-card border-2 border-gray-100 p-4 rounded-3xl text-center transition-all hover:bg-blue-50 group">
+                            <span class="block text-lg">💎 115</span>
+                            <span class="block text-[#1A2B56] font-bold text-sm mt-1">BDT 80</span>
                         </button>
-                        <button onclick="selectPkg('240 Diamonds', 158, this)" class="pkg border-2 p-3 rounded-xl text-sm hover:border-[#6328e0]">
-                            240 Diamonds <br> <span class="text-[#6328e0] font-bold">BDT 158</span>
+                        <button onclick="selectPkg('240 Diamonds', 160, this)" class="pkg-card border-2 border-gray-100 p-4 rounded-3xl text-center transition-all hover:bg-blue-50 group">
+                            <span class="block text-lg">💎 240</span>
+                            <span class="block text-[#1A2B56] font-bold text-sm mt-1">BDT 160</span>
                         </button>
                     </div>
                 </div>
 
                 <div>
-                    <label class="font-bold text-gray-700 block mb-2">2. Account Info</label>
-                    <input id="playerID" class="w-full border-2 bg-gray-50 p-3 rounded-xl focus:border-[#6328e0] outline-none" placeholder="প্লেয়ার আইডি (UID) দিন">
+                    <label class="font-bold text-gray-700 block mb-2 flex items-center gap-2">
+                        <span class="bg-[#1A2B56] text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span> 
+                        প্লেয়ার আইডি
+                    </label>
+                    <input id="playerID" class="w-full border-2 border-gray-100 bg-gray-50 p-4 rounded-2xl focus:border-[#1A2B56] outline-none transition-all" placeholder="Enter Player UID">
                 </div>
 
-                <div>
-                    <label class="font-bold text-gray-700 block mb-3">3. Select Payment</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="border-2 p-3 rounded-xl text-center opacity-50">Wallet Pay</div>
-                        <div class="border-2 border-pink-500 p-3 rounded-xl text-center bg-pink-50 font-bold">Instant Pay</div>
-                    </div>
-                </div>
-
-                <button onclick="confirmOrder()" class="w-full bg-[#6328e0] text-white py-4 rounded-2xl font-bold shadow-lg">Buy Now</button>
+                <button onclick="confirmOrder()" class="w-full bg-[#1A2B56] text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-200 active:scale-95 transition-all">
+                    অর্ডার করুন
+                </button>
             </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t py-3 px-6 flex justify-between items-center text-gray-400 z-50">
-        <div onclick="showPage('home')" class="flex flex-col items-center gap-1 cursor-pointer">
-            <i class="fa-solid fa-house"></i><span class="text-[9px]">Home</span>
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3 px-8 flex justify-between items-center text-gray-400 z-50 rounded-t-3xl shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+        <div onclick="showPage('home')" class="flex flex-col items-center gap-1 text-[#1A2B56]">
+            <i class="fa-solid fa-house-chimney text-lg"></i>
+            <span class="text-[9px] font-bold">Home</span>
         </div>
-        <div class="flex flex-col items-center gap-1"><i class="fa-solid fa-file-invoice-dollar"></i><span class="text-[9px]">Add Money</span></div>
-        <div class="flex flex-col items-center gap-1"><i class="fa-solid fa-bookmark"></i><span class="text-[9px]">Orders</span></div>
-        <div class="flex flex-col items-center gap-1"><i class="fa-solid fa-user"></i><span class="text-[9px]">Account</span></div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-plus-circle text-lg text-yellow-500"></i>
+            <span class="text-[9px] font-bold">Add Money</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+            <span class="text-[9px] font-bold">Orders</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-circle-user text-lg"></i>
+            <span class="text-[9px] font-bold">Profile</span>
+        </div>
     </nav>
 
     <script>
-        let selectedAmount = 0;
+        let selectedPrice = 0;
 
         function showPage(pageId) {
             document.getElementById('homePage').classList.add('hidden-page');
@@ -107,15 +145,21 @@
         }
 
         function selectPkg(name, price, btn) {
-            selectedAmount = price;
-            document.querySelectorAll('.pkg').forEach(b => b.classList.remove('border-[#6328e0]', 'bg-purple-50'));
-            btn.classList.add('border-[#6328e0]', 'bg-purple-50');
+            selectedPrice = price;
+            document.querySelectorAll('.pkg-card').forEach(b => {
+                b.classList.remove('border-[#1A2B56]', 'bg-blue-50', 'scale-105');
+                b.classList.add('border-gray-100');
+            });
+            btn.classList.add('border-[#1A2B56]', 'bg-blue-50', 'scale-105');
+            btn.classList.remove('border-gray-100');
         }
 
         function confirmOrder() {
             const id = document.getElementById('playerID').value;
-            if(!id || selectedAmount === 0) return alert("তথ্য পূরণ করুন!");
-            alert("অর্ডার সফল! আপনার খরচ: ৳" + selectedAmount);
+            if(!id) return alert("দয়া করে প্লেয়ার আইডি দিন!");
+            if(selectedPrice === 0) return alert("প্যাকেজ সিলেক্ট করুন!");
+            
+            alert(`ধন্যবাদ! আপনার অর্ডারটি গ্রহণ করা হয়েছে।\nID: ${id}\nPrice: ৳${selectedPrice}`);
         }
     </script>
 </body>
