@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Payment Ready</title>
+    <title>NexTopUp - Admin Panel</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+        // আপনার প্রজেক্ট কনফিগ
         const firebaseConfig = {
             apiKey: "AIzaSyB4Lff3dPJvWnIMEdbJS0wIEWaBXNlBmro",
             authDomain: "nextopup-e6b28.firebaseapp.com",
@@ -25,183 +26,113 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        window.placeOrder = function(pkgName, price) {
-            const playerID = document.getElementById('playerIDInput').value;
-            const trxID = document.getElementById('trxIDInput').value;
-            
-            if(!playerID || !trxID) return alert("Player ID এবং Transaction ID দুটোই দিন!");
-
-            const orderRef = ref(db, 'orders');
-            const newOrderRef = push(orderRef);
-            set(newOrderRef, {
-                playerID: playerID,
-                trxID: trxID,
-                package: pkgName,
-                price: price,
-                status: 'pending',
-                time: new Date().toLocaleString()
-            }).then(() => {
-                alert("অর্ডার সফল! এডমিন চেক করে ২-৫ মিনিটের মধ্যে কমপ্লিট করে দিবে।");
-                showPage('homePage');
-            });
-        };
-
-        window.loadAdminData = function() {
+        // অ্যাডমিন ডাটা এবং স্ট্যাটাস লোড
+        window.loadAdminDashboard = function() {
             onValue(ref(db, 'orders'), (snapshot) => {
                 const data = snapshot.val();
-                let total = 0, pending = 0, completed = 0;
-                const listUI = document.getElementById('adminOrderList');
+                let totalOrders = 0, pending = 0, completed = 0;
+                const listUI = document.getElementById('liveOrderList');
                 listUI.innerHTML = '';
+
                 if(data) {
                     Object.keys(data).forEach(key => {
                         const o = data[key];
-                        total++; 
+                        totalOrders++; 
                         if(o.status === 'pending') pending++;
                         else if(o.status === 'done') completed++;
 
                         listUI.innerHTML += `
-                            <div class="bg-[#111] border border-gray-800 p-4 rounded-xl mb-3">
-                                <p class="text-xs text-yellow-500 font-bold">ID: ${o.playerID}</p>
-                                <p class="text-[10px] text-gray-400">TrxID: ${o.trxID}</p>
-                                <p class="text-[10px] text-white mt-1">${o.package} - ৳${o.price}</p>
-                                ${o.status === 'pending' ? `
-                                <div class="flex gap-2 mt-3">
-                                    <button onclick="updateStatus('${key}', 'done')" class="bg-green-600 text-[9px] flex-1 py-2 rounded font-bold">DONE</button>
-                                    <button onclick="updateStatus('${key}', 'cancel')" class="bg-red-600 text-[9px] flex-1 py-2 rounded font-bold">CANCEL</button>
-                                </div>` : `<p class="text-[9px] mt-2 text-green-500 font-bold uppercase">${o.status}</p>`}
+                            <div class="bg-[#111] border border-gray-800 p-4 rounded-2xl mb-3 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-yellow-500 font-bold uppercase tracking-wider">ID: ${o.playerID}</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">${o.package} - ৳${o.price}</p>
+                                    <p class="text-[9px] text-gray-600 mt-0.5">TrxID: ${o.trxID || 'N/A'}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    ${o.status === 'pending' ? `
+                                        <button onclick="updateStatus('${key}', 'done')" class="bg-green-600/20 text-green-500 text-[10px] px-4 py-2 rounded-xl font-bold">DONE</button>
+                                        <button onclick="updateStatus('${key}', 'cancel')" class="bg-red-600/20 text-red-500 text-[10px] px-4 py-2 rounded-xl font-bold">EXIT</button>
+                                    ` : `<span class="text-[9px] px-3 py-1 rounded-full ${o.status === 'done' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'} font-bold uppercase">${o.status}</span>`}
+                                </div>
                             </div>`;
                     });
+                } else {
+                    listUI.innerHTML = `<p class="text-center text-gray-600 text-xs mt-10 italic">NO ORDERS AVAILABLE YET</p>`;
                 }
-                document.getElementById('statTotal').innerText = total;
+
+                // স্ট্যাটাস কার্ডে ডাটা বসানো
+                document.getElementById('statTotalOrders').innerText = totalOrders;
                 document.getElementById('statPending').innerText = pending;
                 document.getElementById('statCompleted').innerText = completed;
             });
         };
 
-        window.updateStatus = function(id, status) {
-            update(ref(db, 'orders/' + id), { status: status });
-        };
+        window.updateStatus = (id, status) => update(ref(db, 'orders/' + id), { status: status });
     </script>
 
     <style>
-        .hidden-page { display: none !important; }
-        body { background: #000; color: #fff; font-family: sans-serif; }
-        .card-bg { background: #111; border: 1px solid #1f2937; }
+        body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; }
+        .card-dark { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 24px; padding: 20px; }
+        .stat-label { font-size: 8px; color: #666; font-weight: 800; text-transform: uppercase; margin-top: 5px; }
+        .stat-value { font-size: 24px; font-weight: 900; }
+        .badge-pending { background: #332b00; color: #ffcc00; font-size: 10px; padding: 2px 8px; border-radius: 6px; }
     </style>
 </head>
-<body class="pb-24">
+<body class="p-4 pb-20">
 
-    <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-black">
-        <div class="text-center w-full max-w-sm">
-            <h1 class="text-3xl font-black mb-10 text-yellow-500 italic">NEXT<span class="text-white">TOPUP</span></h1>
-            <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
-            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
+    <div class="flex justify-between items-center mb-8 px-2">
+        <div>
+            <h1 class="text-yellow-500 font-black italic text-xl italic tracking-tighter">ADMIN PANEL</h1>
+            <p class="text-[8px] text-gray-600 font-bold tracking-widest uppercase">Real-time Statistics</p>
+        </div>
+        <button onclick="location.reload()" class="bg-[#111] text-gray-400 text-[10px] px-5 py-2 rounded-full font-bold border border-gray-800 uppercase">Exit</button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-10">
+        <div class="card-dark relative overflow-hidden">
+            <i class="fa-solid fa-users text-blue-500 text-sm mb-2 opacity-50"></i>
+            <p class="stat-value">১২৫</p>
+            <p class="stat-label">Total Viewers</p>
+            <span class="absolute top-3 right-4 bg-blue-500/10 text-blue-500 text-[6px] px-2 py-0.5 rounded font-bold">TODAY</span>
+        </div>
+
+        <div class="card-dark relative overflow-hidden">
+            <i class="fa-solid fa-cart-shopping text-purple-500 text-sm mb-2 opacity-50"></i>
+            <p id="statTotalOrders" class="stat-value text-white">0</p>
+            <p class="stat-label">Total Orders</p>
+            <span class="absolute top-3 right-4 bg-purple-500/10 text-purple-500 text-[6px] px-2 py-0.5 rounded font-bold uppercase">Orders</span>
+        </div>
+
+        <div class="card-dark relative overflow-hidden border-green-900/30">
+            <i class="fa-solid fa-circle-check text-green-500 text-sm mb-2 opacity-50"></i>
+            <p id="statCompleted" class="stat-value text-green-500">0</p>
+            <p class="stat-label">Completed</p>
+            <span class="absolute top-3 right-4 bg-green-500/10 text-green-500 text-[6px] px-2 py-0.5 rounded font-bold uppercase">Done</span>
+        </div>
+
+        <div class="card-dark relative overflow-hidden border-yellow-900/30">
+            <i class="fa-solid fa-hourglass-half text-yellow-500 text-sm mb-2 opacity-50"></i>
+            <p id="statPending" class="stat-value text-yellow-500">0</p>
+            <p class="stat-label">Pending</p>
+            <span class="absolute top-3 right-4 bg-yellow-500/10 text-yellow-500 text-[6px] px-2 py-0.5 rounded font-bold uppercase">Waiting</span>
         </div>
     </div>
 
-    <div id="mainUI" class="hidden-page">
-        <div id="homePage" class="page-content p-4">
-            <div class="bg-blue-600 p-6 rounded-3xl mb-6 shadow-xl">
-                <h2 class="font-bold text-xl">হ্যালো, <span id="userName">User</span>!</h2>
-                <p class="text-xs opacity-90">নিচের প্যাকেজগুলো থেকে অর্ডার করুন</p>
-            </div>
-            <div class="grid grid-cols-3 gap-3">
-                <div onclick="openOrder('UID TOPUP', '80')" class="card-bg p-4 rounded-2xl text-center">
-                    <i class="fa-solid fa-id-card text-blue-500 mb-2 text-xl"></i>
-                    <p class="text-[8px] font-bold text-gray-400">UID TOPUP</p>
-                </div>
-                <div onclick="openOrder('WEEKLY', '155')" class="card-bg p-4 rounded-2xl text-center">
-                    <img src="https://img.icons8.com/color/96/diamond.png" class="h-6 mx-auto mb-2">
-                    <p class="text-[8px] font-bold text-gray-400 uppercase">WEEKLY</p>
-                </div>
-                <div onclick="openOrder('MONTHLY', '765')" class="card-bg p-4 rounded-2xl text-center">
-                    <img src="https://img.icons8.com/fluency/96/diamond.png" class="h-6 mx-auto mb-2">
-                    <p class="text-[8px] font-bold text-gray-400 uppercase">MONTHLY</p>
-                </div>
-            </div>
+    <div class="px-2">
+        <h3 class="text-[10px] font-black text-white uppercase tracking-widest mb-6 flex items-center">
+            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span> Live Orders
+        </h3>
+        <div id="liveOrderList" class="space-y-4 text-center">
+            <p class="text-gray-700 text-xs italic">Loading Live Data...</p>
         </div>
-
-        <div id="orderPage" class="page-content hidden-page p-4">
-            <div class="card-bg p-6 rounded-3xl">
-                <h3 id="orderTitle" class="font-bold mb-4 text-center text-yellow-500 uppercase"></h3>
-                
-                <div class="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl mb-6 text-center">
-                    <p class="text-[10px] text-gray-400 mb-1">নিচের নম্বরে টাকা পাঠান (Send Money)</p>
-                    <p class="font-black text-white">বিকাশ/নগদ: 017XXXXXXXX</p>
-                </div>
-
-                <input id="playerIDInput" type="text" placeholder="গেম Player ID দিন..." class="w-full bg-black border border-gray-700 p-4 rounded-xl mb-3 text-sm">
-                <input id="trxIDInput" type="text" placeholder="বিকাশ/নগদ TrxID দিন..." class="w-full bg-black border border-gray-700 p-4 rounded-xl mb-6 text-sm">
-                
-                <button id="confirmBtn" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black">CONFIRM ORDER</button>
-                <button onclick="showPage('homePage')" class="w-full text-xs text-gray-500 mt-4 font-bold">CANCEL</button>
-            </div>
-        </div>
-
-        <div id="adminPage" class="page-content hidden-page p-4">
-            <h2 class="text-xl font-black text-yellow-500 mb-6">ADMIN PANEL</h2>
-            <div class="grid grid-cols-3 gap-2 mb-6 text-center">
-                <div class="card-bg p-3 rounded-xl"><p id="statTotal">0</p><p class="text-[7px]">TOTAL</p></div>
-                <div class="card-bg p-3 rounded-xl text-yellow-500"><p id="statPending">0</p><p class="text-[7px]">PENDING</p></div>
-                <div class="card-bg p-3 rounded-xl text-green-500"><p id="statCompleted">0</p><p class="text-[7px]">DONE</p></div>
-            </div>
-            <div id="adminOrderList"></div>
-            <button onclick="showPage('homePage')" class="w-full mt-4 text-xs text-gray-500">BACK</button>
-        </div>
-
-        <div id="profilePage" class="page-content hidden-page p-6 text-center">
-            <img id="profileImg" class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-yellow-500">
-            <h3 id="profileName" class="text-xl font-black"></h3>
-            <div class="mt-10 space-y-3">
-                <button id="adminBtn" onclick="showPage('adminPage')" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black hidden uppercase">Admin Panel</button>
-                <button onclick="logout()" class="w-full bg-red-500/10 text-red-500 py-4 rounded-2xl text-xs font-bold uppercase">Logout</button>
-            </div>
-        </div>
-
-        <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 py-4 px-12 flex justify-between">
-            <div onclick="showPage('homePage')" id="navHome" class="text-xl text-yellow-500"><i class="fa-solid fa-house"></i></div>
-            <div onclick="showPage('profilePage')" id="navProfile" class="text-xl text-gray-600"><i class="fa-solid fa-circle-user"></i></div>
-        </nav>
     </div>
 
     <script>
-        const ADMIN_EMAIL = "asraful29661693@gmail.com";
-
-        window.handleCredentialResponse = (response) => {
-            const data = JSON.parse(atob(response.credential.split('.')[1]));
-            localStorage.setItem('nexUser', JSON.stringify(data));
-            loginSuccess(data);
-        };
-
-        function loginSuccess(data) {
-            document.getElementById('userName').innerText = data.given_name;
-            document.getElementById('profileName').innerText = data.name;
-            document.getElementById('profileImg').src = data.picture;
-            if(data.email === ADMIN_EMAIL) {
-                document.getElementById('adminBtn').classList.remove('hidden');
-                loadAdminData();
-            }
-            document.getElementById('loginPage').classList.add('hidden-page');
-            document.getElementById('mainUI').classList.remove('hidden-page');
-        }
-
-        window.logout = () => { localStorage.removeItem('nexUser'); location.reload(); };
-
-        window.showPage = (id) => {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
-            document.getElementById(id).classList.remove('hidden-page');
-        };
-
-        window.openOrder = (title, price) => {
-            document.getElementById('orderTitle').innerText = title + " - ৳" + price;
-            document.getElementById('confirmBtn').onclick = () => placeOrder(title, price);
-            showPage('orderPage');
-        };
-
         window.onload = () => {
-            const user = localStorage.getItem('nexUser');
-            if(user) loginSuccess(JSON.parse(user));
+            // ইউজারের ইমেইল অ্যাডমিন কি না তা চেক করে ফাংশন কল করুন
+            loadAdminDashboard();
         };
     </script>
+
 </body>
 </html>
