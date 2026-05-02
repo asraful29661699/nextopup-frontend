@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Premium UI</title>
+    <title>NexTopUp - Admin Panel Enabled</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,14 +25,15 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // প্যাকেজের দাম লোড করা
+        // দাম লোড করা
         window.loadPrices = function() {
             onValue(ref(db, 'prices'), (snapshot) => {
                 const prices = snapshot.val() || { weekly: 190, monthly: 750 };
-                document.getElementById('priceWeekly').innerText = '৳' + prices.weekly;
-                document.getElementById('priceMonthly').innerText = '৳' + prices.monthly;
+                const wDisplay = document.getElementById('priceWeekly');
+                const mDisplay = document.getElementById('priceMonthly');
+                if(wDisplay) wDisplay.innerText = '৳' + prices.weekly;
+                if(mDisplay) mDisplay.innerText = '৳' + prices.monthly;
                 
-                // অ্যাডমিন ফিল্ডে বর্তমান দাম বসানো
                 if(document.getElementById('inputWeekly')) {
                     document.getElementById('inputWeekly').value = prices.weekly;
                     document.getElementById('inputMonthly').value = prices.monthly;
@@ -40,20 +41,22 @@
             });
         };
 
-        // দাম আপডেট করা (Admin Only)
+        // দাম আপডেট করা
         window.updatePrices = function() {
             const w = document.getElementById('inputWeekly').value;
             const m = document.getElementById('inputMonthly').value;
             set(ref(db, 'prices'), { weekly: w, monthly: m })
-                .then(() => alert("দাম আপডেট হয়েছে!"))
+                .then(() => alert("দাম সফলভাবে আপডেট হয়েছে!"))
                 .catch((e) => alert("Error: " + e.message));
         };
 
+        // অর্ডার লিস্ট লোড করা
         window.loadAdminDashboard = function() {
             onValue(ref(db, 'orders'), (snapshot) => {
                 const data = snapshot.val();
                 let total = 0, pending = 0, completed = 0;
                 const listUI = document.getElementById('liveOrderList');
+                if(!listUI) return;
                 listUI.innerHTML = '';
                 if(data) {
                     Object.keys(data).forEach(key => {
@@ -61,7 +64,14 @@
                         total++; 
                         if(o.status === 'pending') pending++;
                         else if(o.status === 'done') completed++;
-                        listUI.innerHTML += `<div class="bg-[#111] border border-gray-800 p-4 rounded-2xl mb-3 flex justify-between items-center"><div><p class="text-xs text-yellow-500 font-bold uppercase">ID: ${o.playerID}</p><p class="text-[10px] text-gray-400 mt-1">${o.package} - ৳${o.price}</p></div><button onclick="updateStatus('${key}', 'done')" class="bg-green-600/20 text-green-500 text-[10px] px-3 py-1 rounded-lg font-bold">Done</button></div>`;
+                        listUI.innerHTML += `
+                            <div class="bg-[#111] border border-gray-800 p-4 rounded-2xl mb-3 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-yellow-500 font-bold uppercase">ID: ${o.playerID}</p>
+                                    <p class="text-[10px] text-gray-400 mt-1">${o.package} - ৳${o.price}</p>
+                                </div>
+                                <button onclick="updateStatus('${key}', 'done')" class="bg-green-600/20 text-green-500 text-[10px] px-3 py-1 rounded-lg font-bold">Done</button>
+                            </div>`;
                     });
                 }
                 document.getElementById('statTotalOrders').innerText = total;
@@ -87,7 +97,7 @@
         .top-nav { background: #000; border-bottom: 1px solid #111; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         .balance-box { background: #1a1a1a; padding: 6px 12px; border-radius: 12px; border: 1px solid #222; color: #eab308; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; }
         .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
-        .nav-item { color: #444; text-align: center; flex: 1; }
+        .nav-item { color: #444; text-align: center; flex: 1; cursor: pointer; }
         .nav-item.active { color: #eab308; }
         .nav-item i { font-size: 22px; }
         .nav-item p { font-size: 10px; font-weight: 800; margin-top: 4px; }
@@ -123,54 +133,48 @@
                 <h2 class="text-2xl font-black italic">হ্যালো, <span id="userName">User</span>!</h2>
                 <p class="text-xs opacity-80 mb-6 uppercase">আপনার প্রিয় গেম টপ-আপ করুন দ্রুত</p>
             </div>
-
             <h3 class="text-[10px] font-black uppercase mb-4 text-gray-500 border-l-4 border-yellow-500 pl-3">Free Fire Services</h3>
             <div class="services-grid">
-                <div class="service-card shadow-lg">
-                    <div class="image-box"><i class="fa-solid fa-id-card"></i></div>
-                    <div class="title-box"><p>UID Topup</p></div>
-                </div>
-                <div class="service-card shadow-lg">
-                    <div class="image-box"><img src="weekly_logo.png"></div>
-                    <div class="title-box">
-                        <p>Weekly</p>
-                        <span id="priceWeekly" class="price-tag">৳---</span>
-                    </div>
-                </div>
-                <div class="service-card shadow-lg">
-                    <div class="image-box"><img src="monthly_logo.png"></div>
-                    <div class="title-box">
-                        <p>Monthly</p>
-                        <span id="priceMonthly" class="price-tag">৳---</span>
-                    </div>
-                </div>
+                <div class="service-card shadow-lg"><div class="image-box"><i class="fa-solid fa-id-card"></i></div><div class="title-box"><p>UID Topup</p></div></div>
+                <div class="service-card shadow-lg"><div class="image-box"><img src="weekly_logo.png"></div><div class="title-box"><p>Weekly</p><span id="priceWeekly" class="price-tag">৳---</span></div></div>
+                <div class="service-card shadow-lg"><div class="image-box"><img src="monthly_logo.png"></div><div class="title-box"><p>Monthly</p><span id="priceMonthly" class="price-tag">৳---</span></div></div>
             </div>
         </div>
 
         <div id="adminPage" class="page-content hidden-page p-4">
-            <h1 class="text-yellow-500 font-black text-xl italic uppercase mb-6">Admin Control</h1>
+            <h1 class="text-yellow-500 font-black text-xl italic uppercase mb-6 text-center">Admin Panel</h1>
             
+            <div class="grid grid-cols-3 gap-2 mb-6">
+                <div class="bg-[#0c0c0c] p-4 rounded-xl border border-gray-900 text-center"><p id="statTotalOrders" class="text-lg font-black">0</p><p class="text-[7px] text-gray-500 uppercase">Total</p></div>
+                <div class="bg-[#0c0c0c] p-4 rounded-xl border border-gray-900 text-center"><p id="statPending" class="text-lg font-black text-yellow-500">0</p><p class="text-[7px] text-gray-500 uppercase">Wait</p></div>
+                <div class="bg-[#0c0c0c] p-4 rounded-xl border border-gray-900 text-center"><p id="statCompleted" class="text-lg font-black text-green-500">0</p><p class="text-[7px] text-gray-500 uppercase">Done</p></div>
+            </div>
+
             <div class="bg-[#0c0c0c] p-5 rounded-2xl border border-gray-900 mb-6">
-                <p class="text-xs font-bold text-gray-400 uppercase mb-4">Update Package Prices</p>
-                <div class="mb-4">
-                    <label class="text-[10px] text-gray-500 uppercase">Weekly Price</label>
-                    <input id="inputWeekly" type="number" class="admin-input" placeholder="Enter Weekly Price">
-                </div>
-                <div class="mb-4">
-                    <label class="text-[10px] text-gray-500 uppercase">Monthly Price</label>
-                    <input id="inputMonthly" type="number" class="admin-input" placeholder="Enter Monthly Price">
-                </div>
+                <p class="text-xs font-bold text-gray-400 uppercase mb-4 text-center">Update Prices</p>
+                <input id="inputWeekly" type="number" class="admin-input" placeholder="Weekly Price">
+                <input id="inputMonthly" type="number" class="admin-input" placeholder="Monthly Price">
                 <button onclick="updatePrices()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold uppercase text-[10px]">Update Prices</button>
             </div>
 
-            <div id="liveOrderList" class="space-y-3 pt-4 border-t border-gray-800"></div>
+            <div id="liveOrderList" class="space-y-3"></div>
+        </div>
+
+        <div id="profilePage" class="page-content hidden-page p-8 text-center">
+            <div class="w-24 h-24 bg-yellow-500 rounded-full mx-auto mb-4 flex items-center justify-center text-black text-3xl font-black">U</div>
+            <h2 id="profileName" class="text-xl font-black uppercase">User</h2>
+            <p id="userEmail" class="text-[10px] text-gray-500 mt-1"></p>
+            
+            <div id="adminAccess" class="hidden-page mt-8">
+                <p class="text-green-500 text-[10px] font-bold uppercase mb-4">Admin Access Verified</p>
+                <button onclick="showPage('adminPage')" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black uppercase text-xs">Enter Admin Panel</button>
+            </div>
+            
+            <button onclick="logout()" class="w-full bg-red-600/10 text-red-500 py-4 rounded-2xl font-black uppercase text-xs mt-4">Logout</button>
         </div>
 
         <nav class="nav-bar">
             <div onclick="showPage('homePage')" id="navHome" class="nav-item active"><i class="fa-solid fa-house"></i><p>Home</p></div>
-            <div onclick="showPage('addMoneyPage')" id="navAdd" class="nav-item"><i class="fa-solid fa-circle-plus"></i><p>Add</p></div>
-            <div onclick="showPage('ordersPage')" id="navOrders" class="nav-item"><i class="fa-solid fa-bookmark"></i><p>Orders</p></div>
-            <div onclick="showPage('codesPage')" id="navCodes" class="nav-item"><i class="fa-solid fa-table-cells"></i><p>Codes</p></div>
             <div onclick="showPage('profilePage')" id="navProfile" class="nav-item"><i class="fa-solid fa-circle-user"></i><p>Profile</p></div>
         </nav>
     </div>
@@ -184,9 +188,11 @@
         };
         function loginSuccess(d) {
             document.getElementById('userName').innerText = d.given_name;
-            loadPrices(); // দাম লোড হবে
+            document.getElementById('profileName').innerText = d.name;
+            document.getElementById('userEmail').innerText = d.email;
+            loadPrices();
             if(d.email === ADMIN_EMAIL) {
-                document.getElementById('adminBtnArea')?.classList.remove('hidden-page');
+                document.getElementById('adminAccess').classList.remove('hidden-page');
                 loadAdminDashboard();
             }
             document.getElementById('loginPage').classList.add('hidden-page');
@@ -196,9 +202,10 @@
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(id).classList.remove('hidden-page');
-            const map = { homePage:'navHome', adminPage:'navProfile' };
-            if(map[id]) document.getElementById(map[id]).classList.add('active');
+            const navId = id === 'adminPage' ? 'navProfile' : (id === 'homePage' ? 'navHome' : 'navProfile');
+            document.getElementById(navId).classList.add('active');
         };
+        window.logout = () => { localStorage.removeItem('nexUser'); location.reload(); };
         window.onload = () => {
             const u = localStorage.getItem('nexUser');
             if(u) loginSuccess(JSON.parse(u));
