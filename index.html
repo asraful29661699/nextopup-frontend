@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Premium Full UI</title>
+    <title>NexTopUp - Premium UI</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,6 +25,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // Admin functions
         window.loadAdminDashboard = function() {
             onValue(ref(db, 'orders'), (snapshot) => {
                 const data = snapshot.val();
@@ -50,75 +51,71 @@
 
     <style>
         .hidden-page { display: none !important; }
-        body { background: #000; color: #fff; font-family: sans-serif; }
+        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; }
         
-        /* ফ্রেম জুড়ে লোগো দেওয়ার জন্য আপডেট করা CSS */
+        /* প্রিমিয়াম সার্ভিস কার্ড - আপনার স্ক্রিনশটের মতো */
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .service-card { 
-            background: #0c0c0c; 
+            background: #111; 
             border: 1px solid #1a1a1a; 
             border-radius: 20px; 
-            overflow: hidden; /* যাতে ইমেজের কোণা ফ্রেমের বাইরে না যায় */
-            transition: 0.3s; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
+            overflow: hidden; 
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
         }
-        
-        .image-container {
-            width: 100%;
-            height: 110px; /* বক্সের উচ্চতা */
+        .service-card:active { transform: scale(0.95); }
+
+        .image-box { 
+            width: 100%; 
+            aspect-ratio: 1/1; 
+            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #111;
         }
-
         .service-card img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* ইমেজ ফ্রেম জুড়ে থাকবে */
+            object-fit: cover; /* বক্স জুড়ে প্রিমিয়াম ইমেজ */
         }
+        .service-card i { font-size: 40px; color: #3b82f6; }
 
-        .service-card i { 
-            font-size: 45px; 
-            color: #3b82f6; 
+        .title-box { 
+            padding: 8px 2px; 
+            text-align: center; 
+            background: #111;
         }
-
-        .label-area {
-            padding: 10px 0;
-            width: 100%;
-            text-align: center;
-            background: #0c0c0c;
-        }
-
         .service-card p { 
-            font-size: 10px; 
+            font-size: 9px; 
             font-weight: 900; 
             text-transform: uppercase; 
-            color: #fff; 
+            color: #efefef;
         }
 
-        /* হেডার ও বটম নেভিগেশন (আগের মতোই রাখা হয়েছে) */
+        /* হেডার ও ব্যালেন্স */
         .top-nav { background: #000; border-bottom: 1px solid #111; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .balance-chip { background: #1a1a1a; padding: 5px 12px; border-radius: 10px; color: #eab308; font-weight: 800; border: 1px solid #333; }
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
-        .nav-item { color: #555; text-align: center; flex: 1; }
+        .balance-box { background: #1a1a1a; padding: 6px 12px; border-radius: 12px; border: 1px solid #222; color: #eab308; font-weight: 800; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+
+        /* বটম নেভিগেশন - প্রিমিয়াম লুক */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-top: 1px solid #111; display: flex; justify-content: space-around; padding: 12px 0; z-index: 100; }
+        .nav-item { color: #444; text-align: center; flex: 1; }
         .nav-item.active { color: #eab308; }
-        .nav-item i { font-size: 20px; }
-        .nav-item p { font-size: 9px; font-weight: 800; margin-top: 4px; text-transform: uppercase; }
-        
+        .nav-item i { font-size: 22px; }
+        .nav-item p { font-size: 10px; font-weight: 800; margin-top: 4px; }
+
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .marquee-container { background: #eab308; color: #000; font-size: 10px; font-weight: 900; padding: 4px 0; overflow: hidden; white-space: nowrap; }
-        .marquee-text { display: inline-block; animation: marquee 15s linear infinite; }
+        .marquee { background: #eab308; color: #000; font-size: 10px; font-weight: 900; padding: 4px 0; overflow: hidden; white-space: nowrap; }
+        .marquee-inner { display: inline-block; animation: marquee 15s linear infinite; }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-28">
 
     <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-[#001529]">
-        <div class="bg-white p-10 rounded-[45px] text-center w-full max-w-sm shadow-2xl">
-            <img src="logo-main.png" class="w-20 mx-auto mb-4">
+        <div class="bg-white p-10 rounded-[45px] text-center w-full max-w-sm">
+            <img src="logo-main.png" class="w-20 mx-auto mb-4" onerror="this.src='https://img.icons8.com/color/96/000000/google-logo.png'">
             <h1 class="text-2xl font-black text-[#001529]">NexTopUp</h1>
-            <p class="text-[10px] text-gray-400 font-bold mb-8 uppercase italic">Safe • Fast • Reliable</p>
+            <p class="text-[10px] text-gray-400 font-bold mb-8 uppercase">Safe • Fast • Reliable</p>
             <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin flex justify-center" data-type="standard"></div>
         </div>
@@ -127,72 +124,72 @@
     <div id="mainUI" class="hidden-page">
         <div class="top-nav">
             <div class="flex items-center gap-2">
-                <img src="logo-main.png" class="h-7 w-7">
-                <span class="font-black text-lg tracking-tighter uppercase">NexTopUp</span>
+                <img src="logo-main.png" class="h-8 w-8">
+                <span class="font-black text-lg tracking-tighter uppercase">NEXTOPUP</span>
             </div>
-            <div class="balance-chip">৳ ০.০০</div>
+            <div class="balance-box">
+                <i class="fa-solid fa-wallet text-xs"></i> ৳ ০.০০
+            </div>
         </div>
 
-        <div class="marquee-container">
-            <p class="marquee-text">NexTopUp-এ আপনাকে স্বাগতম! দ্রুত এবং নিরাপদ টপ-আপের জন্য আমাদের সাথে থাকুন।</p>
+        <div class="marquee">
+            <p class="marquee-inner">NexTopUp-এ স্বাগতম! দ্রুত এবং নিরাপদ টপ-আপের জন্য আমাদের সাথেই থাকুন।</p>
         </div>
 
         <div id="homePage" class="page-content p-4">
-            <div class="bg-gradient-to-br from-blue-600 to-blue-800 p-8 rounded-[35px] mb-6">
+            <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 rounded-[35px] mb-8 shadow-2xl">
                 <h2 class="text-2xl font-black italic">হ্যালো, <span id="userName">User</span>!</h2>
-                <p class="text-xs opacity-90 mb-6 uppercase">আপনার প্রিয় গেম টপ-আপ করুন দ্রুত</p>
-                <button class="bg-white/20 px-5 py-2 rounded-full text-[10px] font-black uppercase">জয়েন টেলিগ্রাম</button>
+                <p class="text-xs opacity-80 mb-6 uppercase">আপনার প্রিয় গেম টপ-আপ করুন দ্রুত</p>
+                <button class="bg-white/10 backdrop-blur-md px-6 py-2.5 rounded-full text-[10px] font-black uppercase border border-white/20">জয়েন টেলিগ্রাম</button>
             </div>
 
             <h3 class="text-[10px] font-black uppercase mb-4 text-gray-500 border-l-4 border-yellow-500 pl-3">Free Fire Services</h3>
 
-            <div class="grid grid-cols-3 gap-3">
-                <div onclick="alert('UID')" class="service-card">
-                    <div class="image-container"><i class="fa-solid fa-id-card"></i></div>
-                    <div class="label-area"><p>UID Topup</p></div>
+            <div class="services-grid">
+                <div onclick="alert('UID')" class="service-card shadow-lg">
+                    <div class="image-box"><i class="fa-solid fa-id-card"></i></div>
+                    <div class="title-box"><p>UID Topup</p></div>
                 </div>
-                <div onclick="alert('Weekly')" class="service-card">
-                    <div class="image-container"><img src="weekly_logo.png"></div>
-                    <div class="label-area"><p>Weekly</p></div>
+                <div onclick="alert('Weekly')" class="service-card shadow-lg">
+                    <div class="image-box"><img src="weekly_logo.png"></div>
+                    <div class="title-box"><p>Weekly</p></div>
                 </div>
-                <div onclick="alert('Monthly')" class="service-card">
-                    <div class="image-container"><img src="monthly_logo.png"></div>
-                    <div class="label-area"><p>Monthly</p></div>
+                <div onclick="alert('Monthly')" class="service-card shadow-lg">
+                    <div class="image-box"><img src="monthly_logo.png"></div>
+                    <div class="title-box"><p>Monthly</p></div>
                 </div>
             </div>
-        </div>
-
-        <div id="addMoneyPage" class="page-content hidden-page p-6 text-center">
-            <h2 class="text-xl font-black mb-4 uppercase">Add Money</h2>
-            <p class="text-gray-500 text-sm">শীঘ্রই আসছে...</p>
-        </div>
-
-        <div id="ordersPage" class="page-content hidden-page p-6 text-center">
-            <h2 class="text-xl font-black mb-4 uppercase">My Orders</h2>
-            <p class="text-gray-500 text-sm">কোনো অর্ডার নেই</p>
-        </div>
-
-        <div id="codesPage" class="page-content hidden-page p-6 text-center">
-            <h2 class="text-xl font-black mb-4 uppercase">My Codes</h2>
-            <p class="text-gray-500 text-sm">কোনো কোড নেই</p>
-        </div>
-
-        <div id="profilePage" class="page-content hidden-page p-8 text-center">
-            <div class="w-20 h-20 bg-yellow-500 rounded-full mx-auto mb-4 flex items-center justify-center text-black text-2xl font-black">U</div>
-            <h2 id="profileName" class="text-xl font-black uppercase">User</h2>
-            <div id="adminBtnArea" class="hidden-page mt-10">
-                <button onclick="showPage('adminPage')" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black uppercase text-xs">Admin Panel</button>
-            </div>
-            <button onclick="logout()" class="w-full bg-red-600/10 text-red-500 py-4 rounded-2xl font-bold uppercase text-xs mt-4">Logout</button>
         </div>
 
         <div id="adminPage" class="page-content hidden-page p-4">
-            <h1 class="text-yellow-500 font-black italic text-xl mb-6 uppercase">Admin Panel</h1>
-            <div class="grid grid-cols-2 gap-3 mb-8 text-center">
-                <div class="bg-[#0c0c0c] p-5 rounded-2xl border border-gray-800"><p id="statTotalOrders" class="text-2xl font-black">0</p><p class="text-[8px] text-gray-500 uppercase font-bold">Total</p></div>
-                <div class="bg-[#0c0c0c] p-5 rounded-2xl border border-gray-800"><p id="statCompleted" class="text-2xl font-black text-green-500">0</p><p class="text-[8px] text-gray-500 uppercase font-bold">Done</p></div>
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-yellow-500 font-black text-xl italic uppercase">Admin Control</h1>
+                <button onclick="showPage('profilePage')" class="bg-[#111] px-4 py-1.5 rounded-lg text-[10px] font-black uppercase border border-gray-800">Exit</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-8">
+                <div class="bg-[#0c0c0c] p-6 rounded-2xl border border-gray-900 text-center">
+                    <p id="statTotalOrders" class="text-2xl font-black">0</p>
+                    <p class="text-[8px] text-gray-500 uppercase mt-1">Total Orders</p>
+                </div>
+                <div class="bg-[#0c0c0c] p-6 rounded-2xl border border-gray-900 text-center">
+                    <p id="statCompleted" class="text-2xl font-black text-green-500">0</p>
+                    <p class="text-[8px] text-gray-500 uppercase mt-1">Completed</p>
+                </div>
             </div>
             <div id="liveOrderList" class="space-y-3"></div>
+        </div>
+
+        <div id="addMoneyPage" class="page-content hidden-page p-6 text-center text-gray-600 font-bold">ADD MONEY SYSTEM COMING SOON</div>
+        <div id="ordersPage" class="page-content hidden-page p-6 text-center text-gray-600 font-bold">NO ORDERS FOUND</div>
+        <div id="codesPage" class="page-content hidden-page p-6 text-center text-gray-600 font-bold">NO CODES AVAILABLE</div>
+        
+        <div id="profilePage" class="page-content hidden-page p-8 text-center">
+            <div class="w-24 h-24 bg-yellow-500 rounded-full mx-auto mb-4 flex items-center justify-center text-black text-3xl font-black shadow-xl shadow-yellow-500/10">U</div>
+            <h2 id="profileName" class="text-xl font-black uppercase">User Account</h2>
+            <div id="adminBtnArea" class="hidden-page mt-10">
+                <button onclick="showPage('adminPage')" class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black uppercase text-xs shadow-lg">Open Admin Panel</button>
+            </div>
+            <button onclick="logout()" class="w-full bg-red-600/10 text-red-500 py-4 rounded-2xl font-black uppercase text-xs mt-4">Logout</button>
         </div>
 
         <nav class="nav-bar">
@@ -200,7 +197,7 @@
             <div onclick="showPage('addMoneyPage')" id="navAdd" class="nav-item"><i class="fa-solid fa-circle-plus"></i><p>Add</p></div>
             <div onclick="showPage('ordersPage')" id="navOrders" class="nav-item"><i class="fa-solid fa-bookmark"></i><p>Orders</p></div>
             <div onclick="showPage('codesPage')" id="navCodes" class="nav-item"><i class="fa-solid fa-table-cells"></i><p>Codes</p></div>
-            <div onclick="showPage('profilePage')" id="navProfile" class="nav-item"><i class="fa-solid fa-circle-user"></i><p>Account</p></div>
+            <div onclick="showPage('profilePage')" id="navProfile" class="nav-item"><i class="fa-solid fa-circle-user"></i><p>Profile</p></div>
         </nav>
     </div>
 
@@ -225,8 +222,8 @@
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(id).classList.remove('hidden-page');
-            const mapping = { homePage:'navHome', addMoneyPage:'navAdd', ordersPage:'navOrders', codesPage:'navCodes', profilePage:'navProfile', adminPage:'navProfile' };
-            if(mapping[id]) document.getElementById(mapping[id]).classList.add('active');
+            const map = { homePage:'navHome', addMoneyPage:'navAdd', ordersPage:'navOrders', codesPage:'navCodes', profilePage:'navProfile', adminPage:'navProfile' };
+            if(map[id]) document.getElementById(map[id]).classList.add('active');
         };
         window.logout = () => { localStorage.removeItem('nexUser'); location.reload(); };
         window.onload = () => {
