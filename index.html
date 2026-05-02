@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Premium Dark Edition</title>
+    <title>NexTopUp - Dark Edition</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -14,6 +14,9 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; background-color: #000000; color: white; }
         .nav-shadow { box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
         input { color: black; }
+        /* প্যাকেজ বক্স স্টাইল */
+        .pkg-box { border: 1px solid #1f2937; background: #111111; transition: all 0.2s; cursor: pointer; }
+        .pkg-box:active { border-color: #eab308; transform: scale(0.98); }
     </style>
 </head>
 <body class="pb-24">
@@ -24,12 +27,12 @@
             <h2 class="text-xl font-bold text-white mb-1 italic uppercase">NexTopUp</h2>
             <p class="text-gray-500 text-[10px] mb-10 font-bold uppercase tracking-widest">Login to Continue</p>
             <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
-            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill" data-theme="filled_blue"></div>
+            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
         </div>
     </div>
 
     <div id="mainUI" class="hidden-page">
-        <header class="bg-[#000000] p-4 flex justify-between items-center border-b border-gray-800 sticky top-0 z-50">
+        <header class="bg-black p-4 flex justify-between items-center border-b border-gray-800 sticky top-0 z-50">
             <div onclick="showPage('homePage')" class="flex items-center gap-2.5 cursor-pointer">
                 <img src="file_00000000c9787208b660aa071e1c6022.png" alt="Logo" class="h-10 w-10 object-contain rounded-lg">
                 <div class="flex flex-col">
@@ -42,59 +45,55 @@
             </div>
         </header>
 
-        <div class="bg-yellow-500 text-black text-[10px] font-bold py-1.5 overflow-hidden whitespace-nowrap">
-            <div class="animate-marquee inline-block italic uppercase text-blue-900">NexTopUp-এ স্বাগতম! এখন উইকলি এবং মান্থলি অফার একসাথে উপভোগ করুন।</div>
-        </div>
-
-        <div id="homePage" class="page-content">
-            <div class="p-4">
-                <div class="bg-gradient-to-br from-[#111111] to-black rounded-[2rem] p-7 shadow-2xl border border-gray-800 relative overflow-hidden">
-                    <h2 class="text-white font-extrabold text-2xl leading-snug">হ্যালো, <span id="userName" class="text-yellow-400 italic">Asraful</span>!</h2>
-                    <p class="text-gray-400 text-sm mt-1">আপনার প্রিয় গেম টপ-আপ করুন</p>
-                    <button class="mt-5 bg-blue-600 text-white text-[10px] px-5 py-2.5 rounded-xl font-black uppercase"><i class="fa-brands fa-telegram"></i> জয়েন টেলিগ্রাম</button>
-                </div>
+        <div id="homePage" class="page-content p-4">
+            <div class="bg-gradient-to-br from-[#111111] to-black rounded-[2rem] p-7 shadow-2xl border border-gray-800 mb-6">
+                <h2 class="text-white font-extrabold text-2xl leading-snug">হ্যালো, <span id="userName" class="text-yellow-400">User</span>!</h2>
+                <p class="text-gray-400 text-sm mt-1">আপনার প্রিয় গেম টপ-আপ করুন</p>
             </div>
 
-            <div class="px-4 mt-6">
-                <div class="flex items-center gap-2 mb-4"><div class="h-5 w-1.5 bg-yellow-500 rounded-full"></div><h3 class="font-bold text-gray-300 text-sm italic uppercase tracking-wider">OFFERS & SERVICES</h3></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div onclick="openOrder('UID TOPUP')" class="bg-[#111111] rounded-3xl border border-gray-800 p-3 text-center cursor-pointer active:scale-95 transition-all">
-                        <div class="bg-black rounded-2xl aspect-square flex items-center justify-center text-blue-500 mb-2"><i class="fa-solid fa-id-card text-3xl"></i></div>
-                        <p class="text-[10px] font-extrabold text-gray-300 uppercase tracking-widest">UID TOPUP</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div onclick="openOrder('UID TOPUP')" class="bg-[#111111] rounded-3xl border border-gray-800 p-3 text-center">
+                    <div class="bg-black rounded-2xl aspect-square flex items-center justify-center text-blue-500 mb-2"><i class="fa-solid fa-id-card text-3xl"></i></div>
+                    <p class="text-[10px] font-extrabold text-gray-300 uppercase">UID TOPUP</p>
+                </div>
+                <div onclick="openOrder('WEEKLY/MONTHLY OFFER')" class="bg-[#111111] rounded-3xl border border-gray-800 p-3 text-center">
+                    <div class="bg-black rounded-2xl aspect-square flex items-center justify-center text-yellow-500 mb-2 relative overflow-hidden">
+                        <i class="fa-solid fa-crown text-3xl"></i>
                     </div>
-                    <div onclick="openOrder('WEEKLY/MONTHLY OFFER')" class="bg-[#111111] rounded-3xl border border-gray-800 p-3 text-center cursor-pointer active:scale-95 transition-all">
-                        <div class="bg-black rounded-2xl aspect-square flex items-center justify-center text-yellow-500 mb-2 relative overflow-hidden">
-                            <i class="fa-solid fa-crown text-3xl"></i>
-                            <div class="absolute top-1 right-1 bg-purple-600 text-[6px] px-1.5 py-0.5 rounded-full text-white font-black animate-pulse">HOT</div>
-                        </div>
-                        <p class="text-[10px] font-extrabold text-gray-300 uppercase tracking-widest leading-none">Weekly/Monthly</p>
-                    </div>
+                    <p class="text-[10px] font-extrabold text-gray-300 uppercase leading-none">Weekly/Monthly</p>
                 </div>
             </div>
         </div>
 
         <div id="orderPage" class="page-content hidden-page p-4">
-            <div class="bg-[#111111] rounded-3xl p-6 border border-gray-800 shadow-xl">
-                <h3 id="orderTitle" class="text-lg font-bold text-white mb-4 uppercase">Order Service</h3>
-                <input type="text" placeholder="Enter Player ID" class="w-full bg-white p-4 rounded-2xl border-none mb-4 font-bold text-sm">
+            <div class="bg-[#111111] rounded-3xl p-6 border border-gray-800 shadow-xl mb-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="h-10 w-10 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-500 font-bold">1</div>
+                    <h3 id="orderTitle" class="font-bold text-white uppercase tracking-wider">Select Recharge</h3>
+                </div>
                 
-                <p class="text-[10px] font-bold text-gray-500 mb-2 uppercase">Select Package</p>
-                <div id="packageList" class="space-y-3 mb-6">
+                <div id="packageList" class="grid grid-cols-2 gap-3 mb-8">
                     </div>
+
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="h-10 w-10 bg-purple-600/20 rounded-xl flex items-center justify-center text-purple-500 font-bold">2</div>
+                    <h3 class="font-bold text-white uppercase tracking-wider">Account Info</h3>
+                </div>
+                <input type="text" placeholder="Enter Player ID" class="w-full bg-white p-4 rounded-2xl border-none mb-6 font-bold text-sm shadow-inner">
+                
                 <button class="w-full bg-yellow-500 text-black py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95">Confirm Order</button>
             </div>
         </div>
 
         <div id="profilePage" class="page-content hidden-page p-4 text-center">
-            <img id="userImg" src="" class="w-24 h-24 rounded-full border-4 border-yellow-500 mx-auto mb-4 object-cover shadow-xl">
-            <h2 id="profileName" class="text-xl font-bold text-white italic">Asraful</h2>
-            <p id="userEmail" class="text-xs text-gray-500 mb-8">asraful29661693@gmail.com</p>
-            <button onclick="logout()" class="w-full bg-red-900/20 text-red-500 py-4 rounded-2xl font-bold border border-red-900/30"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            <img id="userImg" src="" class="w-24 h-24 rounded-full border-4 border-yellow-500 mx-auto mb-4 object-cover">
+            <h2 id="profileName" class="text-xl font-bold text-white italic">User</h2>
+            <button onclick="logout()" class="w-full mt-6 bg-red-900/20 text-red-500 py-4 rounded-2xl font-bold border border-red-900/30">Logout</button>
         </div>
 
         <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 py-4 px-12 flex justify-between items-center z-50 rounded-t-3xl nav-shadow">
-            <div id="navHome" onclick="showPage('homePage')" class="flex flex-col items-center gap-1 text-white cursor-pointer"><i class="fa-solid fa-house-chimney text-xl text-yellow-500"></i><span class="text-[9px] font-bold uppercase">Home</span></div>
-            <div id="navProfile" onclick="showPage('profilePage')" class="flex flex-col items-center gap-1 text-gray-500 cursor-pointer"><i class="fa-solid fa-circle-user text-xl"></i><span class="text-[9px] font-bold uppercase">Profile</span></div>
+            <div onclick="showPage('homePage')" class="flex flex-col items-center gap-1 text-white cursor-pointer"><i class="fa-solid fa-house-chimney text-xl text-yellow-500"></i><span class="text-[9px] font-bold">Home</span></div>
+            <div onclick="showPage('profilePage')" class="flex flex-col items-center gap-1 text-gray-500 cursor-pointer"><i class="fa-solid fa-circle-user text-xl"></i><span class="text-[9px] font-bold">Profile</span></div>
         </nav>
     </div>
 
@@ -113,7 +112,6 @@
         function updateUI(data) {
             document.getElementById('userName').innerText = data.given_name;
             document.getElementById('profileName').innerText = data.name;
-            document.getElementById('userEmail').innerText = data.email;
             document.getElementById('userImg').src = data.picture;
             document.getElementById('loginPage').classList.add('hidden-page');
             document.getElementById('mainUI').classList.remove('hidden-page');
@@ -142,12 +140,25 @@
             pList.innerHTML = '';
             
             if(title === 'WEEKLY/MONTHLY OFFER') {
-                pList.innerHTML = `
-                    <div class="flex justify-between items-center p-4 bg-black border border-gray-800 rounded-2xl hover:border-yellow-500"><span class="text-sm text-gray-300">Weekly Membership</span><span class="font-black text-yellow-500">৳ ১৭০</span></div>
-                    <div class="flex justify-between items-center p-4 bg-black border border-gray-800 rounded-2xl hover:border-yellow-500"><span class="text-sm text-gray-300">Monthly Membership</span><span class="font-black text-yellow-500">৳ ৭৯০</span></div>
-                `;
+                // আপনার স্ক্রিনশটের মতো প্যাকেজগুলো
+                const packs = [
+                    { name: 'WEEKLY', price: '১৫৪' },
+                    { name: '2X WEEKLY', price: '৩০৮' },
+                    { name: '3X WEEKLY', price: '৪৬০' },
+                    { name: 'MONTHLY', price: '৭৬৫' },
+                    { name: '2X MONTHLY', price: '১৫৩০' },
+                    { name: '1W + 1M', price: '৯১৫' }
+                ];
+                packs.forEach(p => {
+                    pList.innerHTML += `
+                        <div class="pkg-box rounded-xl p-4 text-center">
+                            <p class="text-[10px] font-black text-blue-400 mb-1 uppercase">${p.name}</p>
+                            <p class="text-[12px] font-black text-gray-400 italic">BDT ${p.price}</p>
+                        </div>
+                    `;
+                });
             } else {
-                pList.innerHTML = `<div class="flex justify-between items-center p-4 bg-black border border-gray-800 rounded-2xl"><span class="text-sm text-gray-300">১১৫ ডায়মন্ড</span><span class="font-black text-yellow-500">৳ ৮০</span></div>`;
+                pList.innerHTML = `<div class="pkg-box rounded-xl p-4 text-center col-span-2"><p class="text-xs font-bold text-blue-400 uppercase">115 Diamonds</p><p class="text-xs font-black text-gray-400">BDT 80</p></div>`;
             }
             showPage('orderPage');
         }
