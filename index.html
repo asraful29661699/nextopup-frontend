@@ -1,122 +1,122 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .animate-marquee { animation: marquee 15s linear infinite; }
+        .hidden-page { display: none; }
+    </style>
+</head>
 <body class="bg-gray-50 pb-20">
 
     <header class="bg-white p-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
-        <div class="flex items-center gap-2">
+        <div onclick="showPage('home')" class="flex items-center gap-2 cursor-pointer">
             <div class="bg-[#6328e0] text-white p-2 rounded-lg font-bold">O</div>
-            <span class="font-bold text-xl tracking-tighter">OFFER <span class="text-[#6328e0]">TOPUP</span></span>
+            <span class="font-bold text-xl tracking-tighter uppercase">Offer <span class="text-[#6328e0]">Topup</span></span>
         </div>
-        <div class="flex items-center gap-3">
-            <div class="bg-purple-100 text-[#6328e0] px-3 py-1 rounded-full font-bold flex items-center gap-1 text-sm">
-                <i class="fa-solid fa-wallet"></i> ৳০
-            </div>
-            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-400 to-blue-400 border-2 border-white shadow-sm"></div>
+        <div class="bg-purple-100 text-[#6328e0] px-3 py-1 rounded-full font-bold flex items-center gap-1 text-sm">
+            <i class="fa-solid fa-wallet"></i> ৳০
         </div>
     </header>
 
-    <div class="bg-[#6328e0] text-white text-[11px] py-2 px-4 overflow-hidden whitespace-nowrap">
-        <div class="animate-marquee inline-block">
-            ১৮ বছরের নিচে কেউ অর্ডার করবেন না! বাবা/মা বা ফ্যামিলির টাকা চুরি করে অর্ডার করলে তার বিরুদ্ধে আইনগত ব্যবস্থা নেওয়া হবে!
+    <div id="homePage">
+        <div class="bg-[#6328e0] text-white text-[11px] py-2 overflow-hidden whitespace-nowrap">
+            <div class="animate-marquee inline-block">১৮ বছরের নিচে কেউ অর্ডার করবেন না! ফ্যামিলির টাকা চুরি করে অর্ডার করলে ব্যবস্থা নেওয়া হবে!</div>
+        </div>
+
+        <div class="p-4">
+            <div class="bg-gradient-to-r from-purple-800 to-indigo-900 rounded-2xl p-6 text-white shadow-lg">
+                <h2 class="font-bold text-lg">গিভওয়ে ও সকল অফার</h2>
+                <p class="text-xs text-yellow-400">টেলিগ্রাম চ্যানেলে জয়েন করুন</p>
+            </div>
+        </div>
+
+        <div class="px-4 mt-4">
+            <h3 class="text-center font-bold text-gray-800 mb-4 tracking-widest uppercase">Free Fire</h3>
+            <div class="grid grid-cols-3 gap-3">
+                <div onclick="showPage('orderPage')" class="bg-white rounded-2xl shadow-sm border p-2 text-center cursor-pointer active:scale-95 transition-all">
+                    <div class="bg-gradient-to-b from-indigo-500 to-purple-800 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2">
+                        <i class="fa-solid fa-id-card text-2xl"></i>
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-700 uppercase leading-tight">UID TOPUP (BD)</p>
+                </div>
+                </div>
         </div>
     </div>
 
-    <div class="px-4 mt-4">
-        <div class="bg-gradient-to-r from-purple-800 to-indigo-900 rounded-2xl p-6 relative overflow-hidden h-40 flex items-center justify-between shadow-lg">
-            <div class="z-10">
-                <h2 class="text-white font-bold text-xl leading-tight">গিভওয়ে ও সকল অফার <br> <span class="text-yellow-400 text-sm">সম্পর্কে জানতে</span></h2>
-                <button class="mt-3 bg-blue-500 text-white text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-2">
-                    <i class="fa-brands fa-telegram text-lg"></i> টেলিগ্রাম চ্যানেলে জয়েন করুন
-                </button>
-            </div>
-            <div class="absolute right-[-20px] bottom-[-10px] opacity-30 transform rotate-12">
-                 <i class="fa-solid fa-gift text-9xl text-white"></i>
-            </div>
-        </div>
-        <div class="flex justify-center gap-1 mt-2">
-            <span class="w-4 h-1.5 bg-[#6328e0] rounded-full"></span>
-            <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
-            <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
-        </div>
-    </div>
+    <div id="orderPage" class="hidden-page p-4">
+        <button onclick="showPage('home')" class="mb-4 text-[#6328e0] font-bold flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </button>
 
-    <div class="mt-8 px-4">
-        <h3 class="text-center font-bold text-gray-800 text-lg mb-4 tracking-widest uppercase">Special Offer</h3>
-        <div class="grid grid-cols-3 gap-3">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-center p-2 group hover:shadow-md transition-all">
-                <div class="bg-purple-600 rounded-xl aspect-square flex flex-col items-center justify-center text-white relative overflow-hidden mb-2">
-                    <img src="https://img.freepik.com/free-vector/ninja-gaming-mascot-logo-concept_23-2148496417.jpg" class="object-cover w-full h-full opacity-80">
-                    <span class="absolute bottom-2 bg-yellow-400 text-black text-[9px] font-bold px-2 py-0.5 rounded">স্পেশাল অফার</span>
-                </div>
-                <p class="text-[10px] font-bold text-gray-700 leading-tight">SPECIAL OFFER</p>
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border">
+            <div class="bg-[#6328e0] p-4 text-white text-center">
+                <h2 class="font-bold">UID TOPUP (BD)</h2>
             </div>
-        </div>
-    </div>
-
-    <div class="mt-8 px-4">
-        <h3 class="text-center font-bold text-gray-800 text-lg mb-4 tracking-widest uppercase">Free Fire</h3>
-        <div class="grid grid-cols-3 gap-3">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 text-center group active:scale-95 transition-all">
-                <div class="bg-gradient-to-b from-purple-500 to-indigo-700 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2 p-1">
-                    <span class="text-[8px] font-bold leading-tight mb-1">২০০ লাইক প্রতিদিন</span>
-                    <i class="fa-solid fa-thumbs-up text-2xl"></i>
-                    <span class="text-[7px] mt-1 opacity-80">Free Fire</span>
+            
+            <div class="p-5 space-y-6">
+                <div>
+                    <label class="font-bold text-gray-700 block mb-3">1. Select Recharge</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="selectPkg('115 Diamonds', 79, this)" class="pkg border-2 p-3 rounded-xl text-sm hover:border-[#6328e0]">
+                            115 Diamonds <br> <span class="text-[#6328e0] font-bold">BDT 79</span>
+                        </button>
+                        <button onclick="selectPkg('240 Diamonds', 158, this)" class="pkg border-2 p-3 rounded-xl text-sm hover:border-[#6328e0]">
+                            240 Diamonds <br> <span class="text-[#6328e0] font-bold">BDT 158</span>
+                        </button>
+                    </div>
                 </div>
-                <p class="text-[10px] font-bold text-gray-700">Free Fire - 200 Like</p>
-            </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 text-center group active:scale-95 transition-all">
-                <div class="bg-gradient-to-b from-indigo-500 to-purple-800 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2">
-                    <span class="text-[9px] font-bold">ইউ আইডি টপআপ</span>
-                    <i class="fa-solid fa-id-card text-2xl my-1"></i>
-                    <span class="text-[7px] opacity-80">(BD Server)</span>
+                <div>
+                    <label class="font-bold text-gray-700 block mb-2">2. Account Info</label>
+                    <input id="playerID" class="w-full border-2 bg-gray-50 p-3 rounded-xl focus:border-[#6328e0] outline-none" placeholder="প্লেয়ার আইডি (UID) দিন">
                 </div>
-                <p class="text-[10px] font-bold text-gray-700 uppercase leading-tight">UID TOPUP (BD)</p>
-            </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 text-center group active:scale-95 transition-all">
-                <div class="bg-gradient-to-b from-blue-600 to-indigo-900 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2">
-                    <span class="text-[9px] font-bold">লেভেল আপ পাস</span>
-                    <i class="fa-solid fa-gem text-2xl my-1 text-blue-300"></i>
-                    <span class="text-[7px] opacity-80">LEVEL UP PASS</span>
+                <div>
+                    <label class="font-bold text-gray-700 block mb-3">3. Select Payment</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border-2 p-3 rounded-xl text-center opacity-50">Wallet Pay</div>
+                        <div class="border-2 border-pink-500 p-3 rounded-xl text-center bg-pink-50 font-bold">Instant Pay</div>
+                    </div>
                 </div>
-                <p class="text-[10px] font-bold text-gray-700 uppercase leading-tight">LEVEL UP PASS</p>
+
+                <button onclick="confirmOrder()" class="w-full bg-[#6328e0] text-white py-4 rounded-2xl font-bold shadow-lg">Buy Now</button>
             </div>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3 px-6 flex justify-between items-center text-gray-400 z-50">
-        <div class="flex flex-col items-center gap-1 text-[#6328e0]">
-            <i class="fa-solid fa-house"></i>
-            <span class="text-[9px] font-bold">Home</span>
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t py-3 px-6 flex justify-between items-center text-gray-400 z-50">
+        <div onclick="showPage('home')" class="flex flex-col items-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-house"></i><span class="text-[9px]">Home</span>
         </div>
-        <div class="flex flex-col items-center gap-1">
-            <i class="fa-solid fa-file-invoice-dollar"></i>
-            <span class="text-[9px] font-bold">Add Money</span>
-        </div>
-        <div class="flex flex-col items-center gap-1">
-            <i class="fa-solid fa-bookmark"></i>
-            <span class="text-[9px] font-bold">My Orders</span>
-        </div>
-        <div class="flex flex-col items-center gap-1">
-            <i class="fa-solid fa-grid-2"></i>
-            <span class="text-[9px] font-bold">My Codes</span>
-        </div>
-        <div class="flex flex-col items-center gap-1">
-            <i class="fa-solid fa-circle-user"></i>
-            <span class="text-[9px] font-bold">Account</span>
-        </div>
+        <div class="flex flex-col items-center gap-1"><i class="fa-solid fa-file-invoice-dollar"></i><span class="text-[9px]">Add Money</span></div>
+        <div class="flex flex-col items-center gap-1"><i class="fa-solid fa-bookmark"></i><span class="text-[9px]">Orders</span></div>
+        <div class="flex flex-col items-center gap-1"><i class="fa-solid fa-user"></i><span class="text-[9px]">Account</span></div>
     </nav>
 
-    <style>
-        @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-            animation: marquee 15s linear infinite;
-        }
-    </style>
+    <script>
+        let selectedAmount = 0;
 
+        function showPage(pageId) {
+            document.getElementById('homePage').classList.add('hidden-page');
+            document.getElementById('orderPage').classList.add('hidden-page');
+            document.getElementById(pageId).classList.remove('hidden-page');
+            window.scrollTo(0,0);
+        }
+
+        function selectPkg(name, price, btn) {
+            selectedAmount = price;
+            document.querySelectorAll('.pkg').forEach(b => b.classList.remove('border-[#6328e0]', 'bg-purple-50'));
+            btn.classList.add('border-[#6328e0]', 'bg-purple-50');
+        }
+
+        function confirmOrder() {
+            const id = document.getElementById('playerID').value;
+            if(!id || selectedAmount === 0) return alert("তথ্য পূরণ করুন!");
+            alert("অর্ডার সফল! আপনার খরচ: ৳" + selectedAmount);
+        }
+    </script>
 </body>
+</html>
