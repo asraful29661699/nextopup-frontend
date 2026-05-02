@@ -3,17 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexTopUp - Updated Nav</title>
+    <title>NexTopUp - Complete Edition</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Lff3dPJvWnIMEdbJS0wIEWaBXNlBmro",
+            authDomain: "nextopup-e6b28.firebaseapp.com",
+            projectId: "nextopup-e6b28",
+            storageBucket: "nextopup-e6b28.firebasestorage.app",
+            messagingSenderId: "603923590112",
+            appId: "1:603923590112:web:c32feab3a13c683a569985",
+            databaseURL: "https://nextopup-e6b28-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Admin Dashboard Logic
+        window.loadAdminDashboard = function() {
+            onValue(ref(db, 'orders'), (snapshot) => {
+                const data = snapshot.val();
+                let total = 0, pending = 0, completed = 0;
+                const listUI = document.getElementById('liveOrderList');
+                listUI.innerHTML = '';
+                if(data) {
+                    Object.keys(data).forEach(key => {
+                        const o = data[key];
+                        total++; 
+                        if(o.status === 'pending') pending++;
+                        else if(o.status === 'done') completed++;
+                        listUI.innerHTML += `<div class="bg-[#111] border border-gray-800 p-4 rounded-2xl mb-3 flex justify-between items-center"><div><p class="text-xs text-yellow-500 font-bold uppercase">ID: ${o.playerID}</p><p class="text-[10px] text-gray-400 mt-1">${o.package} - ৳${o.price}</p></div><button onclick="updateStatus('${key}', 'done')" class="bg-green-600/20 text-green-500 text-[10px] px-3 py-1 rounded-lg font-bold uppercase">Done</button></div>`;
+                    });
+                }
+                document.getElementById('statTotalOrders').innerText = total;
+                document.getElementById('statPending').innerText = pending;
+                document.getElementById('statCompleted').innerText = completed;
+            });
+        };
+        window.updateStatus = (id, status) => update(ref(db, 'orders/' + id), { status });
+    </script>
+
     <style>
         .hidden-page { display: none !important; }
         body { background: #000; color: #fff; font-family: sans-serif; }
         .card-dark { background: #0c0c0c; border: 1px solid #1a1a1a; border-radius: 20px; }
-        /* নেভিগেশন স্টাইল */
-        .nav-icon { flex: 1; text-align: center; color: #444; cursor: pointer; transition: 0.3s; }
+        .nav-icon { flex: 1; text-align: center; color: #555; cursor: pointer; transition: 0.3s; }
         .nav-active { color: #eab308 !important; }
         .nav-text { font-size: 8px; font-weight: bold; margin-top: 4px; text-transform: uppercase; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
@@ -24,9 +64,10 @@
 
     <div id="loginPage" class="min-h-screen flex items-center justify-center p-6 bg-[#001529]">
         <div class="bg-white p-10 rounded-[40px] text-center w-full max-w-sm shadow-2xl">
-            <img src="logo-main.png" class="w-20 mx-auto mb-4" alt="Main Logo"> <h1 class="text-2xl font-black text-[#001529] mb-1">NexTopUp</h1>
-            <p class="text-[10px] text-gray-400 font-bold mb-8 uppercase tracking-widest">Login to Continue</p>
-            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleCredentialResponse"></div>
+            <img src="logo-main.png" class="w-20 mx-auto mb-4" alt="Logo">
+            <h1 class="text-2xl font-black text-[#001529] mb-1">NexTopUp</h1>
+            <p class="text-[10px] text-gray-400 font-bold mb-8 uppercase tracking-widest italic">Login to Continue</p>
+            <div id="g_id_onload" data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com" data-callback="handleCredentialResponse"></div>
             <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill"></div>
         </div>
     </div>
@@ -37,51 +78,75 @@
         </div>
 
         <div id="homePage" class="page-content p-4">
-            <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 rounded-[40px] mb-6">
-                <h2 class="text-2xl font-black mb-1 italic">হ্যালো, <span id="userName">User</span>!</h2>
-                <p class="text-xs opacity-80 mb-6 uppercase tracking-wider">আপনার প্রিয় গেম টপ-আপ করুন দ্রুত</p>
-                <a href="#" class="bg-white/10 backdrop-blur-md px-6 py-3 rounded-full inline-flex items-center gap-2 text-[10px] font-bold">
-                    <i class="fa-brands fa-telegram text-sm"></i> JOIN TELEGRAM
+            <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-8 rounded-[40px] mb-6 shadow-xl shadow-blue-900/20">
+                <h2 class="text-2xl font-black mb-1">হ্যালো, <span id="userName">User</span>!</h2>
+                <p class="text-xs opacity-80 mb-6 uppercase">আপনার প্রিয় গেম টপ-আপ করুন দ্রুত</p>
+                <a href="https://t.me/nextopup" class="bg-white/20 backdrop-blur-md text-[10px] font-black px-6 py-3 rounded-full inline-flex items-center gap-2 uppercase">
+                    <i class="fa-brands fa-telegram text-sm"></i> জয়েন টেলিগ্রাম
                 </a>
             </div>
 
             <div class="grid grid-cols-3 gap-3">
-                <div onclick="openOrder('UID')" class="card-dark p-6 text-center">
+                <div onclick="alert('UID Topup Coming Soon')" class="card-dark p-6 text-center cursor-pointer">
                     <i class="fa-solid fa-id-card text-blue-500 mb-2 text-xl"></i>
                     <p class="text-[8px] font-bold uppercase">UID Topup</p>
                 </div>
-                <div onclick="openOrder('WEEKLY')" class="card-dark p-6 text-center">
-                    <img src="weekly_logo.png" class="h-6 mx-auto mb-2"> <p class="text-[8px] font-bold uppercase">Weekly</p>
+                <div onclick="alert('Weekly Selected')" class="card-dark p-6 text-center cursor-pointer">
+                    <img src="weekly_logo.png" class="h-6 mx-auto mb-2">
+                    <p class="text-[8px] font-bold uppercase">Weekly</p>
                 </div>
-                <div onclick="openOrder('MONTHLY')" class="card-dark p-6 text-center">
-                    <img src="monthly_logo.png" class="h-6 mx-auto mb-2"> <p class="text-[8px] font-bold uppercase">Monthly</p>
+                <div onclick="alert('Monthly Selected')" class="card-dark p-6 text-center cursor-pointer">
+                    <img src="monthly_logo.png" class="h-6 mx-auto mb-2">
+                    <p class="text-[8px] font-bold uppercase">Monthly</p>
                 </div>
             </div>
         </div>
 
-        <div id="addMoneyPage" class="page-content hidden-page p-6 text-center">
-            <h2 class="text-xl font-black mb-4 italic uppercase">Add Money</h2>
-            <div class="card-dark p-8 border-dashed border-gray-700">
-                <p class="text-xs text-gray-500">টাকা যোগ করার সিস্টেমটি এখানে থাকবে।</p>
+        <div id="addMoneyPage" class="page-content hidden-page p-6">
+            <h2 class="text-xl font-black mb-4 uppercase italic">Add Money</h2>
+            <div class="card-dark p-8 border-dashed border-gray-800 text-center">
+                <p class="text-xs text-gray-500">বিকাশ বা নগদে টাকা যোগ করার অপশন শীঘ্রই আসছে।</p>
             </div>
         </div>
 
-        <div id="ordersPage" class="page-content hidden-page p-6 text-center">
-            <h2 class="text-xl font-black mb-4 italic uppercase">My Orders</h2>
-            <div class="card-dark p-8"><p class="text-xs text-gray-500">আপনার সকল অর্ডারের তালিকা এখানে দেখা যাবে।</p></div>
+        <div id="ordersPage" class="page-content hidden-page p-6">
+            <h2 class="text-xl font-black mb-4 uppercase italic">My Orders</h2>
+            <div class="card-dark p-8 text-center text-gray-500 text-xs">আপনার কোনো অর্ডার নেই।</div>
         </div>
 
-        <div id="codesPage" class="page-content hidden-page p-6 text-center">
-            <h2 class="text-xl font-black mb-4 italic uppercase">My Codes</h2>
-            <div class="card-dark p-8"><p class="text-xs text-gray-500">আপনার কেনা রিডিম কোডগুলো এখানে থাকবে।</p></div>
+        <div id="codesPage" class="page-content hidden-page p-6">
+            <h2 class="text-xl font-black mb-4 uppercase italic">My Codes</h2>
+            <div class="card-dark p-8 text-center text-gray-500 text-xs">আপনার কেনা রিডিম কোড এখানে জমা হবে।</div>
         </div>
 
-        <div id="profilePage" class="page-content hidden-page p-8 text-center">
-            <h2 class="text-xl font-black mb-10 italic uppercase">My Account</h2>
+        <div id="profilePage" class="page-content hidden-page p-6 text-center">
+            <div id="userAvatar" class="w-20 h-20 bg-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold">A</div>
+            <h2 id="profileName" class="text-xl font-black uppercase">Asraful Islam</h2>
+            <p class="text-[8px] text-gray-500 font-bold uppercase tracking-widest mb-10">Premium Member</p>
+            
+            <div id="adminBtnArea" class="hidden-page">
+                <button onclick="showPage('adminPage')" class="w-full bg-yellow-500 text-black py-4 rounded-3xl font-black uppercase text-[10px] mb-3">Admin Control</button>
+            </div>
+            
             <button onclick="logout()" class="w-full bg-red-600/10 text-red-500 py-4 rounded-3xl font-bold uppercase text-[10px]">Logout</button>
         </div>
 
-        <nav class="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-lg border-t border-gray-900 py-4 px-2 flex justify-around items-center z-50">
+        <div id="adminPage" class="page-content hidden-page p-4">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-yellow-500 font-black italic text-xl uppercase tracking-tighter">Admin Panel</h1>
+                <button onclick="showPage('profilePage')" class="bg-[#111] text-[8px] px-3 py-1 rounded-lg font-bold uppercase border border-gray-800">Back</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-8 text-center">
+                <div class="card-dark p-5"><p id="statTotalOrders" class="text-2xl font-black">0</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Total</p></div>
+                <div class="card-dark p-5"><p class="text-2xl font-black text-blue-500">১২৫</p><p id="statViewers" class="text-[8px] text-gray-500 uppercase font-bold mt-1">Viewers</p></div>
+                <div class="card-dark p-5 border-green-900/20"><p id="statCompleted" class="text-2xl font-black text-green-500">0</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Done</p></div>
+                <div class="card-dark p-5 border-yellow-900/20"><p id="statPending" class="text-2xl font-black text-yellow-500">0</p><p class="text-[8px] text-gray-500 uppercase font-bold mt-1">Waiting</p></div>
+            </div>
+            <h3 class="text-[10px] font-bold uppercase mb-3 text-gray-400 tracking-widest flex items-center gap-2"><span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span> Live Orders</h3>
+            <div id="liveOrderList" class="space-y-2"></div>
+        </div>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-black/95 border-t border-gray-900 py-4 px-2 flex justify-around items-center z-50">
             <div onclick="showPage('homePage')" id="navHome" class="nav-icon nav-active">
                 <i class="fa-solid fa-house text-lg"></i>
                 <p class="nav-text">Home</p>
@@ -106,6 +171,8 @@
     </div>
 
     <script>
+        const ADMIN_EMAIL = "asraful29661693@gmail.com";
+        
         window.handleCredentialResponse = (r) => {
             const d = JSON.parse(atob(r.credential.split('.')[1]));
             localStorage.setItem('nexUser', JSON.stringify(d));
@@ -114,6 +181,15 @@
 
         function loginSuccess(d) {
             document.getElementById('userName').innerText = d.given_name;
+            document.getElementById('profileName').innerText = d.name;
+            document.getElementById('userAvatar').innerText = d.given_name[0];
+            
+            // Admin Access Check
+            if(d.email === ADMIN_EMAIL) {
+                document.getElementById('adminBtnArea').classList.remove('hidden-page');
+                loadAdminDashboard();
+            }
+            
             document.getElementById('loginPage').classList.add('hidden-page');
             document.getElementById('mainUI').classList.remove('hidden-page');
         }
@@ -123,12 +199,12 @@
             document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('nav-active'));
             document.getElementById(id).classList.remove('hidden-page');
             
-            // আইকন একটিভ করার লজিক
+            // Icon Highlight
             if(id === 'homePage') document.getElementById('navHome').classList.add('nav-active');
             if(id === 'addMoneyPage') document.getElementById('navAdd').classList.add('nav-active');
             if(id === 'ordersPage') document.getElementById('navOrders').classList.add('nav-active');
             if(id === 'codesPage') document.getElementById('navCodes').classList.add('nav-active');
-            if(id === 'profilePage') document.getElementById('navProfile').classList.add('nav-active');
+            if(id === 'profilePage' || id === 'adminPage') document.getElementById('navProfile').classList.add('nav-active');
         };
 
         window.logout = () => { localStorage.removeItem('nexUser'); location.reload(); };
@@ -139,4 +215,4 @@
         };
     </script>
 </body>
-</html>
+                    </html>
