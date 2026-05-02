@@ -1,107 +1,122 @@
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<div class="bg-gray-100 min-h-screen py-10 px-4">
-  <section class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-    
-    <div class="bg-[#6328e0] p-6 text-center text-white">
-      <h2 class="text-2xl font-bold">Free Fire Top-Up</h2>
-      <p class="text-xs opacity-80 mt-1">Instant Delivery via Game ID</p>
+<body class="bg-gray-50 pb-20">
+
+    <header class="bg-white p-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
+        <div class="flex items-center gap-2">
+            <div class="bg-[#6328e0] text-white p-2 rounded-lg font-bold">O</div>
+            <span class="font-bold text-xl tracking-tighter">OFFER <span class="text-[#6328e0]">TOPUP</span></span>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="bg-purple-100 text-[#6328e0] px-3 py-1 rounded-full font-bold flex items-center gap-1 text-sm">
+                <i class="fa-solid fa-wallet"></i> ৳০
+            </div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-400 to-blue-400 border-2 border-white shadow-sm"></div>
+        </div>
+    </header>
+
+    <div class="bg-[#6328e0] text-white text-[11px] py-2 px-4 overflow-hidden whitespace-nowrap">
+        <div class="animate-marquee inline-block">
+            ১৮ বছরের নিচে কেউ অর্ডার করবেন না! বাবা/মা বা ফ্যামিলির টাকা চুরি করে অর্ডার করলে তার বিরুদ্ধে আইনগত ব্যবস্থা নেওয়া হবে!
+        </div>
     </div>
 
-    <div class="p-6 space-y-6">
-      
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">1</span>
-          <label class="font-bold text-gray-700">Account Info</label>
+    <div class="px-4 mt-4">
+        <div class="bg-gradient-to-r from-purple-800 to-indigo-900 rounded-2xl p-6 relative overflow-hidden h-40 flex items-center justify-between shadow-lg">
+            <div class="z-10">
+                <h2 class="text-white font-bold text-xl leading-tight">গিভওয়ে ও সকল অফার <br> <span class="text-yellow-400 text-sm">সম্পর্কে জানতে</span></h2>
+                <button class="mt-3 bg-blue-500 text-white text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-2">
+                    <i class="fa-brands fa-telegram text-lg"></i> টেলিগ্রাম চ্যানেলে জয়েন করুন
+                </button>
+            </div>
+            <div class="absolute right-[-20px] bottom-[-10px] opacity-30 transform rotate-12">
+                 <i class="fa-solid fa-gift text-9xl text-white"></i>
+            </div>
         </div>
-        <input id="uid" class="w-full border-2 border-gray-100 bg-gray-50 p-4 rounded-xl focus:border-[#6328e0] focus:outline-none transition-all" placeholder="প্লেয়ার আইডি (UID) বসান">
-      </div>
-
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">2</span>
-          <label class="font-bold text-gray-700">Select Package</label>
+        <div class="flex justify-center gap-1 mt-2">
+            <span class="w-4 h-1.5 bg-[#6328e0] rounded-full"></span>
+            <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+            <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <button onclick="selectPackage('100', this)" class="pkg-card border-2 border-gray-100 p-4 rounded-2xl hover:bg-purple-50 transition-all text-center group">
-            <span class="block text-xl">💎 100</span>
-            <span class="block text-[#6328e0] font-bold mt-1">৳৮০</span>
-          </button>
-          <button onclick="selectPackage('210', this)" class="pkg-card border-2 border-gray-100 p-4 rounded-2xl hover:bg-purple-50 transition-all text-center group">
-            <span class="block text-xl">💎 210</span>
-            <span class="block text-[#6328e0] font-bold mt-1 text-sm">৳১৬০</span>
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">3</span>
-          <label class="font-bold text-gray-700">Payment Method</label>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <button onclick="selectPay('bkash', this)" class="pay-btn border-2 border-gray-100 p-3 rounded-xl flex items-center justify-center gap-2 hover:border-pink-500 transition-all">
-            <img src="https://itshamsul.com/wp-content/uploads/2023/06/bkash-logo.png" class="h-6" alt="bKash">
-          </button>
-          <button onclick="selectPay('nagad', this)" class="pay-btn border-2 border-gray-100 p-3 rounded-xl flex items-center justify-center gap-2 hover:border-orange-500 transition-all">
-            <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" class="h-8" alt="Nagad">
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="bg-[#6328e0] text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">4</span>
-          <label class="font-bold text-gray-700">Transaction ID</label>
-        </div>
-        <input id="trx" class="w-full border-2 border-gray-100 bg-gray-50 p-4 rounded-xl focus:border-[#6328e0] focus:outline-none" placeholder="পেমেন্ট ট্রানজেকশন আইডি দিন">
-      </div>
-
-      <button onclick="order()" class="w-full bg-[#6328e0] text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-purple-200 hover:scale-[1.02] active:scale-95 transition-all">
-        Buy Now
-      </button>
-
-      <p id="status" class="text-green-600 font-medium text-center"></p>
     </div>
-  </section>
-</div>
 
-<script>
-let selectedProduct = '';
-let selectedMethod = '';
+    <div class="mt-8 px-4">
+        <h3 class="text-center font-bold text-gray-800 text-lg mb-4 tracking-widest uppercase">Special Offer</h3>
+        <div class="grid grid-cols-3 gap-3">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden text-center p-2 group hover:shadow-md transition-all">
+                <div class="bg-purple-600 rounded-xl aspect-square flex flex-col items-center justify-center text-white relative overflow-hidden mb-2">
+                    <img src="https://img.freepik.com/free-vector/ninja-gaming-mascot-logo-concept_23-2148496417.jpg" class="object-cover w-full h-full opacity-80">
+                    <span class="absolute bottom-2 bg-yellow-400 text-black text-[9px] font-bold px-2 py-0.5 rounded">স্পেশাল অফার</span>
+                </div>
+                <p class="text-[10px] font-bold text-gray-700 leading-tight">SPECIAL OFFER</p>
+            </div>
+        </div>
+    </div>
 
-function selectPackage(p, element) {
-  selectedProduct = p;
-  // Remove selection from all
-  document.querySelectorAll('.pkg-card').forEach(card => {
-    card.classList.remove('border-[#6328e0]', 'bg-purple-50');
-    card.classList.add('border-gray-100');
-  });
-  // Add to current
-  element.classList.add('border-[#6328e0]', 'bg-purple-50');
-  element.classList.remove('border-gray-100');
-}
+    <div class="mt-8 px-4">
+        <h3 class="text-center font-bold text-gray-800 text-lg mb-4 tracking-widest uppercase">Free Fire</h3>
+        <div class="grid grid-cols-3 gap-3">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 text-center group active:scale-95 transition-all">
+                <div class="bg-gradient-to-b from-purple-500 to-indigo-700 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2 p-1">
+                    <span class="text-[8px] font-bold leading-tight mb-1">২০০ লাইক প্রতিদিন</span>
+                    <i class="fa-solid fa-thumbs-up text-2xl"></i>
+                    <span class="text-[7px] mt-1 opacity-80">Free Fire</span>
+                </div>
+                <p class="text-[10px] font-bold text-gray-700">Free Fire - 200 Like</p>
+            </div>
 
-function selectPay(method, element) {
-  selectedMethod = method;
-  document.querySelectorAll('.pay-btn').forEach(btn => {
-    btn.classList.remove('border-pink-500', 'border-orange-500', 'bg-gray-50');
-  });
-  
-  if(method === 'bkash') element.classList.add('border-pink-500', 'bg-gray-50');
-  if(method === 'nagad') element.classList.add('border-orange-500', 'bg-gray-50');
-}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 text-center group active:scale-95 transition-all">
+                <div class="bg-gradient-to-b from-indigo-500 to-purple-800 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2">
+                    <span class="text-[9px] font-bold">ইউ আইডি টপআপ</span>
+                    <i class="fa-solid fa-id-card text-2xl my-1"></i>
+                    <span class="text-[7px] opacity-80">(BD Server)</span>
+                </div>
+                <p class="text-[10px] font-bold text-gray-700 uppercase leading-tight">UID TOPUP (BD)</p>
+            </div>
 
-function order() {
-  const uid = document.getElementById('uid').value;
-  const trx = document.getElementById('trx').value;
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 text-center group active:scale-95 transition-all">
+                <div class="bg-gradient-to-b from-blue-600 to-indigo-900 rounded-xl aspect-square flex flex-col items-center justify-center text-white mb-2">
+                    <span class="text-[9px] font-bold">লেভেল আপ পাস</span>
+                    <i class="fa-solid fa-gem text-2xl my-1 text-blue-300"></i>
+                    <span class="text-[7px] opacity-80">LEVEL UP PASS</span>
+                </div>
+                <p class="text-[10px] font-bold text-gray-700 uppercase leading-tight">LEVEL UP PASS</p>
+            </div>
+        </div>
+    </div>
 
-  if(!uid || !selectedProduct || !selectedMethod || !trx) {
-    alert('দয়া করে সব তথ্য পূরণ করুন!');
-    return;
-  }
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3 px-6 flex justify-between items-center text-gray-400 z-50">
+        <div class="flex flex-col items-center gap-1 text-[#6328e0]">
+            <i class="fa-solid fa-house"></i>
+            <span class="text-[9px] font-bold">Home</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span class="text-[9px] font-bold">Add Money</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-bookmark"></i>
+            <span class="text-[9px] font-bold">My Orders</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-grid-2"></i>
+            <span class="text-[9px] font-bold">My Codes</span>
+        </div>
+        <div class="flex flex-col items-center gap-1">
+            <i class="fa-solid fa-circle-user"></i>
+            <span class="text-[9px] font-bold">Account</span>
+        </div>
+    </nav>
 
-  document.getElementById('status').innerText = "অর্ডারটি সফল হয়েছে! ১০-৩০ মিনিট অপেক্ষা করুন।";
-}
-</script>
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            animation: marquee 15s linear infinite;
+        }
+    </style>
+
+</body>
