@@ -1,49 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- ===== NEXTOPUP PREMIUM UI (MODERN + CLEAN + PRO) ===== --><!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NexTopUp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexTopUp Premium</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
+</head><body class="bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900"><!-- NAVBAR --><nav class="bg-white/80 backdrop-blur sticky top-0 shadow-sm">
+  <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
+    <h1 class="text-2xl font-bold text-blue-600">NexTopUp</h1>
+    <button class="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700">Login</button>
+  </div>
+</nav><!-- HERO --><section class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 p-10 items-center">
+  <div>
+    <h2 class="text-4xl font-bold text-blue-600 leading-tight">
+      Instant Game Top-Up
+    </h2>
+    <p class="text-gray-500 mt-3">
+      Fast • Secure • Trusted service in minutes
+    </p><!-- FORM CARD -->
+<div class="mt-6 bg-white p-6 rounded-2xl shadow-lg space-y-4">
+  <input id="uid" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400" placeholder="Enter Free Fire UID" />
 
-<body class="bg-gray-50 text-gray-900">
-
-<!-- NAVBAR -->
-<nav class="bg-white shadow p-4 flex justify-between">
-  <h1 class="text-xl font-bold text-blue-600">NexTopUp</h1>
-</nav>
-
-<!-- MAIN CARD -->
-<section class="max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow">
-  <h2 class="text-2xl font-bold mb-4 text-center">Free Fire Top-Up</h2>
-
-  <input id="uid" class="w-full border p-2 mb-3 rounded" placeholder="Enter UID">
-
-  <select id="product" class="w-full border p-2 mb-3 rounded">
+  <select id="product" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400">
     <option value="100">100 Diamond - ৳80</option>
     <option value="210">210 Diamond - ৳160</option>
     <option value="530">530 Diamond - ৳400</option>
+    <option value="1080">1080 Diamond - ৳780</option>
   </select>
 
-  <input id="trx" class="w-full border p-2 mb-3 rounded" placeholder="Transaction ID (bKash/Nagad)">
+  <input id="trx" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400" placeholder="Transaction ID" />
 
-  <button onclick="order()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+  <button onclick="order()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
     Buy Now
   </button>
 
-  <p id="status" class="text-green-600 mt-3 text-center"></p>
-</section>
+  <p id="status" class="text-green-600 text-center"></p>
+</div>
 
-<!-- SCRIPT -->
-<script>
+  </div>  <!-- SIDE CARD -->  <div class="hidden md:block">
+    <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+      <h3 class="text-xl font-bold mb-4">Why Choose Us?</h3>
+      <ul class="space-y-2 text-gray-600">
+        <li>⚡ Instant Delivery</li>
+        <li>🔒 100% Secure Payment</li>
+        <li>💰 Best Market Price</li>
+        <li>📞 24/7 Support</li>
+      </ul>
+    </div>
+  </div>
+</section><!-- PACKAGES --><section class="max-w-6xl mx-auto p-10">
+  <h2 class="text-2xl font-bold mb-6">Popular Packages</h2>  <div class="grid md:grid-cols-4 gap-6"><div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition text-center">
+  <h3 class="font-bold text-lg">100 Diamond</h3>
+  <p class="text-blue-600 font-semibold">৳80</p>
+</div>
+
+<div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition text-center">
+  <h3 class="font-bold text-lg">210 Diamond</h3>
+  <p class="text-blue-600 font-semibold">৳160</p>
+</div>
+
+<div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition text-center">
+  <h3 class="font-bold text-lg">530 Diamond</h3>
+  <p class="text-blue-600 font-semibold">৳400</p>
+</div>
+
+<div class="bg-white p-5 rounded-2xl shadow hover:shadow-xl transition text-center">
+  <h3 class="font-bold text-lg">1080 Diamond</h3>
+  <p class="text-blue-600 font-semibold">৳780</p>
+</div>
+
+  </div>
+</section><!-- FOOTER --><footer class="text-center text-gray-500 py-6">
+  © 2026 NexTopUp • Fast • Secure • Trusted
+</footer><!-- SCRIPT --><script>
 async function order() {
   const uid = document.getElementById('uid').value;
   const product = document.getElementById('product').value;
   const trx = document.getElementById('trx').value;
 
   if(!uid || !trx){
-    alert('সব তথ্য পূরণ করো');
+    alert('Fill all fields');
     return;
   }
 
@@ -54,9 +89,7 @@ async function order() {
   });
 
   const data = await res.json();
-  document.getElementById('status').innerText = "Order ID: " + data.id;
+  document.getElementById('status').innerText = 'Order ID: ' + data.id;
 }
-</script>
-
-</body>
+</script></body>
 </html>
