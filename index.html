@@ -1,82 +1,67 @@
-<!-- ===== NEXTOPUP PREMIUM UI + GAME BANNERS ===== --><!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NexTopUp Premium</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head><body class="bg-gradient-to-br from-gray-50 to-blue-50 text-gray-900"><!-- NAVBAR --><nav class="bg-white/80 backdrop-blur sticky top-0 shadow-sm">
-  <div class="max-w-6xl mx-auto flex justify-between items-center p-4">
-    <h1 class="text-2xl font-bold text-blue-600">NexTopUp</h1>
-    <button class="bg-blue-600 text-white px-4 py-1 rounded-lg hover:bg-blue-700">Login</button>
-  </div>
-</nav><!-- HERO BANNER --><section class="max-w-6xl mx-auto p-6">
-  <div class="rounded-2xl overflow-hidden shadow-lg">
-    <img src="https://i.ibb.co/6bQK9bC/freefire-banner.jpg" alt="Game Banner" class="w-full h-56 object-cover">
-  </div>
-</section><!-- MAIN SECTION --><section class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 p-10 items-center">
-  <div>
-    <h2 class="text-4xl font-bold text-blue-600 leading-tight">
-      Instant Game Top-Up
-    </h2>
-    <p class="text-gray-500 mt-3">
-      Fast • Secure • Trusted service in minutes
-    </p><!-- FORM CARD -->
-<div class="mt-6 bg-white p-6 rounded-2xl shadow-lg space-y-4">
-  <input id="uid" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400" placeholder="Enter Free Fire UID" />
+<section class="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl">
 
-  <select id="product" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400">
-    <option value="100">100 Diamond - ৳80</option>
-    <option value="210">210 Diamond - ৳160</option>
-    <option value="530">530 Diamond - ৳400</option>
-    <option value="1080">1080 Diamond - ৳780</option>
-  </select>
+  <h2 class="text-xl font-bold mb-4 text-center">Top-Up Now</h2>
 
-  <!-- PAYMENT METHODS -->
-  <div class="grid grid-cols-2 gap-3">
-    <button type="button" onclick="selectPay('bkash')" id="bkashBtn" class="border rounded-lg p-3 flex items-center justify-center gap-2 hover:border-pink-500">
-      <img src="https://i.ibb.co/7QpKsCX/bkash.png" class="h-6"> bKash
-    </button>
-    <button type="button" onclick="selectPay('nagad')" id="nagadBtn" class="border rounded-lg p-3 flex items-center justify-center gap-2 hover:border-orange-500">
-      <img src="https://i.ibb.co/6Wb8F3K/nagad.png" class="h-6"> Nagad
-    </button>
+  <!-- STEP 1 -->
+  <div class="mb-4">
+    <label class="text-sm text-gray-500">Player UID</label>
+    <input id="uid" class="w-full border p-3 rounded-lg mt-1" placeholder="Enter UID">
   </div>
 
-  <input id="trx" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-400" placeholder="Transaction ID" />
+  <!-- STEP 2 -->
+  <div class="mb-4">
+    <label class="text-sm text-gray-500">Select Package</label>
+    <div class="grid grid-cols-2 gap-3 mt-2">
 
-  <button onclick="order()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-    Buy Now
-  </button>
+      <button onclick="selectPackage('100')" class="pkg border p-3 rounded-lg hover:border-blue-500">
+        100 💎 <br> ৳80
+      </button>
 
-  <p id="status" class="text-green-600 text-center"></p>
-</div>
+      <button onclick="selectPackage('210')" class="pkg border p-3 rounded-lg hover:border-blue-500">
+        210 💎 <br> ৳160
+      </button>
 
-  </div>  <!-- SIDE IMAGE CARD -->  <div class="hidden md:block">
-    <div class="bg-white p-4 rounded-2xl shadow-lg">
-      <img src="https://i.ibb.co/3hQ6wXk/freefire-character.png" class="rounded-xl" alt="Character">
-      <h3 class="text-xl font-bold mt-4 text-center">Top-Up Instantly</h3>
     </div>
   </div>
-</section><!-- GAME CARDS --><section class="max-w-6xl mx-auto p-10">
-  <h2 class="text-2xl font-bold mb-6">Supported Games</h2>  <div class="grid md:grid-cols-3 gap-6"><div class="bg-white rounded-2xl shadow hover:shadow-xl transition overflow-hidden">
-  <img src="https://i.ibb.co/6bQK9bC/freefire-banner.jpg" class="h-40 w-full object-cover">
-  <div class="p-4 text-center font-semibold">Free Fire</div>
-</div>
 
-<div class="bg-white rounded-2xl shadow hover:shadow-xl transition overflow-hidden">
-  <img src="https://i.ibb.co/Fb1m9jP/pubg-banner.jpg" class="h-40 w-full object-cover">
-  <div class="p-4 text-center font-semibold">PUBG Mobile</div>
-</div>
+  <!-- STEP 3 -->
+  <div class="mb-4">
+    <label class="text-sm text-gray-500">Payment Method</label>
 
-<div class="bg-white rounded-2xl shadow hover:shadow-xl transition overflow-hidden">
-  <img src="https://i.ibb.co/Tv6Q7pL/codm-banner.jpg" class="h-40 w-full object-cover">
-  <div class="p-4 text-center font-semibold">Call of Duty</div>
-</div>
+    <div class="grid grid-cols-2 gap-3 mt-2">
+      <button onclick="selectPay('bkash')" id="bkashBtn" class="border p-3 rounded-lg hover:border-pink-500">
+        bKash
+      </button>
 
+      <button onclick="selectPay('nagad')" id="nagadBtn" class="border p-3 rounded-lg hover:border-orange-500">
+        Nagad
+      </button>
+    </div>
   </div>
-</section><!-- FOOTER --><footer class="text-center text-gray-500 py-6">
-  © 2026 NexTopUp • Fast • Secure • Trusted
-</footer><!-- SCRIPT --><script>
+
+  <!-- STEP 4 -->
+  <div class="mb-4">
+    <label class="text-sm text-gray-500">Transaction ID</label>
+    <input id="trx" class="w-full border p-3 rounded-lg mt-1">
+  </div>
+
+  <button onclick="order()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold">
+    Confirm Order
+  </button>
+
+  <p id="status" class="text-green-600 mt-3 text-center"></p>
+
+</section>
+
+<script>
+let product = '';
 let paymentMethod = '';
+
+function selectPackage(p){
+  product = p;
+  document.querySelectorAll('.pkg').forEach(btn => btn.classList.remove('border-blue-500'));
+  event.target.classList.add('border-blue-500');
+}
 
 function selectPay(method){
   paymentMethod = method;
@@ -90,45 +75,4 @@ function selectPay(method){
     document.getElementById('nagadBtn').classList.add('border-orange-500');
   }
 }
-
-async function order() {
-  const uid = document.getElementById('uid').value;
-  const product = document.getElementById('product').value;
-  const trx = document.getElementById('trx').value;
-
-  if(!uid || !trx || !paymentMethod){
-    alert('Fill all fields & select payment method');
-    return;
-  }
-
-  const res = await fetch('https://nextopup-site-production.up.railway.app/create-order', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ uid, product, trx, paymentMethod })
-  });
-
-  const data = await res.json();
-  document.getElementById('status').innerText = 'Order ID: ' + data.id;
-}
-</script><script>
-async function order() {
-  const uid = document.getElementById('uid').value;
-  const product = document.getElementById('product').value;
-  const trx = document.getElementById('trx').value;
-
-  if(!uid || !trx){
-    alert('Fill all fields');
-    return;
-  }
-
-  const res = await fetch('https://nextopup-site-production.up.railway.app/create-order', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ uid, product, trx })
-  });
-
-  const data = await res.json();
-  document.getElementById('status').innerText = 'Order ID: ' + data.id;
-}
-</script></body>
-</html>
+</script>
