@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NexTopUp Premium</title>
+<title>NexTopUp - Free Fire</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
@@ -15,23 +17,11 @@ body{
     background:#06070d;
     color:white;
     font-family:sans-serif;
+    overflow-x:hidden;
 }
-
-/* ===== SCROLL ===== */
 
 ::-webkit-scrollbar{
     width:0;
-}
-
-/* ===== TOP BAR ===== */
-
-.topbar{
-    position:sticky;
-    top:0;
-    z-index:100;
-    background:rgba(10,10,15,.85);
-    backdrop-filter:blur(15px);
-    border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 /* ===== GLASS ===== */
@@ -39,32 +29,35 @@ body{
 .glass{
     background:rgba(255,255,255,.04);
     border:1px solid rgba(255,255,255,.05);
-    backdrop-filter:blur(10px);
+    backdrop-filter:blur(12px);
 }
 
-/* ===== BANNER ===== */
+/* ===== HERO ===== */
 
-.banner{
+.ff-hero{
     background:
     linear-gradient(to right,rgba(88,28,135,.9),rgba(29,78,216,.85)),
-    url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop');
+    url('https://i.ibb.co/6bQK9bC/freefire-banner.jpg');
+
     background-size:cover;
     background-position:center;
+    border-radius:35px;
 }
 
-/* ===== GAME CARD ===== */
+/* ===== CARD ===== */
 
-.game-card{
+.ff-card{
     transition:.3s;
 }
 
-.game-card:hover{
-    transform:translateY(-5px) scale(1.02);
+.ff-card:hover{
+    transform:translateY(-5px);
 }
 
-.game-image{
-    aspect-ratio:1/1;
-    object-fit:cover;
+/* ===== BUTTON ===== */
+
+.ff-btn{
+    background:linear-gradient(to right,#9333ea,#2563eb);
 }
 
 /* ===== NAV ===== */
@@ -77,7 +70,6 @@ body{
     background:rgba(10,10,15,.95);
     backdrop-filter:blur(15px);
     border-top:1px solid rgba(255,255,255,.05);
-    z-index:100;
 }
 
 .nav-item{
@@ -88,397 +80,586 @@ body{
     color:#a855f7;
 }
 
-/* ===== PACKAGE ===== */
+/* ===== PAGE ANIMATION ===== */
+
+.page{
+    animation:fade .3s ease;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateX(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+/* ===== ACTIVE ===== */
 
 .pkg.active{
     border:1px solid #a855f7;
-    background:rgba(168,85,247,.12);
+    background:rgba(168,85,247,.15);
 }
-
-/* ===== PAYMENT ===== */
 
 .pay.active{
     border:1px solid #22c55e;
-    background:rgba(34,197,94,.12);
+    background:rgba(34,197,94,.15);
 }
 
 </style>
+
 </head>
 
 <body class="pb-28">
 
-<!-- ===== TOPBAR ===== -->
+<!-- ================= LOGIN PAGE ================= -->
 
-<div class="topbar px-4 py-4 flex justify-between items-center">
+<div id="loginPage"
+class="min-h-screen flex items-center justify-center p-6">
 
-    <div>
-        <h1 class="text-2xl font-black">
-            <span class="text-purple-500">Nex</span><span class="text-yellow-400">TopUp</span>
-        </h1>
-        <p class="text-[10px] text-gray-400 uppercase">
-            Gaming Marketplace
-        </p>
-    </div>
+<div class="glass rounded-[35px] p-8 w-full max-w-sm text-center">
 
-    <div class="glass px-4 py-2 rounded-2xl text-yellow-400 font-bold text-sm">
-        ৳0.00
-    </div>
+<h1 class="text-4xl font-black">
+<span class="text-purple-500">Nex</span><span class="text-yellow-400">TopUp</span>
+</h1>
+
+<p class="text-xs uppercase text-gray-400 mt-2">
+Free Fire Marketplace
+</p>
+
+<input
+id="username"
+placeholder="Enter Username"
+class="w-full mt-6 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
+
+<button
+onclick="login()"
+class="ff-btn w-full py-4 rounded-2xl font-black mt-4">
+
+ENTER
+
+</button>
 
 </div>
 
-<!-- ===== BANNER ===== -->
+</div>
+
+<!-- ================= MAIN APP ================= -->
+
+<div id="app" style="display:none;">
+
+<!-- ================= HOME PAGE ================= -->
+
+<div id="homePage" class="page">
+
+<!-- HERO -->
 
 <section class="p-4">
 
-    <div class="banner rounded-[30px] p-7 shadow-2xl">
+<div class="ff-hero p-8 min-h-[240px] flex flex-col justify-end">
 
-        <p class="uppercase text-xs tracking-widest text-purple-200">
-            Special Event
-        </p>
+<div class="bg-black/30 backdrop-blur rounded-3xl p-5">
 
-        <h2 class="text-3xl font-black mt-2 leading-tight">
-            Free Fire <br>
-            Diamond Top-Up
-        </h2>
+<p class="uppercase text-xs tracking-[0.3em] text-yellow-300 font-bold">
+🔥 BOOYAH EVENT
+</p>
 
-        <p class="text-sm text-purple-100 mt-2">
-            Fast • Secure • Instant Delivery
-        </p>
+<h1 class="text-4xl font-black mt-2 leading-tight">
+FREE FIRE <br>
+TOP-UP
+</h1>
 
-        <button class="mt-5 bg-white text-black px-5 py-3 rounded-2xl font-bold">
-            Buy Now
-        </button>
+<p class="text-sm text-purple-100 mt-3">
+Instant Diamond Delivery
+</p>
 
-    </div>
-
-</section>
-
-<!-- ===== POPULAR GAMES ===== -->
-
-<section class="px-4 mt-2">
-
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="font-black uppercase text-sm text-gray-300">
-            Popular Games
-        </h2>
-
-        <p class="text-xs text-purple-400">
-            View All
-        </p>
-    </div>
-
-    <div class="grid grid-cols-3 gap-3">
-
-        <!-- CARD -->
-
-        <div class="game-card glass rounded-3xl overflow-hidden">
-
-            <img
-            src="https://i.ibb.co/6bQK9bC/freefire-banner.jpg"
-            class="game-image w-full">
-
-            <div class="p-2 text-center">
-                <p class="text-[10px] font-black uppercase">
-                    Free Fire
-                </p>
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="game-card glass rounded-3xl overflow-hidden">
-
-            <img
-            src="https://i.ibb.co/Fb1m9jP/pubg-banner.jpg"
-            class="game-image w-full">
-
-            <div class="p-2 text-center">
-                <p class="text-[10px] font-black uppercase">
-                    PUBG
-                </p>
-            </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="game-card glass rounded-3xl overflow-hidden">
-
-            <img
-            src="https://i.ibb.co/Tv6Q7pL/codm-banner.jpg"
-            class="game-image w-full">
-
-            <div class="p-2 text-center">
-                <p class="text-[10px] font-black uppercase">
-                    CODM
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ===== TOPUP CARD ===== -->
-
-<section class="p-4 mt-4">
-
-<div class="glass rounded-[30px] p-5">
-
-    <h2 class="text-lg font-black mb-5">
-        Free Fire Top-Up
-    </h2>
-
-    <!-- UID -->
-
-    <div class="mb-4">
-
-        <label class="text-xs text-gray-400 uppercase">
-            Player UID
-        </label>
-
-        <input
-        id="uid"
-        type="number"
-        placeholder="Enter UID"
-        class="w-full mt-2 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
-
-    </div>
-
-    <!-- PACKAGE -->
-
-    <div class="mb-5">
-
-        <label class="text-xs text-gray-400 uppercase">
-            Select Package
-        </label>
-
-        <div class="grid grid-cols-2 gap-3 mt-3">
-
-            <button onclick="selectPackage(this,'100')" class="pkg glass rounded-2xl p-4 text-left">
-
-                <p class="font-black">
-                    100 💎
-                </p>
-
-                <p class="text-yellow-400 text-sm mt-1">
-                    ৳80
-                </p>
-
-            </button>
-
-            <button onclick="selectPackage(this,'210')" class="pkg glass rounded-2xl p-4 text-left">
-
-                <p class="font-black">
-                    210 💎
-                </p>
-
-                <p class="text-yellow-400 text-sm mt-1">
-                    ৳160
-                </p>
-
-            </button>
-
-            <button onclick="selectPackage(this,'530')" class="pkg glass rounded-2xl p-4 text-left">
-
-                <p class="font-black">
-                    530 💎
-                </p>
-
-                <p class="text-yellow-400 text-sm mt-1">
-                    ৳400
-                </p>
-
-            </button>
-
-            <button onclick="selectPackage(this,'1080')" class="pkg glass rounded-2xl p-4 text-left">
-
-                <p class="font-black">
-                    1080 💎
-                </p>
-
-                <p class="text-yellow-400 text-sm mt-1">
-                    ৳780
-                </p>
-
-            </button>
-
-        </div>
-
-    </div>
-
-    <!-- PAYMENT -->
-
-    <div class="mb-5">
-
-        <label class="text-xs text-gray-400 uppercase">
-            Payment Method
-        </label>
-
-        <div class="grid grid-cols-2 gap-3 mt-3">
-
-            <button onclick="selectPay(this,'bkash')" class="pay glass rounded-2xl p-4 flex items-center justify-center gap-2">
-
-                <img src="https://i.ibb.co/7QpKsCX/bkash.png" class="h-6">
-
-                <span class="font-bold">
-                    bKash
-                </span>
-
-            </button>
-
-            <button onclick="selectPay(this,'nagad')" class="pay glass rounded-2xl p-4 flex items-center justify-center gap-2">
-
-                <img src="https://i.ibb.co/6Wb8F3K/nagad.png" class="h-6">
-
-                <span class="font-bold">
-                    Nagad
-                </span>
-
-            </button>
-
-        </div>
-
-    </div>
-
-    <!-- TRX -->
-
-    <div class="mb-5">
-
-        <label class="text-xs text-gray-400 uppercase">
-            Transaction ID
-        </label>
-
-        <input
-        id="trx"
-        placeholder="Enter Transaction ID"
-        class="w-full mt-2 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
-
-    </div>
-
-    <!-- BUTTON -->
-
-    <button
-    onclick="order()"
-    class="w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black text-lg shadow-2xl">
-
-        Confirm Order
-
-    </button>
-
-    <p id="status" class="text-center text-green-400 mt-4"></p>
+</div>
 
 </div>
 
 </section>
 
-<!-- ===== OFFERS ===== -->
+<!-- SERVICES -->
 
-<section class="px-4 mt-2">
+<section class="px-4">
 
-    <div class="flex justify-between items-center mb-4">
+<h2 class="font-black uppercase text-sm text-gray-300 mb-4">
+Services
+</h2>
 
-        <h2 class="font-black uppercase text-sm text-gray-300">
-            Hot Offers
-        </h2>
+<div class="grid grid-cols-2 gap-4">
 
-        <p class="text-xs text-purple-400">
-            More
-        </p>
+<!-- UID -->
 
-    </div>
+<div
+onclick="openPage('uidPage')"
+class="ff-card glass rounded-[28px] overflow-hidden">
 
-    <div class="space-y-3">
+<img
+src="https://i.ibb.co/6bQK9bC/freefire-banner.jpg"
+class="w-full aspect-square object-cover">
 
-        <div class="glass rounded-3xl p-5 flex justify-between items-center">
+<div class="p-4">
 
-            <div>
-                <p class="font-black">
-                    Weekly Membership
-                </p>
+<p class="font-black text-sm">
+UID TOP-UP
+</p>
 
-                <p class="text-xs text-gray-400 mt-1">
-                    Instant Delivery
-                </p>
-            </div>
+<p class="text-yellow-400 text-xs mt-1">
+Instant Delivery
+</p>
 
-            <div class="text-yellow-400 font-black">
-                ৳190
-            </div>
+</div>
 
-        </div>
+</div>
 
-        <div class="glass rounded-3xl p-5 flex justify-between items-center">
+<!-- WEEKLY -->
 
-            <div>
-                <p class="font-black">
-                    Monthly Membership
-                </p>
+<div
+onclick="openPage('weeklyPage')"
+class="ff-card glass rounded-[28px] overflow-hidden">
 
-                <p class="text-xs text-gray-400 mt-1">
-                    Best Seller
-                </p>
-            </div>
+<img
+src="https://i.ibb.co/H4t9DkK/freefire2.jpg"
+class="w-full aspect-square object-cover">
 
-            <div class="text-yellow-400 font-black">
-                ৳750
-            </div>
+<div class="p-4">
 
-        </div>
+<p class="font-black text-sm">
+WEEKLY
+</p>
 
-    </div>
+<p class="text-yellow-400 text-xs mt-1">
+৳190
+</p>
+
+</div>
+
+</div>
+
+<!-- MONTHLY -->
+
+<div
+onclick="openPage('monthlyPage')"
+class="ff-card glass rounded-[28px] overflow-hidden">
+
+<img
+src="https://i.ibb.co/fQx8x5W/levelup.jpg"
+class="w-full aspect-square object-cover">
+
+<div class="p-4">
+
+<p class="font-black text-sm">
+MONTHLY
+</p>
+
+<p class="text-yellow-400 text-xs mt-1">
+৳750
+</p>
+
+</div>
+
+</div>
+
+<!-- EVO -->
+
+<div
+onclick="openPage('evoPage')"
+class="ff-card glass rounded-[28px] overflow-hidden">
+
+<img
+src="https://i.ibb.co/wY8bJ8g/evo.jpg"
+class="w-full aspect-square object-cover">
+
+<div class="p-4">
+
+<p class="font-black text-sm">
+EVO ACCESS
+</p>
+
+<p class="text-yellow-400 text-xs mt-1">
+Premium
+</p>
+
+</div>
+
+</div>
+
+</div>
 
 </section>
 
-<!-- ===== BOTTOM NAV ===== -->
+</div>
+
+<!-- ================= UID PAGE ================= -->
+
+<div id="uidPage"
+class="page hidden p-4">
+
+<button
+onclick="backHome()"
+class="mb-5 text-purple-400">
+
+← Back
+
+</button>
+
+<div class="glass rounded-[30px] p-5">
+
+<h2 class="text-3xl font-black">
+UID TOP-UP
+</h2>
+
+<input
+id="uid"
+placeholder="Enter UID"
+class="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
+
+<!-- PACKAGES -->
+
+<div class="grid grid-cols-2 gap-3 mt-5">
+
+<button
+onclick="selectPackage(this,'100')"
+class="pkg glass rounded-2xl p-4">
+
+100 💎 <br>
+<span class="text-yellow-400">
+৳80
+</span>
+
+</button>
+
+<button
+onclick="selectPackage(this,'530')"
+class="pkg glass rounded-2xl p-4">
+
+530 💎 <br>
+<span class="text-yellow-400">
+৳400
+</span>
+
+</button>
+
+<button
+onclick="selectPackage(this,'1080')"
+class="pkg glass rounded-2xl p-4">
+
+1080 💎 <br>
+<span class="text-yellow-400">
+৳780
+</span>
+
+</button>
+
+<button
+onclick="selectPackage(this,'2200')"
+class="pkg glass rounded-2xl p-4">
+
+2200 💎 <br>
+<span class="text-yellow-400">
+৳1500
+</span>
+
+</button>
+
+</div>
+
+<!-- PAYMENT -->
+
+<div class="grid grid-cols-2 gap-3 mt-5">
+
+<button
+onclick="selectPay(this,'bkash')"
+class="pay glass rounded-2xl p-4">
+
+bKash
+
+</button>
+
+<button
+onclick="selectPay(this,'nagad')"
+class="pay glass rounded-2xl p-4">
+
+Nagad
+
+</button>
+
+</div>
+
+<input
+id="trx"
+placeholder="Transaction ID"
+class="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
+
+<button
+onclick="order()"
+class="ff-btn w-full py-4 rounded-2xl font-black mt-5">
+
+CONFIRM ORDER
+
+</button>
+
+<p
+id="status"
+class="text-green-400 text-center mt-4">
+</p>
+
+</div>
+
+</div>
+
+<!-- ================= WEEKLY PAGE ================= -->
+
+<div id="weeklyPage"
+class="page hidden p-4">
+
+<button
+onclick="backHome()"
+class="mb-5 text-purple-400">
+
+← Back
+
+</button>
+
+<div class="glass rounded-[30px] p-6 text-center">
+
+<h2 class="text-3xl font-black">
+WEEKLY MEMBERSHIP
+</h2>
+
+<p class="text-yellow-400 text-4xl font-black mt-5">
+৳190
+</p>
+
+<button
+class="ff-btn w-full py-4 rounded-2xl font-black mt-6">
+
+BUY NOW
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= MONTHLY PAGE ================= -->
+
+<div id="monthlyPage"
+class="page hidden p-4">
+
+<button
+onclick="backHome()"
+class="mb-5 text-purple-400">
+
+← Back
+
+</button>
+
+<div class="glass rounded-[30px] p-6 text-center">
+
+<h2 class="text-3xl font-black">
+MONTHLY MEMBERSHIP
+</h2>
+
+<p class="text-yellow-400 text-4xl font-black mt-5">
+৳750
+</p>
+
+<button
+class="ff-btn w-full py-4 rounded-2xl font-black mt-6">
+
+BUY NOW
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= EVO PAGE ================= -->
+
+<div id="evoPage"
+class="page hidden p-4">
+
+<button
+onclick="backHome()"
+class="mb-5 text-purple-400">
+
+← Back
+
+</button>
+
+<div class="glass rounded-[30px] p-6 text-center">
+
+<h2 class="text-3xl font-black">
+EVO ACCESS
+</h2>
+
+<p class="text-yellow-400 text-4xl font-black mt-5">
+৳250
+</p>
+
+<button
+class="ff-btn w-full py-4 rounded-2xl font-black mt-6">
+
+BUY NOW
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= PROFILE PAGE ================= -->
+
+<div id="profilePage"
+class="page hidden p-4">
+
+<div class="glass rounded-[35px] p-6 text-center">
+
+<div
+class="w-24 h-24 rounded-full bg-purple-500 mx-auto flex items-center justify-center text-3xl font-black">
+
+U
+
+</div>
+
+<h2
+id="profileName"
+class="text-2xl font-black mt-4">
+
+USER
+
+</h2>
+
+<p class="text-xs text-gray-400 mt-2">
+Free Fire Player
+</p>
+
+<button
+onclick="logout()"
+class="w-full bg-red-500/20 text-red-400 py-4 rounded-2xl font-black mt-6">
+
+LOGOUT
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ================= NAV ================= -->
 
 <nav class="bottom-nav py-3 flex justify-around">
 
-    <div class="nav-item nav-active text-center">
-        <i class="fa-solid fa-house text-xl"></i>
-        <p class="text-[10px] mt-1 font-bold">
-            Home
-        </p>
-    </div>
+<div
+onclick="openPage('homePage')"
+class="nav-item nav-active text-center">
 
-    <div class="nav-item text-center">
-        <i class="fa-solid fa-wallet text-xl"></i>
-        <p class="text-[10px] mt-1 font-bold">
-            Wallet
-        </p>
-    </div>
+<i class="fa-solid fa-house text-xl"></i>
 
-    <div class="nav-item text-center">
-        <i class="fa-solid fa-bag-shopping text-xl"></i>
-        <p class="text-[10px] mt-1 font-bold">
-            Orders
-        </p>
-    </div>
+<p class="text-[10px] mt-1 font-bold">
+Home
+</p>
 
-    <div class="nav-item text-center">
-        <i class="fa-solid fa-user text-xl"></i>
-        <p class="text-[10px] mt-1 font-bold">
-            Profile
-        </p>
-    </div>
+</div>
+
+<div
+onclick="openPage('profilePage')"
+class="nav-item text-center">
+
+<i class="fa-solid fa-user text-xl"></i>
+
+<p class="text-[10px] mt-1 font-bold">
+Profile
+</p>
+
+</div>
 
 </nav>
 
-<!-- ===== SCRIPT ===== -->
+</div>
+
+<!-- ================= SCRIPT ================= -->
 
 <script>
 
 let selectedPackage = '';
 let paymentMethod = '';
 
+function login(){
+
+    const user =
+    document.getElementById('username').value;
+
+    if(!user){
+
+        alert('Enter Username');
+        return;
+    }
+
+    localStorage.setItem('nexUser',user);
+
+    document.getElementById('profileName')
+    .innerText = user;
+
+    document.getElementById('loginPage')
+    .style.display='none';
+
+    document.getElementById('app')
+    .style.display='block';
+}
+
+window.onload = ()=>{
+
+    const user =
+    localStorage.getItem('nexUser');
+
+    if(user){
+
+        document.getElementById('profileName')
+        .innerText = user;
+
+        document.getElementById('loginPage')
+        .style.display='none';
+
+        document.getElementById('app')
+        .style.display='block';
+    }
+};
+
+function logout(){
+
+    localStorage.removeItem('nexUser');
+
+    location.reload();
+}
+
+function openPage(page){
+
+    document.querySelectorAll('.page')
+    .forEach(p=>p.classList.add('hidden'));
+
+    document.getElementById(page)
+    .classList.remove('hidden');
+}
+
+function backHome(){
+
+    openPage('homePage');
+}
+
 function selectPackage(el,pack){
 
     selectedPackage = pack;
 
     document.querySelectorAll('.pkg')
-    .forEach(btn => btn.classList.remove('active'));
+    .forEach(btn=>btn.classList.remove('active'));
 
     el.classList.add('active');
 }
@@ -488,15 +669,18 @@ function selectPay(el,method){
     paymentMethod = method;
 
     document.querySelectorAll('.pay')
-    .forEach(btn => btn.classList.remove('active'));
+    .forEach(btn=>btn.classList.remove('active'));
 
     el.classList.add('active');
 }
 
-async function order(){
+function order(){
 
-    const uid = document.getElementById('uid').value;
-    const trx = document.getElementById('trx').value;
+    const uid =
+    document.getElementById('uid').value;
+
+    const trx =
+    document.getElementById('trx').value;
 
     if(!uid || !trx || !selectedPackage || !paymentMethod){
 
@@ -504,27 +688,9 @@ async function order(){
         return;
     }
 
-    const res = await fetch('https://nextopup-site-production.up.railway.app/create-order',{
-
-        method:'POST',
-
-        headers:{
-            'Content-Type':'application/json'
-        },
-
-        body:JSON.stringify({
-            uid,
-            product:selectedPackage,
-            trx,
-            paymentMethod
-        })
-
-    });
-
-    const data = await res.json();
-
-    document.getElementById('status').innerText =
-    'Order Successful • ID: ' + data.id;
+    document.getElementById('status')
+    .innerText =
+    'Order Successful ✅';
 }
 
 </script>
