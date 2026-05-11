@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 export default function NexTopUpUI() {
+
   const [page, setPage] = useState("home");
   const [selectedPackage, setSelectedPackage] = useState("");
   const [payment, setPayment] = useState("");
@@ -21,6 +22,7 @@ export default function NexTopUpUI() {
         "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
       page: "uid",
     },
+
     {
       title: "WEEKLY",
       subtitle: "৳190",
@@ -28,6 +30,7 @@ export default function NexTopUpUI() {
         "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop",
       page: "weekly",
     },
+
     {
       title: "MONTHLY",
       subtitle: "৳750",
@@ -35,6 +38,7 @@ export default function NexTopUpUI() {
         "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1200&auto=format&fit=crop",
       page: "monthly",
     },
+
     {
       title: "EVO ACCESS",
       subtitle: "Premium Reward",
@@ -45,13 +49,18 @@ export default function NexTopUpUI() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#050816] text-white pb-28 overflow-hidden">
+
+    <div className="min-h-screen bg-[#050816] text-white pb-28">
+
       {/* ===== TOPBAR ===== */}
 
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/5">
+      <div className="sticky top-0 z-50 bg-black/30 backdrop-blur-xl border-b border-white/5">
+
         <div className="flex justify-between items-center px-5 py-4">
+
           <div>
-            <h1 className="text-3xl font-black tracking-tight">
+
+            <h1 className="text-3xl font-black">
               <span className="text-purple-500">Nex</span>
               <span className="text-yellow-400">TopUp</span>
             </h1>
@@ -59,54 +68,44 @@ export default function NexTopUpUI() {
             <p className="text-[10px] uppercase tracking-[0.25em] text-gray-400 mt-1">
               Free Fire Marketplace
             </p>
+
           </div>
 
-          <div className="bg-white/5 border border-white/5 rounded-2xl px-4 py-2 text-yellow-400 font-bold">
+          <div className="bg-white/5 rounded-2xl px-4 py-2 text-yellow-400 font-bold">
             ৳0.00
           </div>
+
         </div>
+
       </div>
 
       {/* ================= HOME PAGE ================= */}
 
       {page === "home" && (
+
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          {/* ===== HERO ===== */}
+
+          {/* HERO */}
 
           <section className="p-4">
-            <motion.div
-              animate={{
-                scale: [1, 1.02, 1],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 5,
-              }}
-              className="relative overflow-hidden rounded-[35px] h-[260px] shadow-2xl"
-            >
+
+            <div className="relative overflow-hidden rounded-[35px] h-[260px]">
+
               <img
                 src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop"
                 className="absolute inset-0 w-full h-full object-cover"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-purple-900/30" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-purple-900/30" />
 
               <div className="absolute bottom-0 p-6 w-full">
-                <motion.p
-                  animate={{
-                    opacity: [0.5, 1, 0.5],
-                  }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 2,
-                  }}
-                  className="uppercase text-xs tracking-[0.3em] text-yellow-300 font-bold"
-                >
+
+                <p className="uppercase text-xs tracking-[0.3em] text-yellow-300 font-bold">
                   🔥 BOOYAH EVENT 2026
-                </motion.p>
+                </p>
 
                 <h1 className="text-4xl font-black leading-tight mt-2">
                   FREE FIRE <br />
@@ -117,170 +116,135 @@ export default function NexTopUpUI() {
                   Instant Delivery • Secure Payment
                 </p>
 
-                <button className="mt-5 w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black shadow-[0_0_30px_rgba(168,85,247,.4)]">
+                <button className="mt-5 w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black">
                   TOP-UP NOW
                 </button>
+
               </div>
-            </motion.div>
-          </section>
 
-          {/* ===== SERVICES ===== */}
-
-          <section className="px-4 mt-2">
-            <div className="flex justify-between items-center mb-5">
-              <h2 className="font-black uppercase text-sm text-gray-300">
-                Free Fire Services
-              </h2>
-
-              <p className="text-xs text-purple-400">See All</p>
             </div>
 
+          </section>
+
+          {/* SERVICES */}
+
+          <section className="px-4">
+
             <div className="grid grid-cols-2 gap-4">
+
               {cards.map((card, i) => (
+
                 <motion.div
                   key={i}
-                  whileHover={{
-                    y: -5,
-                    scale: 1.02,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
+                  whileTap={{ scale: 0.96 }}
                   onClick={() => setPage(card.page)}
-                  className="bg-white/[0.04] border border-white/5 rounded-[28px] overflow-hidden backdrop-blur-xl"
+                  className="bg-white/[0.04] border border-white/5 rounded-[28px] overflow-hidden"
                 >
-                  <div className="relative">
-                    <img
-                      src={card.image}
-                      className="w-full aspect-square object-cover"
-                    />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
-                  </div>
+                  <img
+                    src={card.image}
+                    className="w-full aspect-square object-cover"
+                  />
 
                   <div className="p-4">
-                    <p className="font-black text-sm">{card.title}</p>
+
+                    <p className="font-black text-sm">
+                      {card.title}
+                    </p>
 
                     <p className="text-yellow-400 text-xs mt-1">
                       {card.subtitle}
                     </p>
+
                   </div>
+
                 </motion.div>
+
               ))}
+
             </div>
+
           </section>
 
-          {/* ===== HOT OFFER ===== */}
-
-          <section className="p-4 mt-4">
-            <motion.div
-              animate={{
-                boxShadow: [
-                  "0 0 10px rgba(168,85,247,.2)",
-                  "0 0 30px rgba(168,85,247,.4)",
-                  "0 0 10px rgba(168,85,247,.2)",
-                ],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 3,
-              }}
-              className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/20 rounded-[30px] p-5"
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="uppercase text-xs text-purple-300 font-bold">
-                    Limited Offer
-                  </p>
-
-                  <h2 className="text-3xl font-black mt-2">
-                    530 💎 = ৳400
-                  </h2>
-
-                  <p className="text-xs text-gray-400 mt-2">
-                    Instant Delivery within 5 Minutes
-                  </p>
-                </div>
-
-                <div className="w-16 h-16 rounded-full bg-yellow-400/10 flex items-center justify-center">
-                  <span className="text-3xl">⚡</span>
-                </div>
-              </div>
-            </motion.div>
-          </section>
         </motion.div>
+
       )}
 
       {/* ================= UID PAGE ================= */}
 
       {page === "uid" && (
-        <motion.div
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="p-4"
-        >
+
+        <div className="p-4">
+
           <button
             onClick={() => setPage("home")}
             className="mb-5 flex items-center gap-2 text-purple-400"
           >
+
             <ArrowLeft size={18} />
             Back
+
           </button>
 
-          <div className="bg-white/[0.04] border border-white/5 rounded-[35px] p-5 backdrop-blur-xl">
-            <h2 className="text-3xl font-black">UID TOP-UP</h2>
+          <div className="bg-white/[0.04] border border-white/5 rounded-[35px] p-5">
+
+            <h2 className="text-3xl font-black">
+              UID TOP-UP
+            </h2>
 
             <input
               placeholder="Enter UID"
               className="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none"
             />
 
-            {/* ===== PACKAGES ===== */}
+            {/* PACKAGES */}
 
             <div className="grid grid-cols-2 gap-3 mt-5">
+
               {["100", "530", "1080", "2200"].map((pkg) => (
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
+
+                <button
                   key={pkg}
                   onClick={() => setSelectedPackage(pkg)}
-                  className={`rounded-2xl p-4 text-left border ${
+                  className={`rounded-2xl p-4 border ${
                     selectedPackage === pkg
                       ? "border-purple-500 bg-purple-500/20"
                       : "border-white/5 bg-white/[0.04]"
                   }`}
                 >
-                  <p className="font-black">{pkg} 💎</p>
 
-                  <p className="text-yellow-400 text-sm mt-1">
-                    ৳{pkg === "100"
-                      ? "80"
-                      : pkg === "530"
-                      ? "400"
-                      : pkg === "1080"
-                      ? "780"
-                      : "1500"}
+                  <p className="font-black">
+                    {pkg} 💎
                   </p>
-                </motion.button>
+
+                </button>
+
               ))}
+
             </div>
 
-            {/* ===== PAYMENT ===== */}
+            {/* PAYMENT */}
 
             <div className="grid grid-cols-2 gap-3 mt-5">
+
               {["bKash", "Nagad"].map((pay) => (
-                <motion.button
-                  whileTap={{ scale: 0.95 }}
+
+                <button
                   key={pay}
                   onClick={() => setPayment(pay)}
-                  className={`rounded-2xl p-4 font-bold border ${
+                  className={`rounded-2xl p-4 border ${
                     payment === pay
-                      ? "border-green-500 bg-green-500/10"
+                      ? "border-green-500 bg-green-500/20"
                       : "border-white/5 bg-white/[0.04]"
                   }`}
                 >
+
                   {pay}
-                </motion.button>
+
+                </button>
+
               ))}
+
             </div>
 
             <input
@@ -288,75 +252,104 @@ export default function NexTopUpUI() {
               className="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none"
             />
 
-            <motion.button
-              whileTap={{ scale: 0.96 }}
-              className="mt-5 w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black shadow-[0_0_25px_rgba(168,85,247,.35)]"
-            >
+            <button className="mt-5 w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black">
+
               CONFIRM ORDER
-            </motion.button>
+
+            </button>
+
           </div>
-        </motion.div>
+
+        </div>
+
       )}
 
       {/* ================= PROFILE ================= */}
 
       {page === "profile" && (
-        <motion.div
-          initial={{ x: 100, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="p-4"
-        >
-          <div className="bg-white/[0.04] border border-white/5 rounded-[35px] p-6 text-center backdrop-blur-xl">
+
+        <div className="p-4">
+
+          <div className="bg-white/[0.04] border border-white/5 rounded-[35px] p-6 text-center">
+
             <div className="w-24 h-24 rounded-full bg-purple-600 mx-auto flex items-center justify-center text-3xl font-black">
               U
             </div>
 
-            <h2 className="text-2xl font-black mt-5">USER</h2>
+            <h2 className="text-2xl font-black mt-5">
+              USER
+            </h2>
 
             <p className="text-xs text-gray-400 mt-2">
               Free Fire Player
             </p>
 
-            <button className="w-full mt-6 bg-red-500/10 border border-red-500/10 text-red-400 py-4 rounded-2xl font-black">
-              LOGOUT
-            </button>
           </div>
-        </motion.div>
+
+        </div>
+
       )}
 
-      {/* ================= BOTTOM NAV ================= */}
+      {/* ================= NAVBAR ================= */}
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-black/40 backdrop-blur-2xl border-t border-white/5 py-3 flex justify-around z-50">
+      <nav className="fixed bottom-0 left-0 right-0 bg-black/40 backdrop-blur-xl border-t border-white/5 py-3 flex justify-around">
+
         <button
           onClick={() => setPage("home")}
           className={`flex flex-col items-center ${
-            page === "home" ? "text-purple-400" : "text-gray-500"
+            page === "home"
+              ? "text-purple-400"
+              : "text-gray-500"
           }`}
         >
+
           <Home size={24} />
-          <p className="text-[10px] mt-1 font-bold">Home</p>
+
+          <p className="text-[10px] mt-1 font-bold">
+            Home
+          </p>
+
         </button>
 
         <button className="flex flex-col items-center text-gray-500">
+
           <Wallet size={24} />
-          <p className="text-[10px] mt-1 font-bold">Wallet</p>
+
+          <p className="text-[10px] mt-1 font-bold">
+            Wallet
+          </p>
+
         </button>
 
         <button className="flex flex-col items-center text-gray-500">
+
           <ShoppingBag size={24} />
-          <p className="text-[10px] mt-1 font-bold">Orders</p>
+
+          <p className="text-[10px] mt-1 font-bold">
+            Orders
+          </p>
+
         </button>
 
         <button
           onClick={() => setPage("profile")}
           className={`flex flex-col items-center ${
-            page === "profile" ? "text-purple-400" : "text-gray-500"
+            page === "profile"
+              ? "text-purple-400"
+              : "text-gray-500"
           }`}
         >
+
           <User size={24} />
-          <p className="text-[10px] mt-1 font-bold">Profile</p>
+
+          <p className="text-[10px] mt-1 font-bold">
+            Profile
+          </p>
+
         </button>
+
       </nav>
+
     </div>
   );
 }
