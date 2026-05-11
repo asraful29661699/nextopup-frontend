@@ -3,237 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offer TopUp - Premium Store</title>
+    <title>Offer TopUp - Login Required</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyB4Lff3dPJvWnIMEdbJS0wIEWaBXNlBmro",
-            authDomain: "nextopup-e6b28.firebaseapp.com",
-            projectId: "nextopup-e6b28",
-            databaseURL: "https://nextopup-e6b28-default-rtdb.firebaseio.com"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        // ১. রিয়েল-টাইম ডেটা হ্যান্ডলিং
-        window.initApp = (email) => {
-            const userRef = ref(db, `users/${email.replace('.', '_')}`);
-            onValue(userRef, (s) => {
-                const data = s.val() || { balance: 0, spent: 0, orders: 0 };
-                document.getElementById('displayBal').innerText = '৳' + data.balance;
-                document.getElementById('statSpent').innerText = '৳' + data.spent;
-                document.getElementById('statOrders').innerText = data.orders;
-                document.getElementById('statWallet').innerText = '৳' + data.balance;
-            });
-
-            // ২. লেটেস্ট অর্ডার আপডেট (Real-time updates)
-            onValue(ref(db, 'orders'), (s) => {
-                const orders = s.val();
-                const ticker = document.getElementById('latestOrdersTicker');
-                ticker.innerHTML = '';
-                if(orders) {
-                    Object.values(orders).slice(-5).reverse().forEach(o => {
-                        ticker.innerHTML += `<span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[10px] font-bold mr-2"><i class="fa-solid fa-check-circle"></i> ${o.user.split('@')[0]} - ${o.name} ✅</span>`;
-                    });
-                }
-            });
-        };
-
-        // ৩. অর্ডার সাবমিট (UX Focus)
-        window.openProduct = (name, price) => {
-            window.activeProduct = { name, price };
-            document.getElementById('orderTitle').innerText = name;
-            document.getElementById('orderPrice').innerText = 'Price: ৳' + price;
-            document.getElementById('orderModal').style.display = 'flex';
-        };
-
-        window.confirmOrder = () => {
-            const pid = document.getElementById('playerID').value;
-            const method = document.querySelector('input[name="payMethod"]:checked')?.value;
-            if(!pid || !method) return alert("Please fill all info!");
-
-            const u = JSON.parse(localStorage.getItem('nexUser'));
-            push(ref(db, 'orders'), {
-                ...window.activeProduct,
-                playerID: pid,
-                payment: method,
-                user: u.email,
-                status: 'pending',
-                time: new Date().toLocaleString()
-            }).then(() => {
-                alert("Order placed successfully!");
-                document.getElementById('orderModal').style.display = 'none';
-            });
-        };
-    </script>
-
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f4f7fe; color: #1e293b; }
-        .bg-premium { background: linear-gradient(135deg, #1e40af 0%, #6366f1 100%); }
-        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
-        .nav-active { color: #1e40af; border-bottom: 2px solid #1e40af; }
-        #orderModal { display: none; background: rgba(0,0,0,0.5); }
-        .hidden-page { display: none; }
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7fe; }
+        .hidden-page { display: none !important; }
+        .login-card { background: white; padding: 40px; border-radius: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 380px; }
     </style>
 </head>
-<body class="pb-24">
+<body>
 
-    <header class="bg-white p-4 sticky top-0 z-50 card-shadow flex justify-between items-center">
-        <div class="text-2xl font-black italic tracking-tighter">
-            <span class="text-blue-700">OFFER</span><span class="text-indigo-500">TOPUP</span>
-        </div>
-        <div class="flex items-center gap-3">
-            <div class="bg-blue-50 px-4 py-2 rounded-full text-blue-700 font-bold text-xs" id="displayBal">৳ ০.০০</div>
-            <button onclick="toggleMenu()" class="text-gray-500 text-xl"><i class="fa-solid fa-bars-staggered"></i></button>
-        </div>
-    </header>
-
-    <div id="sideMenu" class="hidden-page fixed inset-0 z-[60] bg-white p-6">
-        <button onclick="toggleMenu()" class="absolute top-6 right-6 text-2xl text-gray-400"><i class="fa-solid fa-xmark"></i></button>
-        <div class="mt-12 space-y-6 text-lg font-bold text-gray-700">
-            <p onclick="showPage('homePage')"><i class="fa-solid fa-house mr-3"></i> Home</p>
-            <p onclick="showPage('profilePage')"><i class="fa-solid fa-user-circle mr-3"></i> My Account</p>
-            <p><i class="fa-solid fa-box-open mr-3"></i> My Orders</p>
-            <p onclick="showPage('profilePage')"><i class="fa-solid fa-wallet mr-3"></i> Add Money</p>
-            <button onclick="logout()" class="text-red-500"><i class="fa-solid fa-sign-out-alt mr-3"></i> Logout</button>
-        </div>
-    </div>
-
-    <div class="bg-white border-b overflow-hidden py-2 whitespace-nowrap">
-        <div id="latestOrdersTicker" class="inline-block animate-marquee px-4">
+    <div id="loginSection" class="min-h-screen flex items-center justify-center p-6 bg-blue-50">
+        <div class="login-card">
+            <div class="text-3xl font-black italic mb-2">
+                <span class="text-blue-700">OFFER</span><span class="text-indigo-500">TOPUP</span>
             </div>
-    </div>
-
-    <main id="homePage" class="p-4 page-content">
-        <div class="bg-premium p-8 rounded-[30px] text-white mb-8 relative overflow-hidden">
-            <h1 class="text-2xl font-black italic">Special Offer!</h1>
-            <p class="text-[10px] uppercase font-bold opacity-80 mt-1 tracking-widest">Get extra diamond on first topup</p>
-            <img src="https://img.icons8.com/clouds/200/controller.png" class="absolute -right-10 -bottom-10 opacity-20">
-        </div>
-
-        <h2 class="text-xs font-black uppercase text-gray-400 mb-4 tracking-widest border-l-4 border-blue-600 pl-2">Free Fire Services</h2>
-        <div class="grid grid-cols-2 gap-4 mb-8">
-            <div onclick="openProduct('Weekly Membership', 154)" class="bg-white p-4 rounded-[25px] text-center card-shadow">
-                <img src="https://img.icons8.com/fluency/96/calendar.png" class="mx-auto mb-3 w-16">
-                <p class="text-[10px] font-black uppercase">Weekly</p>
-                <p class="text-[10px] text-blue-600 font-bold mt-1">৳ ১৫৪</p>
-            </div>
-            <div onclick="openProduct('Monthly Membership', 765)" class="bg-white p-4 rounded-[25px] text-center card-shadow">
-                <img src="https://img.icons8.com/fluency/96/crown.png" class="mx-auto mb-3 w-16">
-                <p class="text-[10px] font-black uppercase">Monthly</p>
-                <p class="text-[10px] text-blue-600 font-bold mt-1">৳ ৭৬৫</p>
-            </div>
-        </div>
-
-        <h2 class="text-xs font-black uppercase text-gray-400 mb-4 tracking-widest border-l-4 border-indigo-600 pl-2">Subscriptions</h2>
-        <div class="grid grid-cols-3 gap-3">
-            <div class="bg-white p-3 rounded-2xl text-center card-shadow">
-                <i class="fa-brands fa-youtube text-red-600 text-2xl mb-1"></i>
-                <p class="text-[8px] font-bold">YouTube</p>
-            </div>
-            <div class="bg-white p-3 rounded-2xl text-center card-shadow">
-                <i class="fa-brands fa-spotify text-green-500 text-2xl mb-1"></i>
-                <p class="text-[8px] font-bold">Spotify</p>
-            </div>
-            <div class="bg-white p-3 rounded-2xl text-center card-shadow">
-                <i class="fa-solid fa-comment-dots text-purple-600 text-2xl mb-1"></i>
-                <p class="text-[8px] font-bold">ChatGPT</p>
-            </div>
-        </div>
-    </main>
-
-    <main id="profilePage" class="hidden-page p-4 page-content">
-        <div class="bg-white p-6 rounded-[30px] card-shadow mb-6 text-center">
-            <div class="w-20 h-20 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <i class="fa-solid fa-user-shield text-3xl text-blue-600"></i>
-            </div>
-            <h2 class="text-xl font-black text-gray-800" id="profileName">User Name</h2>
-            <span class="bg-green-100 text-green-600 text-[8px] px-3 py-1 rounded-full font-black uppercase">Account Verified</span>
-        </div>
-
-        <div class="grid grid-cols-3 gap-3 mb-8">
-            <div class="bg-white p-4 rounded-2xl card-shadow text-center">
-                <p id="statSpent" class="text-sm font-black text-blue-700">৳০</p>
-                <p class="text-[7px] text-gray-400 uppercase font-bold">Spent</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl card-shadow text-center">
-                <p id="statOrders" class="text-sm font-black text-indigo-700">০</p>
-                <p class="text-[7px] text-gray-400 uppercase font-bold">Orders</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl card-shadow text-center">
-                <p id="statWallet" class="text-sm font-black text-yellow-600">৳০</p>
-                <p class="text-[7px] text-gray-400 uppercase font-bold">Wallet</p>
-            </div>
-        </div>
-    </main>
-
-    <div id="orderModal" class="fixed inset-0 z-[100] items-end">
-        <div class="bg-white w-full rounded-t-[40px] p-8 animate-slide-up">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h3 id="orderTitle" class="text-xl font-black text-blue-900">Weekly</h3>
-                    <p id="orderPrice" class="text-xs text-blue-600 font-bold"></p>
-                </div>
-                <button onclick="document.getElementById('orderModal').style.display='none'" class="text-gray-300 text-2xl"><i class="fa-solid fa-circle-xmark"></i></button>
-            </div>
+            <p class="text-xs text-gray-400 font-bold uppercase mb-8 tracking-widest">Login to Continue</p>
             
-            <label class="text-[10px] font-black text-gray-400 uppercase">Player ID (UID)</label>
-            <input id="playerID" type="number" class="w-full bg-gray-50 p-4 rounded-2xl border-none outline-none mt-2 mb-6 font-bold" placeholder="123456789">
-
-            <label class="text-[10px] font-black text-gray-400 uppercase">Payment Method</label>
-            <div class="grid grid-cols-2 gap-3 mt-3 mb-8">
-                <label class="border p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
-                    <input type="radio" name="payMethod" value="bkash" class="accent-pink-600">
-                    <span class="text-xs font-bold">bKash</span>
-                </label>
-                <label class="border p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
-                    <input type="radio" name="payMethod" value="wallet" class="accent-blue-600">
-                    <span class="text-xs font-bold">Wallet</span>
-                </label>
+            <div id="g_id_onload"
+                data-client_id="267844479249-s4lk6u674rvsdkp8k94s8fnsseeuq751.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
             </div>
-
-            <button onclick="confirmOrder()" class="w-full bg-blue-700 text-white p-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-blue-200">Confirm Now</button>
+            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill" data-theme="filled_blue" data-text="signin_with" data-size="large"></div>
+            
+            <p class="mt-8 text-[10px] text-gray-400">By logging in, you agree to our Terms & Conditions</p>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-around items-center z-50">
-        <button onclick="showPage('homePage')" class="nav-active flex flex-col items-center"><i class="fa-solid fa-home"></i><span class="text-[8px] font-bold mt-1">HOME</span></button>
-        <button class="text-gray-300 flex flex-col items-center"><i class="fa-solid fa-bolt"></i><span class="text-[8px] font-bold mt-1">OFFERS</span></button>
-        <button onclick="showPage('profilePage')" class="text-gray-300 flex flex-col items-center"><i class="fa-solid fa-user"></i><span class="text-[8px] font-bold mt-1">ACCOUNT</span></button>
-    </nav>
+    <div id="mainWebsite" class="hidden-page">
+        <header class="bg-white p-4 sticky top-0 z-50 shadow-sm flex justify-between items-center">
+            <div class="text-xl font-black italic">
+                <span class="text-blue-700">OFFER</span><span class="text-indigo-500">TOPUP</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div id="userBalance" class="bg-blue-50 px-3 py-1 rounded-full text-blue-700 font-bold text-xs">৳ ০.০০</div>
+                <img id="userImg" src="" class="w-8 h-8 rounded-full border-2 border-blue-100">
+            </div>
+        </header>
+
+        <main class="p-4">
+            <div class="bg-blue-600 p-8 rounded-[30px] text-white shadow-xl mb-6">
+                <h2 class="text-xl font-bold">Welcome, <span id="userNameDisplay">User</span>!</h2>
+                <p class="text-xs opacity-80">Ready for your next top-up?</p>
+            </div>
+            <p class="text-center text-gray-400 text-sm mt-20">লগইন সফল হয়েছে! এখন আপনি সার্ভিস ব্যবহার করতে পারবেন।</p>
+        </main>
+        
+        <button onclick="logout()" class="fixed bottom-24 right-6 bg-red-500 text-white p-4 rounded-full shadow-lg">
+            <i class="fa-solid fa-sign-out-alt"></i>
+        </button>
+    </div>
 
     <script>
-        // UI Helpers
-        window.toggleMenu = () => document.getElementById('sideMenu').classList.toggle('hidden-page');
-        window.showPage = (id) => {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
-            document.getElementById(id).classList.remove('hidden-page');
-            toggleMenu();
-        };
+        // গুগল লগইন রেসপন্স হ্যান্ডলার
+        function handleCredentialResponse(response) {
+            // টোকেন ডিকোড করা
+            const responsePayload = JSON.parse(atob(response.credential.split('.')[1]));
+            
+            // ইউজার ডেটা সেভ করা
+            localStorage.setItem('userLoggedIn', 'true');
+            localStorage.setItem('userData', JSON.stringify(responsePayload));
 
-        // Google Login Handler
-        window.handleCredentialResponse = (r) => {
-            const d = JSON.parse(atob(r.credential.split('.')[1]));
-            localStorage.setItem('nexUser', JSON.stringify(d));
+            // ওয়েবসাইট ওপেন করা
+            showWebsite(responsePayload);
+        }
+
+        function showWebsite(user) {
+            document.getElementById('loginSection').classList.add('hidden-page');
+            document.getElementById('mainWebsite').classList.remove('hidden-page');
+            
+            // ইউজারের নাম ও ছবি সেট করা
+            document.getElementById('userNameDisplay').innerText = user.name;
+            document.getElementById('userImg').src = user.picture;
+        }
+
+        // লগআউট সিস্টেম
+        function logout() {
+            localStorage.clear();
             location.reload();
-        };
+        }
 
-        window.onload = () => {
-            const u = localStorage.getItem('nexUser');
-            if(u) {
-                const data = JSON.parse(u);
-                document.getElementById('profileName').innerText = data.name;
-                initApp(data.email);
+        // পেজ লোড হওয়ার সময় চেক করা
+        window.onload = function () {
+            const loggedIn = localStorage.getItem('userLoggedIn');
+            if (loggedIn === 'true') {
+                const user = JSON.parse(localStorage.getItem('userData'));
+                showWebsite(user);
             }
-        };
+        }
     </script>
 </body>
 </html>
