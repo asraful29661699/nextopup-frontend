@@ -1,699 +1,362 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Home,
+  User,
+  Wallet,
+  ShoppingBag,
+  ArrowLeft,
+} from "lucide-react";
 
-<title>NexTopUp - Free Fire</title>
+export default function NexTopUpUI() {
+  const [page, setPage] = useState("home");
+  const [selectedPackage, setSelectedPackage] = useState("");
+  const [payment, setPayment] = useState("");
 
-<script src="https://cdn.tailwindcss.com"></script>
+  const cards = [
+    {
+      title: "UID TOP-UP",
+      subtitle: "Instant Delivery",
+      image:
+        "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop",
+      page: "uid",
+    },
+    {
+      title: "WEEKLY",
+      subtitle: "৳190",
+      image:
+        "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop",
+      page: "weekly",
+    },
+    {
+      title: "MONTHLY",
+      subtitle: "৳750",
+      image:
+        "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1200&auto=format&fit=crop",
+      page: "monthly",
+    },
+    {
+      title: "EVO ACCESS",
+      subtitle: "Premium Reward",
+      image:
+        "https://images.unsplash.com/photo-1560253023-3ec5d502959f?q=80&w=1200&auto=format&fit=crop",
+      page: "evo",
+    },
+  ];
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  return (
+    <div className="min-h-screen bg-[#050816] text-white pb-28 overflow-hidden">
+      {/* ===== TOPBAR ===== */}
 
-<style>
+      <div className="sticky top-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/5">
+        <div className="flex justify-between items-center px-5 py-4">
+          <div>
+            <h1 className="text-3xl font-black tracking-tight">
+              <span className="text-purple-500">Nex</span>
+              <span className="text-yellow-400">TopUp</span>
+            </h1>
 
-body{
-    background:#06070d;
-    color:white;
-    font-family:sans-serif;
-    overflow-x:hidden;
+            <p className="text-[10px] uppercase tracking-[0.25em] text-gray-400 mt-1">
+              Free Fire Marketplace
+            </p>
+          </div>
+
+          <div className="bg-white/5 border border-white/5 rounded-2xl px-4 py-2 text-yellow-400 font-bold">
+            ৳0.00
+          </div>
+        </div>
+      </div>
+
+      {/* ================= HOME PAGE ================= */}
+
+      {page === "home" && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          {/* ===== HERO ===== */}
+
+          <section className="p-4">
+            <motion.div
+              animate={{
+                scale: [1, 1.02, 1],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 5,
+              }}
+              className="relative overflow-hidden rounded-[35px] h-[260px] shadow-2xl"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-purple-900/30" />
+
+              <div className="absolute bottom-0 p-6 w-full">
+                <motion.p
+                  animate={{
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 2,
+                  }}
+                  className="uppercase text-xs tracking-[0.3em] text-yellow-300 font-bold"
+                >
+                  🔥 BOOYAH EVENT 2026
+                </motion.p>
+
+                <h1 className="text-4xl font-black leading-tight mt-2">
+                  FREE FIRE <br />
+                  TOP-UP
+                </h1>
+
+                <p className="text-sm text-purple-100 mt-3">
+                  Instant Delivery • Secure Payment
+                </p>
+
+                <button className="mt-5 w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black shadow-[0_0_30px_rgba(168,85,247,.4)]">
+                  TOP-UP NOW
+                </button>
+              </div>
+            </motion.div>
+          </section>
+
+          {/* ===== SERVICES ===== */}
+
+          <section className="px-4 mt-2">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="font-black uppercase text-sm text-gray-300">
+                Free Fire Services
+              </h2>
+
+              <p className="text-xs text-purple-400">See All</p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {cards.map((card, i) => (
+                <motion.div
+                  key={i}
+                  whileHover={{
+                    y: -5,
+                    scale: 1.02,
+                  }}
+                  whileTap={{
+                    scale: 0.97,
+                  }}
+                  onClick={() => setPage(card.page)}
+                  className="bg-white/[0.04] border border-white/5 rounded-[28px] overflow-hidden backdrop-blur-xl"
+                >
+                  <div className="relative">
+                    <img
+                      src={card.image}
+                      className="w-full aspect-square object-cover"
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
+                  </div>
+
+                  <div className="p-4">
+                    <p className="font-black text-sm">{card.title}</p>
+
+                    <p className="text-yellow-400 text-xs mt-1">
+                      {card.subtitle}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* ===== HOT OFFER ===== */}
+
+          <section className="p-4 mt-4">
+            <motion.div
+              animate={{
+                boxShadow: [
+                  "0 0 10px rgba(168,85,247,.2)",
+                  "0 0 30px rgba(168,85,247,.4)",
+                  "0 0 10px rgba(168,85,247,.2)",
+                ],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 3,
+              }}
+              className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/20 rounded-[30px] p-5"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="uppercase text-xs text-purple-300 font-bold">
+                    Limited Offer
+                  </p>
+
+                  <h2 className="text-3xl font-black mt-2">
+                    530 💎 = ৳400
+                  </h2>
+
+                  <p className="text-xs text-gray-400 mt-2">
+                    Instant Delivery within 5 Minutes
+                  </p>
+                </div>
+
+                <div className="w-16 h-16 rounded-full bg-yellow-400/10 flex items-center justify-center">
+                  <span className="text-3xl">⚡</span>
+                </div>
+              </div>
+            </motion.div>
+          </section>
+        </motion.div>
+      )}
+
+      {/* ================= UID PAGE ================= */}
+
+      {page === "uid" && (
+        <motion.div
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="p-4"
+        >
+          <button
+            onClick={() => setPage("home")}
+            className="mb-5 flex items-center gap-2 text-purple-400"
+          >
+            <ArrowLeft size={18} />
+            Back
+          </button>
+
+          <div className="bg-white/[0.04] border border-white/5 rounded-[35px] p-5 backdrop-blur-xl">
+            <h2 className="text-3xl font-black">UID TOP-UP</h2>
+
+            <input
+              placeholder="Enter UID"
+              className="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none"
+            />
+
+            {/* ===== PACKAGES ===== */}
+
+            <div className="grid grid-cols-2 gap-3 mt-5">
+              {["100", "530", "1080", "2200"].map((pkg) => (
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  key={pkg}
+                  onClick={() => setSelectedPackage(pkg)}
+                  className={`rounded-2xl p-4 text-left border ${
+                    selectedPackage === pkg
+                      ? "border-purple-500 bg-purple-500/20"
+                      : "border-white/5 bg-white/[0.04]"
+                  }`}
+                >
+                  <p className="font-black">{pkg} 💎</p>
+
+                  <p className="text-yellow-400 text-sm mt-1">
+                    ৳{pkg === "100"
+                      ? "80"
+                      : pkg === "530"
+                      ? "400"
+                      : pkg === "1080"
+                      ? "780"
+                      : "1500"}
+                  </p>
+                </motion.button>
+              ))}
+            </div>
+
+            {/* ===== PAYMENT ===== */}
+
+            <div className="grid grid-cols-2 gap-3 mt-5">
+              {["bKash", "Nagad"].map((pay) => (
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  key={pay}
+                  onClick={() => setPayment(pay)}
+                  className={`rounded-2xl p-4 font-bold border ${
+                    payment === pay
+                      ? "border-green-500 bg-green-500/10"
+                      : "border-white/5 bg-white/[0.04]"
+                  }`}
+                >
+                  {pay}
+                </motion.button>
+              ))}
+            </div>
+
+            <input
+              placeholder="Transaction ID"
+              className="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none"
+            />
+
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              className="mt-5 w-full bg-gradient-to-r from-purple-600 to-blue-600 py-4 rounded-2xl font-black shadow-[0_0_25px_rgba(168,85,247,.35)]"
+            >
+              CONFIRM ORDER
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ================= PROFILE ================= */}
+
+      {page === "profile" && (
+        <motion.div
+          initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          className="p-4"
+        >
+          <div className="bg-white/[0.04] border border-white/5 rounded-[35px] p-6 text-center backdrop-blur-xl">
+            <div className="w-24 h-24 rounded-full bg-purple-600 mx-auto flex items-center justify-center text-3xl font-black">
+              U
+            </div>
+
+            <h2 className="text-2xl font-black mt-5">USER</h2>
+
+            <p className="text-xs text-gray-400 mt-2">
+              Free Fire Player
+            </p>
+
+            <button className="w-full mt-6 bg-red-500/10 border border-red-500/10 text-red-400 py-4 rounded-2xl font-black">
+              LOGOUT
+            </button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* ================= BOTTOM NAV ================= */}
+
+      <nav className="fixed bottom-0 left-0 right-0 bg-black/40 backdrop-blur-2xl border-t border-white/5 py-3 flex justify-around z-50">
+        <button
+          onClick={() => setPage("home")}
+          className={`flex flex-col items-center ${
+            page === "home" ? "text-purple-400" : "text-gray-500"
+          }`}
+        >
+          <Home size={24} />
+          <p className="text-[10px] mt-1 font-bold">Home</p>
+        </button>
+
+        <button className="flex flex-col items-center text-gray-500">
+          <Wallet size={24} />
+          <p className="text-[10px] mt-1 font-bold">Wallet</p>
+        </button>
+
+        <button className="flex flex-col items-center text-gray-500">
+          <ShoppingBag size={24} />
+          <p className="text-[10px] mt-1 font-bold">Orders</p>
+        </button>
+
+        <button
+          onClick={() => setPage("profile")}
+          className={`flex flex-col items-center ${
+            page === "profile" ? "text-purple-400" : "text-gray-500"
+          }`}
+        >
+          <User size={24} />
+          <p className="text-[10px] mt-1 font-bold">Profile</p>
+        </button>
+      </nav>
+    </div>
+  );
 }
-
-::-webkit-scrollbar{
-    width:0;
-}
-
-/* ===== GLASS ===== */
-
-.glass{
-    background:rgba(255,255,255,.04);
-    border:1px solid rgba(255,255,255,.05);
-    backdrop-filter:blur(12px);
-}
-
-/* ===== HERO ===== */
-
-.ff-hero{
-    background:
-    linear-gradient(to right,rgba(88,28,135,.9),rgba(29,78,216,.85)),
-    url('https://i.ibb.co/6bQK9bC/freefire-banner.jpg');
-
-    background-size:cover;
-    background-position:center;
-    border-radius:35px;
-}
-
-/* ===== CARD ===== */
-
-.ff-card{
-    transition:.3s;
-}
-
-.ff-card:hover{
-    transform:translateY(-5px);
-}
-
-/* ===== BUTTON ===== */
-
-.ff-btn{
-    background:linear-gradient(to right,#9333ea,#2563eb);
-}
-
-/* ===== NAV ===== */
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    background:rgba(10,10,15,.95);
-    backdrop-filter:blur(15px);
-    border-top:1px solid rgba(255,255,255,.05);
-}
-
-.nav-item{
-    color:#6b7280;
-}
-
-.nav-active{
-    color:#a855f7;
-}
-
-/* ===== PAGE ANIMATION ===== */
-
-.page{
-    animation:fade .3s ease;
-}
-
-@keyframes fade{
-    from{
-        opacity:0;
-        transform:translateX(20px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateX(0);
-    }
-}
-
-/* ===== ACTIVE ===== */
-
-.pkg.active{
-    border:1px solid #a855f7;
-    background:rgba(168,85,247,.15);
-}
-
-.pay.active{
-    border:1px solid #22c55e;
-    background:rgba(34,197,94,.15);
-}
-
-</style>
-
-</head>
-
-<body class="pb-28">
-
-<!-- ================= LOGIN PAGE ================= -->
-
-<div id="loginPage"
-class="min-h-screen flex items-center justify-center p-6">
-
-<div class="glass rounded-[35px] p-8 w-full max-w-sm text-center">
-
-<h1 class="text-4xl font-black">
-<span class="text-purple-500">Nex</span><span class="text-yellow-400">TopUp</span>
-</h1>
-
-<p class="text-xs uppercase text-gray-400 mt-2">
-Free Fire Marketplace
-</p>
-
-<input
-id="username"
-placeholder="Enter Username"
-class="w-full mt-6 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
-
-<button
-onclick="login()"
-class="ff-btn w-full py-4 rounded-2xl font-black mt-4">
-
-ENTER
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ================= MAIN APP ================= -->
-
-<div id="app" style="display:none;">
-
-<!-- ================= HOME PAGE ================= -->
-
-<div id="homePage" class="page">
-
-<!-- HERO -->
-
-<section class="p-4">
-
-<div class="ff-hero p-8 min-h-[240px] flex flex-col justify-end">
-
-<div class="bg-black/30 backdrop-blur rounded-3xl p-5">
-
-<p class="uppercase text-xs tracking-[0.3em] text-yellow-300 font-bold">
-🔥 BOOYAH EVENT
-</p>
-
-<h1 class="text-4xl font-black mt-2 leading-tight">
-FREE FIRE <br>
-TOP-UP
-</h1>
-
-<p class="text-sm text-purple-100 mt-3">
-Instant Diamond Delivery
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- SERVICES -->
-
-<section class="px-4">
-
-<h2 class="font-black uppercase text-sm text-gray-300 mb-4">
-Services
-</h2>
-
-<div class="grid grid-cols-2 gap-4">
-
-<!-- UID -->
-
-<div
-onclick="openPage('uidPage')"
-class="ff-card glass rounded-[28px] overflow-hidden">
-
-<img
-src="https://i.ibb.co/6bQK9bC/freefire-banner.jpg"
-class="w-full aspect-square object-cover">
-
-<div class="p-4">
-
-<p class="font-black text-sm">
-UID TOP-UP
-</p>
-
-<p class="text-yellow-400 text-xs mt-1">
-Instant Delivery
-</p>
-
-</div>
-
-</div>
-
-<!-- WEEKLY -->
-
-<div
-onclick="openPage('weeklyPage')"
-class="ff-card glass rounded-[28px] overflow-hidden">
-
-<img
-src="https://i.ibb.co/H4t9DkK/freefire2.jpg"
-class="w-full aspect-square object-cover">
-
-<div class="p-4">
-
-<p class="font-black text-sm">
-WEEKLY
-</p>
-
-<p class="text-yellow-400 text-xs mt-1">
-৳190
-</p>
-
-</div>
-
-</div>
-
-<!-- MONTHLY -->
-
-<div
-onclick="openPage('monthlyPage')"
-class="ff-card glass rounded-[28px] overflow-hidden">
-
-<img
-src="https://i.ibb.co/fQx8x5W/levelup.jpg"
-class="w-full aspect-square object-cover">
-
-<div class="p-4">
-
-<p class="font-black text-sm">
-MONTHLY
-</p>
-
-<p class="text-yellow-400 text-xs mt-1">
-৳750
-</p>
-
-</div>
-
-</div>
-
-<!-- EVO -->
-
-<div
-onclick="openPage('evoPage')"
-class="ff-card glass rounded-[28px] overflow-hidden">
-
-<img
-src="https://i.ibb.co/wY8bJ8g/evo.jpg"
-class="w-full aspect-square object-cover">
-
-<div class="p-4">
-
-<p class="font-black text-sm">
-EVO ACCESS
-</p>
-
-<p class="text-yellow-400 text-xs mt-1">
-Premium
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-</div>
-
-<!-- ================= UID PAGE ================= -->
-
-<div id="uidPage"
-class="page hidden p-4">
-
-<button
-onclick="backHome()"
-class="mb-5 text-purple-400">
-
-← Back
-
-</button>
-
-<div class="glass rounded-[30px] p-5">
-
-<h2 class="text-3xl font-black">
-UID TOP-UP
-</h2>
-
-<input
-id="uid"
-placeholder="Enter UID"
-class="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
-
-<!-- PACKAGES -->
-
-<div class="grid grid-cols-2 gap-3 mt-5">
-
-<button
-onclick="selectPackage(this,'100')"
-class="pkg glass rounded-2xl p-4">
-
-100 💎 <br>
-<span class="text-yellow-400">
-৳80
-</span>
-
-</button>
-
-<button
-onclick="selectPackage(this,'530')"
-class="pkg glass rounded-2xl p-4">
-
-530 💎 <br>
-<span class="text-yellow-400">
-৳400
-</span>
-
-</button>
-
-<button
-onclick="selectPackage(this,'1080')"
-class="pkg glass rounded-2xl p-4">
-
-1080 💎 <br>
-<span class="text-yellow-400">
-৳780
-</span>
-
-</button>
-
-<button
-onclick="selectPackage(this,'2200')"
-class="pkg glass rounded-2xl p-4">
-
-2200 💎 <br>
-<span class="text-yellow-400">
-৳1500
-</span>
-
-</button>
-
-</div>
-
-<!-- PAYMENT -->
-
-<div class="grid grid-cols-2 gap-3 mt-5">
-
-<button
-onclick="selectPay(this,'bkash')"
-class="pay glass rounded-2xl p-4">
-
-bKash
-
-</button>
-
-<button
-onclick="selectPay(this,'nagad')"
-class="pay glass rounded-2xl p-4">
-
-Nagad
-
-</button>
-
-</div>
-
-<input
-id="trx"
-placeholder="Transaction ID"
-class="w-full mt-5 bg-black/30 border border-white/5 rounded-2xl p-4 outline-none">
-
-<button
-onclick="order()"
-class="ff-btn w-full py-4 rounded-2xl font-black mt-5">
-
-CONFIRM ORDER
-
-</button>
-
-<p
-id="status"
-class="text-green-400 text-center mt-4">
-</p>
-
-</div>
-
-</div>
-
-<!-- ================= WEEKLY PAGE ================= -->
-
-<div id="weeklyPage"
-class="page hidden p-4">
-
-<button
-onclick="backHome()"
-class="mb-5 text-purple-400">
-
-← Back
-
-</button>
-
-<div class="glass rounded-[30px] p-6 text-center">
-
-<h2 class="text-3xl font-black">
-WEEKLY MEMBERSHIP
-</h2>
-
-<p class="text-yellow-400 text-4xl font-black mt-5">
-৳190
-</p>
-
-<button
-class="ff-btn w-full py-4 rounded-2xl font-black mt-6">
-
-BUY NOW
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ================= MONTHLY PAGE ================= -->
-
-<div id="monthlyPage"
-class="page hidden p-4">
-
-<button
-onclick="backHome()"
-class="mb-5 text-purple-400">
-
-← Back
-
-</button>
-
-<div class="glass rounded-[30px] p-6 text-center">
-
-<h2 class="text-3xl font-black">
-MONTHLY MEMBERSHIP
-</h2>
-
-<p class="text-yellow-400 text-4xl font-black mt-5">
-৳750
-</p>
-
-<button
-class="ff-btn w-full py-4 rounded-2xl font-black mt-6">
-
-BUY NOW
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ================= EVO PAGE ================= -->
-
-<div id="evoPage"
-class="page hidden p-4">
-
-<button
-onclick="backHome()"
-class="mb-5 text-purple-400">
-
-← Back
-
-</button>
-
-<div class="glass rounded-[30px] p-6 text-center">
-
-<h2 class="text-3xl font-black">
-EVO ACCESS
-</h2>
-
-<p class="text-yellow-400 text-4xl font-black mt-5">
-৳250
-</p>
-
-<button
-class="ff-btn w-full py-4 rounded-2xl font-black mt-6">
-
-BUY NOW
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ================= PROFILE PAGE ================= -->
-
-<div id="profilePage"
-class="page hidden p-4">
-
-<div class="glass rounded-[35px] p-6 text-center">
-
-<div
-class="w-24 h-24 rounded-full bg-purple-500 mx-auto flex items-center justify-center text-3xl font-black">
-
-U
-
-</div>
-
-<h2
-id="profileName"
-class="text-2xl font-black mt-4">
-
-USER
-
-</h2>
-
-<p class="text-xs text-gray-400 mt-2">
-Free Fire Player
-</p>
-
-<button
-onclick="logout()"
-class="w-full bg-red-500/20 text-red-400 py-4 rounded-2xl font-black mt-6">
-
-LOGOUT
-
-</button>
-
-</div>
-
-</div>
-
-<!-- ================= NAV ================= -->
-
-<nav class="bottom-nav py-3 flex justify-around">
-
-<div
-onclick="openPage('homePage')"
-class="nav-item nav-active text-center">
-
-<i class="fa-solid fa-house text-xl"></i>
-
-<p class="text-[10px] mt-1 font-bold">
-Home
-</p>
-
-</div>
-
-<div
-onclick="openPage('profilePage')"
-class="nav-item text-center">
-
-<i class="fa-solid fa-user text-xl"></i>
-
-<p class="text-[10px] mt-1 font-bold">
-Profile
-</p>
-
-</div>
-
-</nav>
-
-</div>
-
-<!-- ================= SCRIPT ================= -->
-
-<script>
-
-let selectedPackage = '';
-let paymentMethod = '';
-
-function login(){
-
-    const user =
-    document.getElementById('username').value;
-
-    if(!user){
-
-        alert('Enter Username');
-        return;
-    }
-
-    localStorage.setItem('nexUser',user);
-
-    document.getElementById('profileName')
-    .innerText = user;
-
-    document.getElementById('loginPage')
-    .style.display='none';
-
-    document.getElementById('app')
-    .style.display='block';
-}
-
-window.onload = ()=>{
-
-    const user =
-    localStorage.getItem('nexUser');
-
-    if(user){
-
-        document.getElementById('profileName')
-        .innerText = user;
-
-        document.getElementById('loginPage')
-        .style.display='none';
-
-        document.getElementById('app')
-        .style.display='block';
-    }
-};
-
-function logout(){
-
-    localStorage.removeItem('nexUser');
-
-    location.reload();
-}
-
-function openPage(page){
-
-    document.querySelectorAll('.page')
-    .forEach(p=>p.classList.add('hidden'));
-
-    document.getElementById(page)
-    .classList.remove('hidden');
-}
-
-function backHome(){
-
-    openPage('homePage');
-}
-
-function selectPackage(el,pack){
-
-    selectedPackage = pack;
-
-    document.querySelectorAll('.pkg')
-    .forEach(btn=>btn.classList.remove('active'));
-
-    el.classList.add('active');
-}
-
-function selectPay(el,method){
-
-    paymentMethod = method;
-
-    document.querySelectorAll('.pay')
-    .forEach(btn=>btn.classList.remove('active'));
-
-    el.classList.add('active');
-}
-
-function order(){
-
-    const uid =
-    document.getElementById('uid').value;
-
-    const trx =
-    document.getElementById('trx').value;
-
-    if(!uid || !trx || !selectedPackage || !paymentMethod){
-
-        alert('Fill all fields');
-        return;
-    }
-
-    document.getElementById('status')
-    .innerText =
-    'Order Successful ✅';
-}
-
-</script>
-
-</body>
-</html>
