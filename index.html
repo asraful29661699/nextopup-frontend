@@ -1,556 +1,239 @@
-import React, { useState, useEffect } from "react";
-import {
-  Home,
-  User,
-  Wallet,
-  ShoppingBag,
-  Menu,
-  ChevronRight,
-  ArrowLeft,
-  CheckCircle2,
-} from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offer TopUp - Premium Store</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-import { motion, AnimatePresence } from "framer-motion";
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4Lff3dPJvWnIMEdbJS0wIEWaBXNlBmro",
+            authDomain: "nextopup-e6b28.firebaseapp.com",
+            projectId: "nextopup-e6b28",
+            databaseURL: "https://nextopup-e6b28-default-rtdb.firebaseio.com"
+        };
 
-export default function NexTopUp() {
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-  const [page, setPage] = useState("home");
-  const [menu, setMenu] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState("");
-  const [selectedPayment, setSelectedPayment] = useState("");
+        // ১. রিয়েল-টাইম ডেটা হ্যান্ডলিং
+        window.initApp = (email) => {
+            const userRef = ref(db, `users/${email.replace('.', '_')}`);
+            onValue(userRef, (s) => {
+                const data = s.val() || { balance: 0, spent: 0, orders: 0 };
+                document.getElementById('displayBal').innerText = '৳' + data.balance;
+                document.getElementById('statSpent').innerText = '৳' + data.spent;
+                document.getElementById('statOrders').innerText = data.orders;
+                document.getElementById('statWallet').innerText = '৳' + data.balance;
+            });
 
-  const banners = [
-    "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1400&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1400&auto=format&fit=crop",
-  ];
+            // ২. লেটেস্ট অর্ডার আপডেট (Real-time updates)
+            onValue(ref(db, 'orders'), (s) => {
+                const orders = s.val();
+                const ticker = document.getElementById('latestOrdersTicker');
+                ticker.innerHTML = '';
+                if(orders) {
+                    Object.values(orders).slice(-5).reverse().forEach(o => {
+                        ticker.innerHTML += `<span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[10px] font-bold mr-2"><i class="fa-solid fa-check-circle"></i> ${o.user.split('@')[0]} - ${o.name} ✅</span>`;
+                    });
+                }
+            });
+        };
 
-  const [currentBanner, setCurrentBanner] = useState(0);
+        // ৩. অর্ডার সাবমিট (UX Focus)
+        window.openProduct = (name, price) => {
+            window.activeProduct = { name, price };
+            document.getElementById('orderTitle').innerText = name;
+            document.getElementById('orderPrice').innerText = 'Price: ৳' + price;
+            document.getElementById('orderModal').style.display = 'flex';
+        };
 
-  useEffect(() => {
+        window.confirmOrder = () => {
+            const pid = document.getElementById('playerID').value;
+            const method = document.querySelector('input[name="payMethod"]:checked')?.value;
+            if(!pid || !method) return alert("Please fill all info!");
 
-    const interval = setInterval(() => {
+            const u = JSON.parse(localStorage.getItem('nexUser'));
+            push(ref(db, 'orders'), {
+                ...window.activeProduct,
+                playerID: pid,
+                payment: method,
+                user: u.email,
+                status: 'pending',
+                time: new Date().toLocaleString()
+            }).then(() => {
+                alert("Order placed successfully!");
+                document.getElementById('orderModal').style.display = 'none';
+            });
+        };
+    </script>
 
-      setCurrentBanner((prev) =>
-        prev === banners.length - 1 ? 0 : prev + 1
-      );
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7fe; color: #1e293b; }
+        .bg-premium { background: linear-gradient(135deg, #1e40af 0%, #6366f1 100%); }
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .nav-active { color: #1e40af; border-bottom: 2px solid #1e40af; }
+        #orderModal { display: none; background: rgba(0,0,0,0.5); }
+        .hidden-page { display: none; }
+    </style>
+</head>
+<body class="pb-24">
 
-    }, 3000);
-
-    return () => clearInterval(interval);
-
-  }, []);
-
-  const packages = [
-    { diamond: "100", price: "80" },
-    { diamond: "530", price: "400" },
-    { diamond: "1080", price: "780" },
-    { diamond: "2200", price: "1500" },
-  ];
-
-  return (
-
-    <div className="min-h-screen bg-[#f4f7ff] pb-28">
-
-      {/* ================= HEADER ================= */}
-
-      <div className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-
-        <div className="flex items-center justify-between px-4 py-4">
-
-          <div>
-
-            <h1 className="text-3xl font-black tracking-tight">
-
-              <span className="text-blue-600">
-                Nex
-              </span>
-
-              <span className="text-purple-600">
-                TopUp
-              </span>
-
-            </h1>
-
-            <p className="text-[10px] uppercase tracking-[0.25em] text-gray-400 mt-1">
-              Gaming Marketplace
-            </p>
-
-          </div>
-
-          <button
-            onClick={() => setMenu(true)}
-            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 text-white flex items-center justify-center shadow-lg"
-          >
-
-            <Menu size={22} />
-
-          </button>
-
+    <header class="bg-white p-4 sticky top-0 z-50 card-shadow flex justify-between items-center">
+        <div class="text-2xl font-black italic tracking-tighter">
+            <span class="text-blue-700">OFFER</span><span class="text-indigo-500">TOPUP</span>
         </div>
-
-      </div>
-
-      {/* ================= SIDEBAR ================= */}
-
-      <AnimatePresence>
-
-        {menu && (
-
-          <>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMenu(false)}
-              className="fixed inset-0 bg-black/40 z-40"
-            />
-
-            <motion.div
-              initial={{ x: 300 }}
-              animate={{ x: 0 }}
-              exit={{ x: 300 }}
-              transition={{ duration: 0.25 }}
-              className="fixed top-0 right-0 w-[280px] h-full bg-white z-50 shadow-2xl p-5"
-            >
-
-              <div className="flex items-center justify-between">
-
-                <div>
-
-                  <h2 className="text-2xl font-black text-blue-600">
-                    NexTopUp
-                  </h2>
-
-                  <p className="text-xs text-gray-400 mt-1">
-                    Verified Account
-                  </p>
-
-                </div>
-
-                <button
-                  onClick={() => setMenu(false)}
-                  className="text-2xl"
-                >
-                  ✕
-                </button>
-
-              </div>
-
-              <div className="mt-8 space-y-4">
-
-                {[
-                  "My Account",
-                  "My Orders",
-                  "My Transaction",
-                  "Add Money",
-                  "Support",
-                ].map((item, i) => (
-
-                  <button
-                    key={i}
-                    className="w-full flex items-center justify-between bg-gray-50 rounded-2xl px-4 py-4 font-semibold"
-                  >
-
-                    {item}
-
-                    <ChevronRight size={18} />
-
-                  </button>
-
-                ))}
-
-              </div>
-
-            </motion.div>
-
-          </>
-
-        )}
-
-      </AnimatePresence>
-
-      {/* ================= HOME PAGE ================= */}
-
-      {page === "home" && (
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-
-          {/* ================= BANNER ================= */}
-
-          <section className="p-4">
-
-            <div className="relative overflow-hidden rounded-[35px] h-[230px] shadow-xl">
-
-              <AnimatePresence mode="wait">
-
-                <motion.img
-                  key={currentBanner}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
-                  src={banners[currentBanner]}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-
-              </AnimatePresence>
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-              <div className="absolute bottom-0 p-6 text-white">
-
-                <p className="uppercase text-xs tracking-[0.3em] text-yellow-300 font-bold">
-                  🔥 Special Event
-                </p>
-
-                <h1 className="text-4xl font-black leading-tight mt-2">
-                  FREE FIRE <br />
-                  TOP-UP
-                </h1>
-
-                <p className="text-sm text-gray-200 mt-2">
-                  Instant Diamond Delivery
-                </p>
-
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* ================= ACCOUNT CARD ================= */}
-
-          <section className="px-4">
-
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-[30px] p-5 text-white shadow-xl">
-
-              <div className="flex items-center justify-between">
-
-                <div>
-
-                  <p className="text-sm opacity-80">
-                    Wallet Balance
-                  </p>
-
-                  <h2 className="text-3xl font-black mt-1">
-                    ৳0.00
-                  </h2>
-
-                </div>
-
-                <CheckCircle2 size={36} />
-
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 mt-5">
-
-                <div className="bg-white/10 rounded-2xl p-3 text-center">
-
-                  <p className="text-xl font-black">
-                    0
-                  </p>
-
-                  <p className="text-[10px] uppercase">
-                    Orders
-                  </p>
-
-                </div>
-
-                <div className="bg-white/10 rounded-2xl p-3 text-center">
-
-                  <p className="text-xl font-black">
-                    ৳0
-                  </p>
-
-                  <p className="text-[10px] uppercase">
-                    Spent
-                  </p>
-
-                </div>
-
-                <div className="bg-white/10 rounded-2xl p-3 text-center">
-
-                  <p className="text-xl font-black">
-                    YES
-                  </p>
-
-                  <p className="text-[10px] uppercase">
-                    Verified
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </section>
-
-          {/* ================= SERVICES ================= */}
-
-          <section className="p-4">
-
-            <div className="flex items-center justify-between mb-4">
-
-              <h2 className="font-black text-gray-700">
-                Free Fire
-              </h2>
-
-              <p className="text-sm text-purple-600">
-                See All
-              </p>
-
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-
-              {[
-                {
-                  title: "Diamond Topup",
-                  price: "Instant",
-                  img: banners[0],
-                },
-
-                {
-                  title: "Weekly",
-                  price: "৳190",
-                  img: banners[1],
-                },
-
-                {
-                  title: "Monthly",
-                  price: "৳750",
-                  img: banners[2],
-                },
-
-                {
-                  title: "Evo Access",
-                  price: "Premium",
-                  img: banners[0],
-                },
-
-              ].map((item, i) => (
-
-                <motion.div
-                  whileTap={{ scale: 0.96 }}
-                  key={i}
-                  onClick={() => setPage("topup")}
-                  className="bg-white rounded-[28px] overflow-hidden shadow-lg"
-                >
-
-                  <img
-                    src={item.img}
-                    className="w-full aspect-square object-cover"
-                  />
-
-                  <div className="p-4">
-
-                    <p className="font-black text-gray-800">
-                      {item.title}
-                    </p>
-
-                    <p className="text-sm text-purple-600 mt-1">
-                      {item.price}
-                    </p>
-
-                  </div>
-
-                </motion.div>
-
-              ))}
-
-            </div>
-
-          </section>
-
-          {/* ================= LATEST ORDERS ================= */}
-
-          <section className="px-4">
-
-            <h2 className="font-black text-gray-700 mb-4">
-              Latest Orders
-            </h2>
-
-            <div className="space-y-3">
-
-              {[1, 2, 3].map((item) => (
-
-                <div
-                  key={item}
-                  className="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm"
-                >
-
-                  <div>
-
-                    <p className="font-bold text-gray-800">
-                      UID: 18273****
-                    </p>
-
-                    <p className="text-xs text-gray-400 mt-1">
-                      530 Diamonds
-                    </p>
-
-                  </div>
-
-                  <div className="bg-green-100 text-green-600 px-3 py-2 rounded-xl text-xs font-bold">
-
-                    SUCCESS
-
-                  </div>
-
-                </div>
-
-              ))}
-
-            </div>
-
-          </section>
-
-        </motion.div>
-
-      )}
-
-      {/* ================= TOPUP PAGE ================= */}
-
-      {page === "topup" && (
-
-        <motion.div
-          initial={{ x: 100 }}
-          animate={{ x: 0 }}
-          className="p-4"
-        >
-
-          <button
-            onClick={() => setPage("home")}
-            className="flex items-center gap-2 text-purple-600 font-semibold mb-5"
-          >
-
-            <ArrowLeft size={18} />
-
-            Back
-
-          </button>
-
-          <div className="bg-white rounded-[35px] p-5 shadow-xl">
-
-            <h2 className="text-3xl font-black text-gray-800">
-              Diamond Topup
-            </h2>
-
-            <input
-              placeholder="Enter Player UID"
-              className="w-full mt-5 bg-gray-100 rounded-2xl p-4 outline-none"
-            />
-
-            {/* PACKAGES */}
-
-            <div className="grid grid-cols-2 gap-3 mt-5">
-
-              {packages.map((pkg, i) => (
-
-                <button
-                  key={i}
-                  onClick={() => setSelectedPackage(pkg.diamond)}
-                  className={`rounded-2xl p-4 border-2 transition ${
-                    selectedPackage === pkg.diamond
-                      ? "border-purple-500 bg-purple-50"
-                      : "border-gray-100 bg-gray-50"
-                  }`}
-                >
-
-                  <p className="font-black text-gray-800">
-                    {pkg.diamond} 💎
-                  </p>
-
-                  <p className="text-purple-600 mt-1 font-semibold">
-                    ৳{pkg.price}
-                  </p>
-
-                </button>
-
-              ))}
-
-            </div>
-
-            {/* PAYMENT */}
-
-            <h3 className="font-black text-gray-700 mt-6 mb-3">
-              Payment Method
-            </h3>
-
-            <div className="grid grid-cols-2 gap-3">
-
-              {["bKash", "Nagad"].map((pay) => (
-
-                <button
-                  key={pay}
-                  onClick={() => setSelectedPayment(pay)}
-                  className={`rounded-2xl p-4 border-2 font-bold ${
-                    selectedPayment === pay
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-100 bg-gray-50"
-                  }`}
-                >
-
-                  {pay}
-
-                </button>
-
-              ))}
-
-            </div>
-
-            <input
-              placeholder="Transaction ID"
-              className="w-full mt-5 bg-gray-100 rounded-2xl p-4 outline-none"
-            />
-
-            <button className="w-full mt-5 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-2xl font-black shadow-lg">
-
-              CONFIRM ORDER
-
-            </button>
-
-          </div>
-
-        </motion.div>
-
-      )}
-
-      {/* ================= NAVBAR ================= */}
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-gray-100 flex justify-around py-3">
-
-        {[
-          { icon: Home, label: "Home" },
-          { icon: Wallet, label: "Wallet" },
-          { icon: ShoppingBag, label: "Orders" },
-          { icon: User, label: "Profile" },
-        ].map((item, i) => (
-
-          <button
-            key={i}
-            className="flex flex-col items-center text-gray-500"
-          >
-
-            <item.icon size={24} />
-
-            <p className="text-[10px] mt-1 font-bold">
-              {item.label}
-            </p>
-
-          </button>
-
-        ))}
-
-      </nav>
-
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-50 px-4 py-2 rounded-full text-blue-700 font-bold text-xs" id="displayBal">৳ ০.০০</div>
+            <button onclick="toggleMenu()" class="text-gray-500 text-xl"><i class="fa-solid fa-bars-staggered"></i></button>
+        </div>
+    </header>
+
+    <div id="sideMenu" class="hidden-page fixed inset-0 z-[60] bg-white p-6">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 text-2xl text-gray-400"><i class="fa-solid fa-xmark"></i></button>
+        <div class="mt-12 space-y-6 text-lg font-bold text-gray-700">
+            <p onclick="showPage('homePage')"><i class="fa-solid fa-house mr-3"></i> Home</p>
+            <p onclick="showPage('profilePage')"><i class="fa-solid fa-user-circle mr-3"></i> My Account</p>
+            <p><i class="fa-solid fa-box-open mr-3"></i> My Orders</p>
+            <p onclick="showPage('profilePage')"><i class="fa-solid fa-wallet mr-3"></i> Add Money</p>
+            <button onclick="logout()" class="text-red-500"><i class="fa-solid fa-sign-out-alt mr-3"></i> Logout</button>
+        </div>
     </div>
 
-  );
-}
+    <div class="bg-white border-b overflow-hidden py-2 whitespace-nowrap">
+        <div id="latestOrdersTicker" class="inline-block animate-marquee px-4">
+            </div>
+    </div>
+
+    <main id="homePage" class="p-4 page-content">
+        <div class="bg-premium p-8 rounded-[30px] text-white mb-8 relative overflow-hidden">
+            <h1 class="text-2xl font-black italic">Special Offer!</h1>
+            <p class="text-[10px] uppercase font-bold opacity-80 mt-1 tracking-widest">Get extra diamond on first topup</p>
+            <img src="https://img.icons8.com/clouds/200/controller.png" class="absolute -right-10 -bottom-10 opacity-20">
+        </div>
+
+        <h2 class="text-xs font-black uppercase text-gray-400 mb-4 tracking-widest border-l-4 border-blue-600 pl-2">Free Fire Services</h2>
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div onclick="openProduct('Weekly Membership', 154)" class="bg-white p-4 rounded-[25px] text-center card-shadow">
+                <img src="https://img.icons8.com/fluency/96/calendar.png" class="mx-auto mb-3 w-16">
+                <p class="text-[10px] font-black uppercase">Weekly</p>
+                <p class="text-[10px] text-blue-600 font-bold mt-1">৳ ১৫৪</p>
+            </div>
+            <div onclick="openProduct('Monthly Membership', 765)" class="bg-white p-4 rounded-[25px] text-center card-shadow">
+                <img src="https://img.icons8.com/fluency/96/crown.png" class="mx-auto mb-3 w-16">
+                <p class="text-[10px] font-black uppercase">Monthly</p>
+                <p class="text-[10px] text-blue-600 font-bold mt-1">৳ ৭৬৫</p>
+            </div>
+        </div>
+
+        <h2 class="text-xs font-black uppercase text-gray-400 mb-4 tracking-widest border-l-4 border-indigo-600 pl-2">Subscriptions</h2>
+        <div class="grid grid-cols-3 gap-3">
+            <div class="bg-white p-3 rounded-2xl text-center card-shadow">
+                <i class="fa-brands fa-youtube text-red-600 text-2xl mb-1"></i>
+                <p class="text-[8px] font-bold">YouTube</p>
+            </div>
+            <div class="bg-white p-3 rounded-2xl text-center card-shadow">
+                <i class="fa-brands fa-spotify text-green-500 text-2xl mb-1"></i>
+                <p class="text-[8px] font-bold">Spotify</p>
+            </div>
+            <div class="bg-white p-3 rounded-2xl text-center card-shadow">
+                <i class="fa-solid fa-comment-dots text-purple-600 text-2xl mb-1"></i>
+                <p class="text-[8px] font-bold">ChatGPT</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="profilePage" class="hidden-page p-4 page-content">
+        <div class="bg-white p-6 rounded-[30px] card-shadow mb-6 text-center">
+            <div class="w-20 h-20 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <i class="fa-solid fa-user-shield text-3xl text-blue-600"></i>
+            </div>
+            <h2 class="text-xl font-black text-gray-800" id="profileName">User Name</h2>
+            <span class="bg-green-100 text-green-600 text-[8px] px-3 py-1 rounded-full font-black uppercase">Account Verified</span>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 mb-8">
+            <div class="bg-white p-4 rounded-2xl card-shadow text-center">
+                <p id="statSpent" class="text-sm font-black text-blue-700">৳০</p>
+                <p class="text-[7px] text-gray-400 uppercase font-bold">Spent</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl card-shadow text-center">
+                <p id="statOrders" class="text-sm font-black text-indigo-700">০</p>
+                <p class="text-[7px] text-gray-400 uppercase font-bold">Orders</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl card-shadow text-center">
+                <p id="statWallet" class="text-sm font-black text-yellow-600">৳০</p>
+                <p class="text-[7px] text-gray-400 uppercase font-bold">Wallet</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="orderModal" class="fixed inset-0 z-[100] items-end">
+        <div class="bg-white w-full rounded-t-[40px] p-8 animate-slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 id="orderTitle" class="text-xl font-black text-blue-900">Weekly</h3>
+                    <p id="orderPrice" class="text-xs text-blue-600 font-bold"></p>
+                </div>
+                <button onclick="document.getElementById('orderModal').style.display='none'" class="text-gray-300 text-2xl"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+            
+            <label class="text-[10px] font-black text-gray-400 uppercase">Player ID (UID)</label>
+            <input id="playerID" type="number" class="w-full bg-gray-50 p-4 rounded-2xl border-none outline-none mt-2 mb-6 font-bold" placeholder="123456789">
+
+            <label class="text-[10px] font-black text-gray-400 uppercase">Payment Method</label>
+            <div class="grid grid-cols-2 gap-3 mt-3 mb-8">
+                <label class="border p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                    <input type="radio" name="payMethod" value="bkash" class="accent-pink-600">
+                    <span class="text-xs font-bold">bKash</span>
+                </label>
+                <label class="border p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                    <input type="radio" name="payMethod" value="wallet" class="accent-blue-600">
+                    <span class="text-xs font-bold">Wallet</span>
+                </label>
+            </div>
+
+            <button onclick="confirmOrder()" class="w-full bg-blue-700 text-white p-5 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-blue-200">Confirm Now</button>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 flex justify-around items-center z-50">
+        <button onclick="showPage('homePage')" class="nav-active flex flex-col items-center"><i class="fa-solid fa-home"></i><span class="text-[8px] font-bold mt-1">HOME</span></button>
+        <button class="text-gray-300 flex flex-col items-center"><i class="fa-solid fa-bolt"></i><span class="text-[8px] font-bold mt-1">OFFERS</span></button>
+        <button onclick="showPage('profilePage')" class="text-gray-300 flex flex-col items-center"><i class="fa-solid fa-user"></i><span class="text-[8px] font-bold mt-1">ACCOUNT</span></button>
+    </nav>
+
+    <script>
+        // UI Helpers
+        window.toggleMenu = () => document.getElementById('sideMenu').classList.toggle('hidden-page');
+        window.showPage = (id) => {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden-page'));
+            document.getElementById(id).classList.remove('hidden-page');
+            toggleMenu();
+        };
+
+        // Google Login Handler
+        window.handleCredentialResponse = (r) => {
+            const d = JSON.parse(atob(r.credential.split('.')[1]));
+            localStorage.setItem('nexUser', JSON.stringify(d));
+            location.reload();
+        };
+
+        window.onload = () => {
+            const u = localStorage.getItem('nexUser');
+            if(u) {
+                const data = JSON.parse(u);
+                document.getElementById('profileName').innerText = data.name;
+                initApp(data.email);
+            }
+        };
+    </script>
+</body>
+</html>
